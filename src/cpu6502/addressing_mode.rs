@@ -1,5 +1,6 @@
 // Extracted from WikiBooks 6502 assembly
 
+use super::{Bus, Registers};
 use crate::utils;
 
 #[derive(Clone, Copy)]
@@ -24,7 +25,8 @@ pub enum AddressingMode {
     Relative,
     /// ### (a)
     /// The little-endian two-byte value stored at the specified address is used to perform the computation. Only used by the `JMP` instruction.
-    AbsoluteIndirect,
+    // AbsoluteIndirect, // Not for this implementation
+
     /// ### a,x
     /// The value in `X` is added to the specified address for a sum address. The value at the sum address is used to perform the computation.
     AbsoluteIndexedWithX,
@@ -45,52 +47,89 @@ pub enum AddressingMode {
     ZeroPageIndirectIndexedWithY,
 }
 
-const lookup_table: [AddressingMode; 256] = [AddressingMode::Accumulator; 256];
+const LOOKUP_TABLE: [AddressingMode; 256] = [AddressingMode::Accumulator; 256];
+
+pub enum Operand {
+    Implied,
+    Accumulator,
+    Memory(u16),
+}
+
+impl Operand {
+    pub fn load(&self, registers: &Registers, bus: &impl Bus) -> u8 {
+        match self {
+            Self::Implied => 0,
+            Self::Accumulator => registers.accumulator,
+            Self::Memory(pointer) => bus.get(*pointer),
+        }
+    }
+    pub fn store(&self, data: u8, registers: &mut Registers, bus: &mut impl Bus) {
+        match self {
+            Self::Implied => (),
+            Self::Accumulator => registers.accumulator = data,
+            Self::Memory(pointer) => bus.set(*pointer, data),
+        }
+    }
+}
 
 impl AddressingMode {
     pub fn from_opcode(opcode: u8) -> AddressingMode {
-        lookup_table[opcode as usize]
+        LOOKUP_TABLE[opcode as usize]
     }
-    pub fn fetch_operand(&self, registers: &mut super::Registers, bus: &mut impl super::Bus) -> u8 {
+    pub fn fetch_operand(&self, registers: &mut Registers, bus: &mut impl Bus) -> Operand {
         //
+        let pc = registers.program_counter;
+
         let mut read_next = || {
-            let next = bus.get(registers.pc);
-            registers.pc = registers.pc.wrapping_add(1);
+            let next = bus.get(registers.program_counter);
+            registers.program_counter = pc.wrapping_add(1);
             next
         };
 
         let mut read_next_u16 = || {
-            // 6502 is Little Endian
             let low = read_next();
             let high = read_next();
-            crate::utils::concat(high, low)
+            crate::utils::concat(low, high)
         };
 
         match self {
-            Self::Accumulator => registers.a,
-            Self::Implied => registers.a,
-            Self::Immediate => read_next(),
-            Self::Absolute => bus.get(read_next_u16()),
-            Self::ZeroPage => bus.get(read_next() as u16),
-            Self::Relative => {
-                let pc = registers.pc.clone();
-                let off = read_next();
-                bus.get(utils::signed_add(pc, off))
-            },
-            Self::AbsoluteIndirect => {
-                // Specal case: Must be handled at the JMP instruction
-                0
-            },
+            Self::Accumulator => Operand::Accumulator,
+            Self::Implied => Operand::Implied,
+            Self::Immediate => {
+                registers.program_counter += pc.wrapping_add(1);
+                Operand::Memory(pc)
+            }
+            Self::Absolute => Operand::Memory(read_next_u16()),
+            Self::ZeroPage => Operand::Memory(read_next() as u16),
+            Self::Relative => Operand::Memory(utils::signed_add(pc, read_next())),
+            // Specal case: Must be handled at the JMP instruction
+            // Self::AbsoluteIndirect => 0,
             Self::AbsoluteIndexedWithX => {
-                let specified_addr = read_next_u16();
-                let pos = utils::signed_add(specified_addr, registers.x);
-                bus.get(pos)
-            },
-            Self::AbsoluteIndexedWithY => todo!(),
-            Self::ZeroPageIndexedWithX => todo!(),
-            Self::ZeroPageIndexedWithY => todo!(),
-            Self::ZeroPageIndexedIndirect => todo!(),
-            Self::ZeroPageIndirectIndexedWithY => todo!(),
+                Operand::Memory(read_next_u16() + registers.xindex as u16)
+            }
+            Self::AbsoluteIndexedWithY => {
+                Operand::Memory(read_next_u16() + registers.yindex as u16)
+            }
+            Self::ZeroPageIndexedWithX => {
+                Operand::Memory(read_next() as u16 + registers.xindex as u16)
+            }
+            Self::ZeroPageIndexedWithY => {
+                Operand::Memory(read_next() as u16 + registers.yindex as u16)
+            }
+            Self::ZeroPageIndexedIndirect => {
+                let sum_address = read_next() as u16 + registers.xindex as u16;
+                let low = bus.get(sum_address);
+                let high = bus.get(sum_address + 1);
+                let pointer = utils::concat(low, high);
+                Operand::Memory(pointer)
+            }
+            Self::ZeroPageIndirectIndexedWithY => {
+                let off = read_next() as u16;
+                let low = bus.get(off);
+                let high = bus.get(off + 1);
+                let pointer = utils::concat(low, high);
+                Operand::Memory(pointer)
+            }
         }
     }
 }

@@ -1,9 +1,10 @@
 mod addressing_mode;
 mod cycles;
+mod instruction;
 
 use crate::Tickable;
 
-use self::addressing_mode::AddressingMode;
+use self::{addressing_mode::AddressingMode, instruction::Instruction};
 
 pub trait Bus {
     fn get(&self, address: u16) -> u8;
@@ -14,21 +15,21 @@ struct StatusRegister {
     carry: bool,
     zero: bool,
     disable_interrupts: bool,
-    // decimal_mode: bool,
+    _decimal_mode: bool,
     break_: bool,
-    // unused:bool,
+    _unused: bool,
     overflow: bool,
     negative: bool,
 }
 
 pub struct Registers {
-    a: u8,
-    x: u8,
-    y: u8,
+    accumulator: u8,
+    xindex: u8,
+    yindex: u8,
 
-    sp: u8,
-    pc: u16,
-    st: StatusRegister,
+    stack_pointer: u8,
+    program_counter: u16,
+    status_registers: StatusRegister,
 }
 
 pub struct CPU<B: Bus> {
@@ -59,17 +60,18 @@ impl<B: Bus> Tickable for CPU<B> {
         if self.pending_cycles == 0 {
             //
             // Execute instruction
-            let opcode = self.bus.get(self.registers.pc);
-            self.registers.pc += 1;
+            let opcode = self.bus.get(self.registers.program_counter);
+            self.registers.program_counter = self.registers.program_counter.wrapping_add(1);
 
             self.pending_cycles = cycles::required_for_opcode(opcode);
 
             let mode = AddressingMode::from_opcode(opcode);
+            let instruction = Instruction::from_opcode(opcode);
+
             let operand = mode.fetch_operand(&mut self.registers, &mut self.bus);
+            instruction.run(operand, &mut self.registers, &mut self.bus);
         }
 
         self.pending_cycles -= 1;
     }
 }
-
-fn get_pocode_info(opcode: u8) -> () {}
