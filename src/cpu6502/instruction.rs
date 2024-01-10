@@ -191,7 +191,7 @@ impl<'a, B: Bus> InstructionExecutor<'a, B> {
                 self.load(),
                 self.get_carry(),
             )),
-            I::SBC => self.set_acc(add_with_carry(
+            I::SBC => self.set_acc(sub_with_carry(
                 self.get_acc(),
                 self.load(),
                 self.get_carry(),
