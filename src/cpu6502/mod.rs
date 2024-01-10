@@ -2,7 +2,7 @@ mod addressing_mode;
 mod cycles;
 mod instruction;
 
-use crate::Tickable;
+use crate::Tick;
 
 use self::{
     addressing_mode::{AddressingMode, Operand},
@@ -14,6 +14,7 @@ pub trait Bus {
     fn set(&mut self, address: u16, data: u8) -> ();
 }
 
+#[derive(Default)]
 struct StatusRegister {
     carry: bool,
     zero: bool,
@@ -25,6 +26,7 @@ struct StatusRegister {
     negative: bool,
 }
 
+#[derive(Default)]
 pub struct Registers {
     accumulator: u8,
     xindex: u8,
@@ -44,13 +46,22 @@ pub struct CPU<B: Bus> {
 }
 
 impl<B: Bus> CPU<B> {
-    pub fn new(registers: Registers, bus: B) -> Self {
+    pub fn new(bus: B) -> Self {
+        Self {
+            registers: Registers::default(),
+            pending_cycles: 0,
+            bus,
+        }
+    }
+
+    pub fn from_state(registers:Registers, bus: B) -> Self {
         Self {
             registers,
             pending_cycles: 0,
             bus,
         }
     }
+
     pub fn set_pending_cycles(&mut self, cycles: u8) {
         self.pending_cycles = cycles;
     }
@@ -76,7 +87,7 @@ impl<B: Bus> CPU<B> {
     }
 }
 
-impl<B: Bus> Tickable for CPU<B> {
+impl<B: Bus> Tick for CPU<B> {
     fn tick(&mut self) {
         //
         // Retrun if previous instructions have pending cycles

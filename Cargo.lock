@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "nes"
+name = "nesvm"
 version = "0.1.0"

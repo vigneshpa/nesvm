@@ -22,7 +22,7 @@ pub fn rotate_left(val: u8) -> u8 {
     low | high
 }
 pub fn rotate_right(val: u8) -> u8 {
-    let low = val >> 1;;
+    let low = val >> 1;
     let high = val & 0b1u8;
     low | high
 }

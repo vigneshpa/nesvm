@@ -140,8 +140,8 @@ pub enum Instruction {
 
 
 impl Instruction {
-    pub fn from_opcode(opcode: u8) -> Self {
-        Self::LDA
+    pub fn from_opcode(_opcode: u8) -> Self {
+        Self::NOP
     }
 
     pub fn executor<'a, B: Bus>(self, cpu: &'a mut CPU<B>, operand: Operand) -> InstructionExecuter<'a, B> {
@@ -264,8 +264,7 @@ impl<'a, B: Bus> InstructionExecuter<'a, B> {
             I::SEI => todo!(),
             I::CLV => todo!(),
             I::BRK => todo!(),
-            I::NOP => todo!(),
-            // Arithmetic Operations
+            I::NOP => {},
         }
     }
 }

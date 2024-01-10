@@ -3,6 +3,6 @@
 pub mod cpu6502;
 pub mod motherboard;
 pub mod utils;
-pub trait Tickable {
+pub trait Tick {
     fn tick(&mut self);
 }

@@ -1,3 +1,10 @@
+use nesvm::Tick;
+
 fn main() {
-    println!("Hello, world!");
+    let bus = nesvm::motherboard::MotherBoard::new();
+    let mut cpu = nesvm::cpu6502::CPU::new(bus);
+
+    loop {
+        cpu.tick();
+    }
 }
