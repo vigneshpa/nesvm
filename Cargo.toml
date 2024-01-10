@@ -1,5 +1,5 @@
 [package]
-name = "nes"
+name = "nesvm"
 version = "0.1.0"
 edition = "2021"
 authors = ["Vignesh Paranthaman <vignesh-p@outlook.com>"]
