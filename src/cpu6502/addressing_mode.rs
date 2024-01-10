@@ -1,8 +1,9 @@
 // Extracted from WikiBooks 6502 assembly
 
 use super::{Bus, CPU};
-use crate::utils;
+use crate::utils::{self, concat, increment};
 
+/// Addressing modes for 6052
 #[derive(Clone, Copy)]
 pub enum AddressingMode {
     /// ### A
@@ -25,7 +26,7 @@ pub enum AddressingMode {
     Relative,
     /// ### (a)
     /// The little-endian two-byte value stored at the specified address is used to perform the computation. Only used by the `JMP` instruction.
-    // AbsoluteIndirect, // Not for this implementation
+    AbsoluteIndirect, // Not for this implementation
 
     /// ### a,x
     /// The value in `X` is added to the specified address for a sum address. The value at the sum address is used to perform the computation.
@@ -92,7 +93,14 @@ impl AddressingMode {
             Self::ZeroPage => Operand::Memory(cpu.read_next() as u16),
             Self::Relative => Operand::Memory(utils::signed_add(pc, cpu.read_next())),
             // Specal case: Must be handled at the JMP instruction
-            // Self::AbsoluteIndirect => 0,
+            Self::AbsoluteIndirect => Operand::Memory({
+                let low = cpu.read_next();
+                let high = cpu.read_next();
+                let low = cpu.bus.get(concat(low, high));
+                let high = cpu.bus.get(concat(low, increment(high)));
+                let pointer = concat(low, high);
+                pointer
+            }),
             Self::AbsoluteIndexedWithX => {
                 Operand::Memory(cpu.read_next_u16() + cpu.registers.xindex as u16)
             }

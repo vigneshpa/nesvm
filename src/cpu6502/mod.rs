@@ -21,6 +21,34 @@ struct StatusRegister {
     negative: bool,
 }
 
+impl StatusRegister {
+    pub fn as_array(&self) -> [bool; 8] {
+        [
+            self.negative,
+            self.overflow,
+            self._unused,
+            self.break_,
+            self._decimal_mode,
+            self.disable_interrupts,
+            self.zero,
+            self.carry,
+        ]
+    }
+
+    pub fn from_array(data: [bool; 8]) -> Self {
+        Self {
+            negative: data[0],
+            overflow: data[1],
+            _unused: data[2],
+            break_: data[3],
+            _decimal_mode: data[4],
+            disable_interrupts: data[5],
+            zero: data[6],
+            carry: data[7],
+        }
+    }
+}
+
 #[derive(Default)]
 pub struct Registers {
     accumulator: u8,
@@ -42,11 +70,13 @@ pub struct CPU<B: Bus> {
 
 impl<B: Bus> CPU<B> {
     pub fn new(bus: B) -> Self {
-        Self {
+        let mut ret = Self {
             registers: Registers::default(),
             pending_cycles: 0,
             bus,
-        }
+        };
+        ret.registers.stack_pointer = 0xfdu8;
+        ret
     }
 
     pub fn from_state(registers: Registers, bus: B) -> Self {

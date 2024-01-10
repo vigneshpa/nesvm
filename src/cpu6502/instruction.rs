@@ -1,7 +1,8 @@
-use super::{addressing_mode::Operand, Bus, CPU};
+use super::{addressing_mode::Operand, Bus, CPU, StatusRegister};
 use crate::utils::*;
 
 /// Instructions for 6502
+#[derive(Clone, Copy)]
 pub enum Instruction {
     // Load and Store Instructions
     /// Load Accumulator with Memory
@@ -106,6 +107,10 @@ pub enum Instruction {
     PHA,
     /// Pull Accumulator from Stack
     PLA,
+    /// Push Processor Status on Stack
+    PHP,
+    /// Pull Processor Status from Stack
+    PLP,
 
     // Subroutines and Jump
     /// Jump to New Location
@@ -147,23 +152,164 @@ impl Instruction {
         self,
         cpu: &'a mut CPU<B>,
         operand: Operand,
-    ) -> InstructionExecuter<'a, B> {
-        InstructionExecuter::new(self, operand, cpu)
+    ) -> InstructionExecutor<'a, B> {
+        InstructionExecutor::new(self, operand, cpu)
     }
 }
 
-pub struct InstructionExecuter<'a, B: Bus> {
+pub struct InstructionExecutor<'a, B: Bus> {
     instruction: Instruction,
     operand: Operand,
     cpu: &'a mut CPU<B>,
 }
 
-impl<'a, B: Bus> InstructionExecuter<'a, B> {
+impl<'a, B: Bus> InstructionExecutor<'a, B> {
     pub fn new(instruction: Instruction, operand: Operand, cpu: &'a mut CPU<B>) -> Self {
         Self {
             instruction,
             operand,
             cpu,
+        }
+    }
+
+    pub fn run(&mut self) {
+        use Instruction as I;
+        match self.instruction {
+            //
+            // Load and Store
+            I::LDA => self.set_acc(self.load()),
+            I::LDX => self.set_x(self.load()),
+            I::LDY => self.set_y(self.load()),
+
+            I::STA => self.store(self.get_acc()),
+            I::STX => self.store(self.get_x()),
+            I::STY => self.store(self.get_y()),
+
+            // Addition and Subtraction
+            I::ADC => self.set_acc(add_with_carry(
+                self.get_acc(),
+                self.load(),
+                self.get_carry(),
+            )),
+            I::SBC => self.set_acc(add_with_carry(
+                self.get_acc(),
+                self.load(),
+                self.get_carry(),
+            )),
+
+            // Increment
+            I::INC => self.store(increment(self.load())),
+            I::INX => self.set_x(increment(self.get_x())),
+            I::INY => self.set_y(increment(self.get_y())),
+
+            // Decrement
+            I::DEC => self.store(decrement(self.load())),
+            I::DEX => self.set_x(decrement(self.get_x())),
+            I::DEY => self.set_y(decrement(self.get_y())),
+
+            // Shift and Rotation
+            I::ASL => self.store(shift_left(self.load())),
+            I::LSR => self.store(shift_right(self.load())),
+            I::ROL => self.store(rotate_left(self.load())),
+            I::ROR => self.store(rotate_right(self.load())),
+
+            // Bitwise
+            I::AND => self.set_acc(self.get_acc() & self.load()),
+            I::ORA => self.set_acc(self.get_acc() | self.load()),
+            I::EOR => self.set_acc(self.get_acc() ^ self.load()),
+
+            // Compare
+            I::CMP => self.compare(self.get_acc()),
+            I::CPX => self.compare(self.get_x()),
+            I::CPY => self.compare(self.get_y()),
+
+            // Test bit
+            I::BIT => todo!(),
+
+            // Branching
+            I::BCC => {
+                if !self.cpu.registers.status_register.carry {
+                    self.branch(self.load())
+                }
+            },
+            I::BCS => {
+                if self.cpu.registers.status_register.carry {
+                    self.branch(self.load())
+                }
+            },
+            I::BNE => {
+                if !self.cpu.registers.status_register.zero {
+                    self.branch(self.load())
+                }
+            },
+            I::BEQ => {
+                if self.cpu.registers.status_register.zero {
+                    self.branch(self.load())
+                }
+            },
+            I::BPL => {
+                if !self.cpu.registers.status_register.negative {
+                    self.branch(self.load())
+                }
+            },
+            I::BMI => {
+                if self.cpu.registers.status_register.negative {
+                    self.branch(self.load())
+                }
+            },
+            I::BVC => {
+                if !self.cpu.registers.status_register.overflow {
+                    self.branch(self.load())
+                }
+            },
+            I::BVS => {
+                if self.cpu.registers.status_register.overflow {
+                    self.branch(self.load())
+                }
+            },
+
+            // Transfer instructions
+            I::TAX => self.set_x(self.get_acc()),
+            I::TXA => self.set_acc(self.get_x()),
+            I::TAY => self.set_y(self.get_acc()),
+            I::TYA => self.set_acc(self.get_y()),
+            I::TSX => self.set_x(self.get_sp()),
+            I::TXS => self.set_sp(self.get_x()),
+
+            // Stack
+            I::PHA => self.push(self.get_acc()),
+            I::PLA => {
+                let data = self.pull();
+                self.set_acc(data)
+            },
+            I::PHP => self.push(self.get_status()),
+            I::PLP => {
+                let data = self.pull();
+                self.set_status(data)
+            },
+
+            // Jump
+            I::JMP => match self.operand {
+                Operand::Memory(memory) => self.cpu.registers.program_counter = memory,
+                _ => panic!("Illeagal addressing mode")
+            },
+            I::JSR => match self.operand {
+                Operand::Memory(memory) => {
+                    self.cpu.registers.program_counter = memory;
+                    todo!("Push the address before the next instruction (PC-1)");
+                },
+                _ => panic!("Illeagal addressing mode")
+            },
+            I::RTI => todo!(),
+            I::CLC => todo!(),
+            I::SEC => todo!(),
+            I::CLD => todo!(),
+            I::SED => todo!(),
+            I::CLI => todo!(),
+            I::SEI => todo!(),
+            I::CLV => todo!(),
+            I::BRK => todo!(),
+            I::NOP => {}
         }
     }
 
@@ -173,6 +319,69 @@ impl<'a, B: Bus> InstructionExecuter<'a, B> {
 
     fn store(&mut self, data: u8) {
         self.cpu.store(self.operand, data)
+    }
+
+    fn compare(&mut self, data: u8) {
+        use std::cmp::Ordering::*;
+        match data.cmp(&self.load()) {
+            Less => {
+                self.cpu.registers.status_register.negative = true;
+                self.cpu.registers.status_register.zero = false;
+                self.cpu.registers.status_register.carry = false;
+            }
+            Equal => {
+                self.cpu.registers.status_register.negative = false;
+                self.cpu.registers.status_register.zero = true;
+                self.cpu.registers.status_register.carry = true;
+            }
+            Greater => {
+                self.cpu.registers.status_register.negative = false;
+                self.cpu.registers.status_register.zero = false;
+                self.cpu.registers.status_register.carry = true;
+            }
+        }
+    }
+
+    fn branch(&mut self, data: u8) {
+        let pc = self.cpu.registers.program_counter;
+        self.cpu.registers.program_counter = signed_add(pc, data);
+    }
+
+    fn push(&mut self, data: u8) {
+        let sp = self.get_sp();
+        self.cpu.bus.set(sp as u16 + 0b01_00u16, data);
+        self.set_sp(decrement(sp)); // sp--
+    }
+
+    fn pull(&mut self) -> u8 {
+        let sp = increment(self.get_sp());
+        self.set_sp(sp); // sp++
+        self.cpu.bus.get(sp as u16 + 0b01_00u16)
+    }
+
+    fn get_status(&self) -> u8 {
+        let mut acc = 0u8;
+        for el in self.cpu.registers.status_register.as_array() {
+            if el {
+                acc |= 1u8;
+            }
+            acc = acc << 1;
+        }
+        acc
+    }
+
+    fn set_status(&mut self, mut data: u8) {
+        let mut arr = [false; 8];
+        let high_mask = 0b1000_0000u8;
+        for el in &mut arr {
+            *el = (high_mask & data) != 0;
+            data = data << 1;
+        }
+        self.cpu.registers.status_register = StatusRegister::from_array(arr);
+    }
+
+    fn get_carry(&self) -> bool {
+        self.cpu.registers.status_register.carry
     }
 
     fn get_acc(&self) -> u8 {
@@ -199,74 +408,11 @@ impl<'a, B: Bus> InstructionExecuter<'a, B> {
         self.cpu.registers.yindex = data
     }
 
-    fn get_carry(&self) -> bool {
-        self.cpu.registers.status_register.carry
+    fn get_sp(&self) -> u8 {
+        self.cpu.registers.stack_pointer
     }
 
-    pub fn run(&mut self) {
-        use Instruction as I;
-        match self.instruction {
-            I::LDA => self.set_acc(self.load()),
-            I::LDX => self.set_x(self.load()),
-            I::LDY => self.set_y(self.load()),
-            I::STA => self.store(self.get_acc()),
-            I::STX => self.store(self.get_x()),
-            I::STY => self.store(self.get_y()),
-            I::ADC => self.set_acc(add_with_carry(
-                self.get_acc(),
-                self.load(),
-                self.get_carry(),
-            )),
-            I::SBC => self.set_acc(add_with_carry(
-                self.get_acc(),
-                self.load(),
-                self.get_carry(),
-            )),
-            I::INC => self.store(increment(self.load())),
-            I::INX => self.set_x(increment(self.get_x())),
-            I::INY => self.set_y(increment(self.get_y())),
-            I::DEC => self.store(decrement(self.load())),
-            I::DEX => self.set_x(decrement(self.get_x())),
-            I::DEY => self.set_y(decrement(self.get_y())),
-            I::ASL => self.store(shift_left(self.load())),
-            I::LSR => self.store(shift_right(self.load())),
-            I::ROL => self.store(rotate_left(self.load())),
-            I::ROR => self.store(rotate_right(self.load())),
-            I::AND => self.set_acc(self.get_acc() & self.load()),
-            I::ORA => self.set_acc(self.get_acc() & self.load()),
-            I::EOR => todo!(),
-            I::CMP => todo!(),
-            I::CPX => todo!(),
-            I::CPY => todo!(),
-            I::BIT => todo!(),
-            I::BCC => todo!(),
-            I::BCS => todo!(),
-            I::BNE => todo!(),
-            I::BEQ => todo!(),
-            I::BPL => todo!(),
-            I::BMI => todo!(),
-            I::BVC => todo!(),
-            I::BVS => todo!(),
-            I::TAX => todo!(),
-            I::TXA => todo!(),
-            I::TAY => todo!(),
-            I::TYA => todo!(),
-            I::TSX => todo!(),
-            I::TXS => todo!(),
-            I::PHA => todo!(),
-            I::PLA => todo!(),
-            I::JMP => todo!(),
-            I::JSR => todo!(),
-            I::RTI => todo!(),
-            I::CLC => todo!(),
-            I::SEC => todo!(),
-            I::CLD => todo!(),
-            I::SED => todo!(),
-            I::CLI => todo!(),
-            I::SEI => todo!(),
-            I::CLV => todo!(),
-            I::BRK => todo!(),
-            I::NOP => {}
-        }
+    fn set_sp(&mut self, data: u8) {
+        self.cpu.registers.stack_pointer = data
     }
 }
