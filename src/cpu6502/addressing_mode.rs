@@ -1,6 +1,6 @@
 // Extracted from WikiBooks 6502 assembly
 
-use super::{Bus, Registers};
+use super::{CPU, Bus};
 use crate::utils;
 
 #[derive(Clone, Copy)]
@@ -49,6 +49,7 @@ pub enum AddressingMode {
 
 const LOOKUP_TABLE: [AddressingMode; 256] = [AddressingMode::Accumulator; 256];
 
+#[derive(Clone, Copy)]
 pub enum Operand {
     Implied,
     Accumulator,
@@ -56,18 +57,18 @@ pub enum Operand {
 }
 
 impl Operand {
-    pub fn load(&self, registers: &Registers, bus: &impl Bus) -> u8 {
+    pub fn load<B: Bus>(&self, cpu: &CPU<B>) -> u8 {
         match self {
             Self::Implied => 0,
-            Self::Accumulator => registers.accumulator,
-            Self::Memory(pointer) => bus.get(*pointer),
+            Self::Accumulator => cpu.registers.accumulator,
+            Self::Memory(pointer) => cpu.bus.get(*pointer),
         }
     }
-    pub fn store(&self, data: u8, registers: &mut Registers, bus: &mut impl Bus) {
+    pub fn store<B: Bus>(&self, data: u8, cpu: &mut CPU<B>) {
         match self {
             Self::Implied => (),
-            Self::Accumulator => registers.accumulator = data,
-            Self::Memory(pointer) => bus.set(*pointer, data),
+            Self::Accumulator => cpu.registers.accumulator = data,
+            Self::Memory(pointer) => cpu.bus.set(*pointer, data),
         }
     }
 }
@@ -76,57 +77,45 @@ impl AddressingMode {
     pub fn from_opcode(opcode: u8) -> AddressingMode {
         LOOKUP_TABLE[opcode as usize]
     }
-    pub fn fetch_operand(&self, registers: &mut Registers, bus: &mut impl Bus) -> Operand {
+    pub fn fetch_operand<B: Bus>(&self, cpu: &mut CPU<B>) -> Operand {
         //
-        let pc = registers.program_counter;
-
-        let mut read_next = || {
-            let next = bus.get(registers.program_counter);
-            registers.program_counter = pc.wrapping_add(1);
-            next
-        };
-
-        let mut read_next_u16 = || {
-            let low = read_next();
-            let high = read_next();
-            crate::utils::concat(low, high)
-        };
+        let pc = cpu.registers.program_counter;
 
         match self {
             Self::Accumulator => Operand::Accumulator,
             Self::Implied => Operand::Implied,
             Self::Immediate => {
-                registers.program_counter += pc.wrapping_add(1);
+                cpu.registers.program_counter += pc.wrapping_add(1);
                 Operand::Memory(pc)
             }
-            Self::Absolute => Operand::Memory(read_next_u16()),
-            Self::ZeroPage => Operand::Memory(read_next() as u16),
-            Self::Relative => Operand::Memory(utils::signed_add(pc, read_next())),
+            Self::Absolute => Operand::Memory(cpu.read_next_u16()),
+            Self::ZeroPage => Operand::Memory(cpu.read_next() as u16),
+            Self::Relative => Operand::Memory(utils::signed_add(pc, cpu.read_next())),
             // Specal case: Must be handled at the JMP instruction
             // Self::AbsoluteIndirect => 0,
             Self::AbsoluteIndexedWithX => {
-                Operand::Memory(read_next_u16() + registers.xindex as u16)
+                Operand::Memory(cpu.read_next_u16() + cpu.registers.xindex as u16)
             }
             Self::AbsoluteIndexedWithY => {
-                Operand::Memory(read_next_u16() + registers.yindex as u16)
+                Operand::Memory(cpu.read_next_u16() + cpu.registers.yindex as u16)
             }
             Self::ZeroPageIndexedWithX => {
-                Operand::Memory(read_next() as u16 + registers.xindex as u16)
+                Operand::Memory(cpu.read_next() as u16 + cpu.registers.xindex as u16)
             }
             Self::ZeroPageIndexedWithY => {
-                Operand::Memory(read_next() as u16 + registers.yindex as u16)
+                Operand::Memory(cpu.read_next() as u16 + cpu.registers.yindex as u16)
             }
             Self::ZeroPageIndexedIndirect => {
-                let sum_address = read_next() as u16 + registers.xindex as u16;
-                let low = bus.get(sum_address);
-                let high = bus.get(sum_address + 1);
+                let sum_address = cpu.read_next() as u16 + cpu.registers.xindex as u16;
+                let low = cpu.bus.get(sum_address);
+                let high = cpu.bus.get(sum_address + 1);
                 let pointer = utils::concat(low, high);
                 Operand::Memory(pointer)
             }
             Self::ZeroPageIndirectIndexedWithY => {
-                let off = read_next() as u16;
-                let low = bus.get(off);
-                let high = bus.get(off + 1);
+                let off = cpu.read_next() as u16;
+                let low = cpu.bus.get(off);
+                let high = cpu.bus.get(off + 1);
                 let pointer = utils::concat(low, high);
                 Operand::Memory(pointer)
             }
