@@ -138,13 +138,16 @@ pub enum Instruction {
     NOP,
 }
 
-
 impl Instruction {
     pub fn from_opcode(_opcode: u8) -> Self {
         Self::NOP
     }
 
-    pub fn executor<'a, B: Bus>(self, cpu: &'a mut CPU<B>, operand: Operand) -> InstructionExecuter<'a, B> {
+    pub fn executor<'a, B: Bus>(
+        self,
+        cpu: &'a mut CPU<B>,
+        operand: Operand,
+    ) -> InstructionExecuter<'a, B> {
         InstructionExecuter::new(self, operand, cpu)
     }
 }
@@ -156,12 +159,11 @@ pub struct InstructionExecuter<'a, B: Bus> {
 }
 
 impl<'a, B: Bus> InstructionExecuter<'a, B> {
-
-    pub fn new(instruction:Instruction, operand: Operand, cpu: &'a mut CPU<B>) -> Self {
+    pub fn new(instruction: Instruction, operand: Operand, cpu: &'a mut CPU<B>) -> Self {
         Self {
             instruction,
             operand,
-            cpu
+            cpu,
         }
     }
 
@@ -231,7 +233,7 @@ impl<'a, B: Bus> InstructionExecuter<'a, B> {
             I::ROL => self.store(rotate_left(self.load())),
             I::ROR => self.store(rotate_right(self.load())),
             I::AND => self.set_acc(self.get_acc() & self.load()),
-            I::ORA => todo!(),
+            I::ORA => self.set_acc(self.get_acc() & self.load()),
             I::EOR => todo!(),
             I::CMP => todo!(),
             I::CPX => todo!(),
@@ -264,7 +266,7 @@ impl<'a, B: Bus> InstructionExecuter<'a, B> {
             I::SEI => todo!(),
             I::CLV => todo!(),
             I::BRK => todo!(),
-            I::NOP => {},
+            I::NOP => {}
         }
     }
 }

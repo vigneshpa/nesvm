@@ -1,23 +1,43 @@
-use crate::cpu6502::Bus;
+mod muxbus;
+mod ram;
 
-pub struct MotherBoard {
-    memory:[u8; 65536]
+use self::{
+    muxbus::{MuxBus, SubDevice},
+    ram::RAM,
+};
+use crate::{cpu6502::CPU, Tick};
+
+pub struct MotherBoardBuilder {
+    system_bus: MuxBus,
 }
 
-impl MotherBoard {
+/// A Bus de-multiplexor
+impl MotherBoardBuilder {
     pub fn new() -> Self {
         Self {
-            memory:[0u8; 65536]
+            system_bus: MuxBus::new(),
+        }
+    }
+
+    pub fn mount_memory(mut self, start: u16, end: u32, capacity: usize) -> Self {
+        self.system_bus
+            .mount(SubDevice::new(start, end, RAM::new(capacity)));
+        self
+    }
+
+    pub fn get_board(self) -> MotherBoard {
+        MotherBoard {
+            cpu: CPU::new(self.system_bus),
         }
     }
 }
 
-impl Bus for MotherBoard {
-    fn get(&self, address:u16) -> u8 {
-        self.memory[address as usize]
-    }
+pub struct MotherBoard {
+    cpu: CPU<MuxBus>,
+}
 
-    fn set(&mut self, address:u16, data:u8) {
-        self.memory[address as usize] = data;
+impl Tick for MotherBoard {
+    fn tick(&mut self) {
+        self.cpu.tick()
     }
 }

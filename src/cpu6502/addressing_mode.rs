@@ -1,6 +1,6 @@
 // Extracted from WikiBooks 6502 assembly
 
-use super::{CPU, Bus};
+use super::{Bus, CPU};
 use crate::utils;
 
 #[derive(Clone, Copy)]

@@ -2,17 +2,12 @@ mod addressing_mode;
 mod cycles;
 mod instruction;
 
-use crate::Tick;
+use crate::{Bus, Tick};
 
 use self::{
     addressing_mode::{AddressingMode, Operand},
     instruction::Instruction,
 };
-
-pub trait Bus {
-    fn get(&self, address: u16) -> u8;
-    fn set(&mut self, address: u16, data: u8) -> ();
-}
 
 #[derive(Default)]
 struct StatusRegister {
@@ -54,7 +49,7 @@ impl<B: Bus> CPU<B> {
         }
     }
 
-    pub fn from_state(registers:Registers, bus: B) -> Self {
+    pub fn from_state(registers: Registers, bus: B) -> Self {
         Self {
             registers,
             pending_cycles: 0,
