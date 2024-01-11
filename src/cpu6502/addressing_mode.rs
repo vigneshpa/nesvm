@@ -48,8 +48,6 @@ pub enum AddressingMode {
     ZeroPageIndirectIndexedWithY,
 }
 
-const LOOKUP_TABLE: [AddressingMode; 256] = [AddressingMode::Accumulator; 256];
-
 #[derive(Clone, Copy)]
 pub enum Operand {
     Implied,
@@ -75,9 +73,6 @@ impl Operand {
 }
 
 impl AddressingMode {
-    pub fn from_opcode(opcode: u8) -> AddressingMode {
-        LOOKUP_TABLE[opcode as usize]
-    }
     pub fn fetch_operand<B: Bus>(&self, cpu: &mut CPU<B>) -> Operand {
         //
         let pc = cpu.registers.program_counter;

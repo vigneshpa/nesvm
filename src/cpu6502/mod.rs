@@ -1,6 +1,6 @@
 mod addressing_mode;
-mod cycles;
 mod instruction;
+mod opcode;
 
 use crate::{Bus, Tick};
 

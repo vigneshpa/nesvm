@@ -1,0 +1,451 @@
+{
+    "modes": {
+        "A": "Accumulator",
+        "i": "Implied",
+        "#": "Immediate",
+        "a": "Absolute",
+        "zp": "ZeroPage",
+        "r": "Relative",
+        "(a)": "AbsoluteIndirect",
+        "a,x": "AbsoluteIndexedWithX",
+        "a,y": "AbsoluteIndexedWithY",
+        "zp,x": "ZeroPageIndexedWithX",
+        "zp,y": "ZeroPageIndexedWithY",
+        "(zp,x)": "ZeroPageIndexedIndirect",
+        "(zp),y": "ZeroPageIndirectIndexedWithY"
+    },
+    "instructions": {
+        "LDA": {
+            "name": "Load Accumulator with Memory",
+            "opcodes": {
+                "a": "AD",
+                "a,x": "BD",
+                "a,y": "B9",
+                "#": "A9",
+                "zp": "A5",
+                "(zp,x)": "A1",
+                "zp,x": "B5",
+                "(zp),y": "B1"
+            }
+        },
+        "LDX": {
+            "name": "Load Index X with Memory",
+            "opcodes": {
+                "a": "AE",
+                "a,y": "BE",
+                "#": "A2",
+                "zp": "A6",
+                "zp,y": "B6"
+            }
+        },
+        "LDY": {
+            "name": "Load Index Y with Memory",
+            "opcodes": {
+                "a": "AC",
+                "a,x": "BC",
+                "#": "A0",
+                "zp": "A4",
+                "zp,x": "B4"
+            }
+        },
+        "STA": {
+            "name": "Store Accumulator in Memory",
+            "opcodes": {
+                "a": "8D",
+                "a,x": "9D",
+                "a,y": "99",
+                "zp": "85",
+                "(zp,x)": "81",
+                "zp,x": "95",
+                "(zp),y": "91"
+            }
+        },
+        "STX": {
+            "name": "Store Index X in Memory",
+            "opcodes": {
+                "a": "8E",
+                "zp": "86",
+                "zp,y": "96"
+            }
+        },
+        "STY": {
+            "name": "Store Index Y in Memory",
+            "opcodes": {
+                "a": "8C",
+                "zp": "84",
+                "zp,x": "94"
+            }
+        },
+        "ADC": {
+            "name": "Add Memory to Accumulator with Carry",
+            "opcodes": {
+                "a": "6D",
+                "a,x": "7D",
+                "a,y": "79",
+                "#": "69",
+                "zp": "65",
+                "(zp,x)": "61",
+                "zp,x": "75",
+                "(zp),y": "71"
+            }
+        },
+        "SBC": {
+            "name": "Subtract Memory from Accumulator with Borrow",
+            "opcodes": {
+                "a": "ED",
+                "a,x": "FD",
+                "a,y": "F9",
+                "#": "E9",
+                "zp": "E5",
+                "(zp,x)": "E1",
+                "zp,x": "F5",
+                "(zp),y": "F1"
+            }
+        },
+        "INC": {
+            "name": "Increment Memory by One",
+            "opcodes": {
+                "a": "EE",
+                "a,x": "FE",
+                "zp": "E6",
+                "zp,x": "F6"
+            }
+        },
+        "INX": {
+            "name": "Increment Index X by One",
+            "opcodes": {
+                "i": "E8"
+            }
+        },
+        "INY": {
+            "name": "Increment Index Y by One",
+            "opcodes": {
+                "i": "C8"
+            }
+        },
+        "DEC": {
+            "name": "Decrement Memory by One",
+            "opcodes": {
+                "a": "CE",
+                "a,x": "DE",
+                "zp": "C6",
+                "zp,x": "D6"
+            }
+        },
+        "DEX": {
+            "name": "Decrement Index X by One",
+            "opcodes": {
+                "i": "CA"
+            }
+        },
+        "DEY": {
+            "name": "Decrement Index Y by One",
+            "opcodes": {
+                "i": "88"
+            }
+        },
+        "ASL": {
+            "name": "Arithmetic Shift Left One Bit",
+            "opcodes": {
+                "a": "0E",
+                "a,x": "1E",
+                "A": "0A",
+                "zp": "06",
+                "zp,x": "16"
+            }
+        },
+        "LSR": {
+            "name": "Logical Shift Right One Bit",
+            "opcodes": {
+                "a": "4E",
+                "a,x": "5E",
+                "A": "4A",
+                "zp": "46",
+                "zp,x": "56"
+            }
+        },
+        "ROL": {
+            "name": "Rotate Left One Bit",
+            "opcodes": {
+                "a": "2E",
+                "a,x": "3E",
+                "A": "2A",
+                "zp": "26",
+                "zp,x": "36"
+            }
+        },
+        "ROR": {
+            "name": "Rotate Right One Bit",
+            "opcodes": {
+                "a": "6E",
+                "a,x": "7E",
+                "A": "6A",
+                "zp": "66",
+                "zp,x": "76"
+            }
+        },
+        "AND": {
+            "name": "AND Memory with Accumulator",
+            "opcodes": {
+                "a": "2D",
+                "a,x": "3D",
+                "a,y": "39",
+                "#": "29",
+                "zp": "25",
+                "(zp,x)": "21",
+                "zp,x": "35",
+                "(zp),y": "31"
+            }
+        },
+        "ORA": {
+            "name": "OR Memory with Accumulator",
+            "opcodes": {
+                "a": "0D",
+                "a,x": "1D",
+                "a,y": "19",
+                "#": "09",
+                "zp": "05",
+                "(zp,x)": "01",
+                "zp,x": "15",
+                "(zp),y": "11"
+            }
+        },
+        "EOR": {
+            "name": "Exclusive-OR Memory with Accumulator",
+            "opcodes": {
+                "a": "4D",
+                "a,x": "5D",
+                "a,y": "59",
+                "#": "49",
+                "zp": "45",
+                "(zp,x)": "41",
+                "zp,x": "55",
+                "(zp),y": "51"
+            }
+        },
+        "CMP": {
+            "name": "Compare Memory and Accumulator",
+            "opcodes": {
+                "a": "CD",
+                "a,x": "DD",
+                "a,y": "D9",
+                "#": "C9",
+                "zp": "C5",
+                "(zp,x)": "C1",
+                "zp,x": "D5",
+                "(zp),y": "D1"
+            }
+        },
+        "CPX": {
+            "name": "Compare Memory and Index X",
+            "opcodes": {
+                "a": "EC",
+                "#": "E0",
+                "zp": "E4"
+            }
+        },
+        "CPY": {
+            "name": "Compare Memory with Index Y",
+            "opcodes": {
+                "a": "CC",
+                "#": "C0",
+                "zp": "C4"
+            }
+        },
+        "BIT": {
+            "name": "Test Bits in Memory with Accumulator",
+            "opcodes": {
+                "a": "2C",
+                "#": "89",
+                "zp": "24"
+            }
+        },
+        "BCC": {
+            "name": "Branch on Carry Clear",
+            "opcodes": {
+                "r": "90"
+            }
+        },
+        "BCS": {
+            "name": "Branch on Carry Set",
+            "opcodes": {
+                "r": "B0"
+            }
+        },
+        "BNE": {
+            "name": "Branch on Result not Zero",
+            "opcodes": {
+                "r": "D0"
+            }
+        },
+        "BEQ": {
+            "name": "Branch on Result Zero",
+            "opcodes": {
+                "r": "F0"
+            }
+        },
+        "BPL": {
+            "name": "Branch on Result Plus",
+            "opcodes": {
+                "r": "10"
+            }
+        },
+        "BMI": {
+            "name": "Branch on Result Minus",
+            "opcodes": {
+                "r": "30"
+            }
+        },
+        "BVC": {
+            "name": "Branch on Overflow Clear",
+            "opcodes": {
+                "r": "50"
+            }
+        },
+        "BVS": {
+            "name": "Branch on Overflow Set",
+            "opcodes": {
+                "r": "70"
+            }
+        },
+        "TAX": {
+            "name": "Transfer Accumulator to Index X",
+            "opcodes": {
+                "i": "AA"
+            }
+        },
+        "TXA": {
+            "name": "Transfer Index X to Accumulator",
+            "opcodes": {
+                "i": "8A"
+            }
+        },
+        "TAY": {
+            "name": "Transfer Accumulator to Index Y",
+            "opcodes": {
+                "i": "A8"
+            }
+        },
+        "TYA": {
+            "name": "Transfer Index Y to Accumulator",
+            "opcodes": {
+                "i": "98"
+            }
+        },
+        "TSX": {
+            "name": "Transfer Stack Pointer to Index X",
+            "opcodes": {
+                "i": "BA"
+            }
+        },
+        "TXS": {
+            "name": "Transfer Index X to Stack Pointer",
+            "opcodes": {
+                "i": "9A"
+            }
+        },
+        "PHA": {
+            "name": "Push Accumulator on Stack",
+            "opcodes": {
+                "i": "48"
+            }
+        },
+        "PLA": {
+            "name": "Pull Accumulator from Stack",
+            "opcodes": {
+                "i": "68"
+            }
+        },
+        "PHP": {
+            "name": "Push Processor Status on Stack",
+            "opcodes": {
+                "i": "08"
+            }
+        },
+        "PLP": {
+            "name": "Pull Processor Status from Stack",
+            "opcodes": {
+                "i": "28"
+            }
+        },
+        "JMP": {
+            "name": "Jump to New Location",
+            "opcodes": {
+                "a": "4C",
+                "(a)": "6C"
+            }
+        },
+        "JSR": {
+            "name": "Jump to New Location Saving Return Address",
+            "opcodes": {
+                "a": "20"
+            }
+        },
+        "RTS": {
+            "name": "Return from Subroutine",
+            "opcodes": {
+                "i": "60"
+            }
+        },
+        "RTI": {
+            "name": "Return from Interrupt",
+            "opcodes": {
+                "i": "40"
+            }
+        },
+        "CLC": {
+            "name": "Clear Carry Flag",
+            "opcodes": {
+                "i": "18"
+            }
+        },
+        "SEC": {
+            "name": "Set Carry Flag",
+            "opcodes": {
+                "i": "38"
+            }
+        },
+        "CLD": {
+            "name": "Clear Decimal Mode",
+            "opcodes": {
+                "i": "D8"
+            }
+        },
+        "SED": {
+            "name": "Set Decimal Mode",
+            "opcodes": {
+                "i": "F8"
+            }
+        },
+        "CLI": {
+            "name": "Clear Interrupt Disable Status",
+            "opcodes": {
+                "i": "58"
+            }
+        },
+        "SEI": {
+            "name": "Set Interrupt Disable Status",
+            "opcodes": {
+                "i": "78"
+            }
+        },
+        "CLV": {
+            "name": "Clear Overflow Flag",
+            "opcodes": {
+                "i": "B8"
+            }
+        },
+        "BRK": {
+            "name": "Break",
+            "opcodes": {
+                "i": "00"
+            }
+        },
+        "NOP": {
+            "name": "No Operation",
+            "opcodes": {
+                "i": "EA"
+            }
+        }
+    }
+}

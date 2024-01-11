@@ -117,6 +117,8 @@ pub enum Instruction {
     JMP,
     /// Jump to New Location Saving Return Address
     JSR,
+    /// Return from Subroutine
+    RTS,
     /// Return from Interrupt
     RTI,
 
@@ -144,10 +146,6 @@ pub enum Instruction {
 }
 
 impl Instruction {
-    pub fn from_opcode(_opcode: u8) -> Self {
-        Self::NOP
-    }
-
     pub fn executor<'a, B: Bus>(
         self,
         cpu: &'a mut CPU<B>,
@@ -173,143 +171,175 @@ impl<'a, B: Bus> InstructionExecutor<'a, B> {
     }
 
     pub fn run(&mut self) {
-        use Instruction as I;
+        use Instruction::*;
         match self.instruction {
             //
             // Load and Store
-            I::LDA => self.set_acc(self.load()),
-            I::LDX => self.set_x(self.load()),
-            I::LDY => self.set_y(self.load()),
+            LDA => self.set_acc(self.load()),
+            LDX => self.set_x(self.load()),
+            LDY => self.set_y(self.load()),
 
-            I::STA => self.store(self.get_acc()),
-            I::STX => self.store(self.get_x()),
-            I::STY => self.store(self.get_y()),
+            STA => self.store(self.get_acc()),
+            STX => self.store(self.get_x()),
+            STY => self.store(self.get_y()),
 
             // Addition and Subtraction
-            I::ADC => self.set_acc(add_with_carry(
+            ADC => self.set_acc(add_with_carry(
                 self.get_acc(),
                 self.load(),
                 self.get_carry(),
             )),
-            I::SBC => self.set_acc(sub_with_carry(
+            SBC => self.set_acc(sub_with_carry(
                 self.get_acc(),
                 self.load(),
                 self.get_carry(),
             )),
 
             // Increment
-            I::INC => self.store(increment(self.load())),
-            I::INX => self.set_x(increment(self.get_x())),
-            I::INY => self.set_y(increment(self.get_y())),
+            INC => self.store(increment(self.load())),
+            INX => self.set_x(increment(self.get_x())),
+            INY => self.set_y(increment(self.get_y())),
 
             // Decrement
-            I::DEC => self.store(decrement(self.load())),
-            I::DEX => self.set_x(decrement(self.get_x())),
-            I::DEY => self.set_y(decrement(self.get_y())),
+            DEC => self.store(decrement(self.load())),
+            DEX => self.set_x(decrement(self.get_x())),
+            DEY => self.set_y(decrement(self.get_y())),
 
             // Shift and Rotation
-            I::ASL => self.store(shift_left(self.load())),
-            I::LSR => self.store(shift_right(self.load())),
-            I::ROL => self.store(rotate_left(self.load())),
-            I::ROR => self.store(rotate_right(self.load())),
+            ASL => self.store(shift_left(self.load())),
+            LSR => self.store(shift_right(self.load())),
+            ROL => self.store(rotate_left(self.load())),
+            ROR => self.store(rotate_right(self.load())),
 
             // Bitwise
-            I::AND => self.set_acc(self.get_acc() & self.load()),
-            I::ORA => self.set_acc(self.get_acc() | self.load()),
-            I::EOR => self.set_acc(self.get_acc() ^ self.load()),
+            AND => self.set_acc(self.get_acc() & self.load()),
+            ORA => self.set_acc(self.get_acc() | self.load()),
+            EOR => self.set_acc(self.get_acc() ^ self.load()),
 
             // Compare
-            I::CMP => self.compare(self.get_acc()),
-            I::CPX => self.compare(self.get_x()),
-            I::CPY => self.compare(self.get_y()),
+            CMP => self.compare(self.get_acc()),
+            CPX => self.compare(self.get_x()),
+            CPY => self.compare(self.get_y()),
 
             // Test bit
-            I::BIT => todo!(),
+            BIT => todo!(),
 
             // Branching
-            I::BCC => {
+            BCC => {
                 if !self.cpu.registers.status_register.carry {
                     self.branch(self.load())
                 }
             },
-            I::BCS => {
+            BCS => {
                 if self.cpu.registers.status_register.carry {
                     self.branch(self.load())
                 }
             },
-            I::BNE => {
+            BNE => {
                 if !self.cpu.registers.status_register.zero {
                     self.branch(self.load())
                 }
             },
-            I::BEQ => {
+            BEQ => {
                 if self.cpu.registers.status_register.zero {
                     self.branch(self.load())
                 }
             },
-            I::BPL => {
+            BPL => {
                 if !self.cpu.registers.status_register.negative {
                     self.branch(self.load())
                 }
             },
-            I::BMI => {
+            BMI => {
                 if self.cpu.registers.status_register.negative {
                     self.branch(self.load())
                 }
             },
-            I::BVC => {
+            BVC => {
                 if !self.cpu.registers.status_register.overflow {
                     self.branch(self.load())
                 }
             },
-            I::BVS => {
+            BVS => {
                 if self.cpu.registers.status_register.overflow {
                     self.branch(self.load())
                 }
             },
 
             // Transfer instructions
-            I::TAX => self.set_x(self.get_acc()),
-            I::TXA => self.set_acc(self.get_x()),
-            I::TAY => self.set_y(self.get_acc()),
-            I::TYA => self.set_acc(self.get_y()),
-            I::TSX => self.set_x(self.get_sp()),
-            I::TXS => self.set_sp(self.get_x()),
+            TAX => self.set_x(self.get_acc()),
+            TXA => self.set_acc(self.get_x()),
+            TAY => self.set_y(self.get_acc()),
+            TYA => self.set_acc(self.get_y()),
+            TSX => self.set_x(self.get_sp()),
+            TXS => self.set_sp(self.get_x()),
 
             // Stack
-            I::PHA => self.push(self.get_acc()),
-            I::PLA => {
+            PHA => self.push(self.get_acc()),
+            PLA => {
                 let data = self.pull();
                 self.set_acc(data)
             },
-            I::PHP => self.push(self.get_status()),
-            I::PLP => {
+            PHP => self.push(self.get_status()),
+            PLP => {
                 let data = self.pull();
                 self.set_status(data)
             },
 
             // Jump
-            I::JMP => match self.operand {
+
+            // Jump to new location by changing the value of the program counter.
+            JMP => match self.operand {
                 Operand::Memory(memory) => self.cpu.registers.program_counter = memory,
                 _ => panic!("Illeagal addressing mode")
             },
-            I::JSR => match self.operand {
+
+            // Jumps to a subroutine
+            // The address before the next instruction (PC - 1) is pushed onto the stack: first the upper byte followed by the lower byte. As the stack grows backwards, the return address is therefore stored as a little-endian number in memory.
+            // PC is set to the target address.
+            JSR => match self.operand {
                 Operand::Memory(memory) => {
+                    let (low, high) = split(self.cpu.registers.program_counter - 1);
+                    self.push(high);
+                    self.push(low);
                     self.cpu.registers.program_counter = memory;
-                    todo!("Push the address before the next instruction (PC-1)");
                 },
                 _ => panic!("Illeagal addressing mode")
             },
-            I::RTI => todo!(),
-            I::CLC => todo!(),
-            I::SEC => todo!(),
-            I::CLD => todo!(),
-            I::SED => todo!(),
-            I::CLI => todo!(),
-            I::SEI => todo!(),
-            I::CLV => todo!(),
-            I::BRK => todo!(),
-            I::NOP => {}
+
+            // Return from a subroutine to the point where it called with JSR.
+            // The return address is popped from the stack (low byte first, then high byte).
+            // The return address is incremented and stored in PC.
+            RTS => {
+                let low = self.pull();
+                let high = self.pull();
+                self.cpu.registers.program_counter = concat(low, high) + 1;
+            },
+            // Return from an interrupt.
+            // P is popped from the stack.
+            // PC is popped from the stack.
+            RTI => {
+                let status = self.pull();
+                let low = self.pull();
+                let high = self.pull();
+                self.set_status(status);
+                self.cpu.registers.program_counter = concat(low, high);
+            },
+
+            // Set and Clear
+            CLC => self.cpu.registers.status_register.carry = false,
+            SEC => self.cpu.registers.status_register.carry = true,
+            CLD => self.cpu.registers.status_register._decimal_mode = false,
+            SED => self.cpu.registers.status_register._decimal_mode = true,
+            CLI => self.cpu.registers.status_register.disable_interrupts = false,
+            SEI => self.cpu.registers.status_register.disable_interrupts = true,
+            CLV => self.cpu.registers.status_register.overflow = false,
+
+            // Force an Interrupt
+            BRK => todo!(),
+
+            // No Operation
+            NOP => {}
         }
     }
 

@@ -1,0 +1,2585 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<title>6502 Assembly - Wikibooks, open books for an open world</title>
+<script>document.documentElement.className="client-js";RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"6b83b075-40fa-47c4-8f7a-6089485f596c","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"6502_Assembly","wgTitle":"6502 Assembly","wgCurRevisionId":4338037,"wgRevisionId":4338037,"wgArticleId":74734,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Alphabetical/6","Subject:Assembly languages","Subject:Assembly languages/all books","Subject:Computer programming languages/all books","Subject:Computer programming/all books","Subject:Computer science/all books","Subject:Computing/all books","Subject:Books by subject/all books","Book:Wikibooks Stacks/Books",
+"Shelf:Assembly languages/all books","Shelf:Computer programming/all books","Shelf:Computer programming languages/all books","Shelf:Computer science/all books","Department:Computing/all books","Partly developed books","Books by completion status/all books","Book:6502 Assembly","Shelf:Assembly languages","One-page books"],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"6502_Assembly","wgRelevantArticleId":74734,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgNoticeProject":"wikibooks","wgFlaggedRevsParams":{"tags":{"value":{"levels":3}}},"wgStableRevisionId":4222229,"wgMediaViewerOnClick":true,"wgMediaViewerEnabledByDefault":true,"wgVisualEditor":{"pageLanguageCode":"en","pageLanguageDir":"ltr","pageVariantFallbacks":"en"},"wgMFDisplayWikibaseDescriptions":{"search":true,"watchlist":true,"tagline":false,"nearby":true},"wgWMESchemaEditAttemptStepOversample":
+false,"wgWMEPageLength":30000,"wgULSCurrentAutonym":"English","wgCentralAuthMobileDomain":false,"wgEditSubmitButtonLabelPublish":true,"wgULSPosition":"interlanguage","wgULSisCompactLinksEnabled":true,"wgULSisLanguageSelectorEmpty":false,"wgWikibaseItemId":"Q19368646","wgCheckUserClientHintsHeadersJsApi":["architecture","bitness","brands","fullVersionList","mobile","model","platform","platformVersion"],"wgSiteNoticeId":"2.24"};RLSTATE={"ext.globalCssJs.user.styles":"ready","site.styles":"ready","user.styles":"ready","ext.globalCssJs.user":"ready","user":"ready","user.options":"loading","ext.flaggedRevs.icons":"ready","oojs-ui-core.styles":"ready","oojs-ui.styles.indicators":"ready","mediawiki.widgets.styles":"ready","oojs-ui-core.icons":"ready","ext.cite.styles":"ready","skins.vector.styles.legacy":"ready","ext.flaggedRevs.basic":"ready","ext.visualEditor.desktopArticleTarget.noscript":"ready","codex-search-styles":"ready","ext.uls.interlanguage":"ready","wikibase.client.init":"ready",
+"ext.wikimediaBadges":"ready","ext.dismissableSiteNotice.styles":"ready"};RLPAGEMODULES=["ext.cite.ux-enhancements","mediawiki.page.media","mediawiki.toggleAllCollapsibles","site","mediawiki.page.ready","mediawiki.toc","skins.vector.legacy.js","ext.centralNotice.geoIP","ext.centralNotice.startUp","ext.flaggedRevs.advanced","ext.gadget.wikidialog","ext.gadget.commons-file","ext.urlShortener.toolbar","ext.centralauth.centralautologin","mmv.head","mmv.bootstrap.autostart","ext.visualEditor.desktopArticleTarget.init","ext.visualEditor.targetLoader","ext.echo.centralauth","ext.eventLogging","ext.wikimediaEvents","ext.navigationTiming","ext.uls.compactlinks","ext.uls.interface","ext.checkUser.clientHints","ext.dismissableSiteNotice"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+}];});});</script>
+<link rel="stylesheet" href="/w/load.php?lang=en&amp;modules=codex-search-styles%7Cext.cite.styles%7Cext.dismissableSiteNotice.styles%7Cext.flaggedRevs.basic%2Cicons%7Cext.uls.interlanguage%7Cext.visualEditor.desktopArticleTarget.noscript%7Cext.wikimediaBadges%7Cmediawiki.widgets.styles%7Coojs-ui-core.icons%2Cstyles%7Coojs-ui.styles.indicators%7Cskins.vector.styles.legacy%7Cwikibase.client.init&amp;only=styles&amp;skin=vector">
+<script async="" src="/w/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="/w/load.php?lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector">
+<meta name="generator" content="MediaWiki 1.42.0-wmf.13">
+<meta name="referrer" content="origin">
+<meta name="referrer" content="origin-when-cross-origin">
+<meta name="robots" content="max-image-preview:standard">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=1000">
+<meta property="og:title" content="6502 Assembly - Wikibooks, open books for an open world">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="//upload.wikimedia.org">
+<link rel="alternate" media="only screen and (max-width: 720px)" href="//en.m.wikibooks.org/wiki/6502_Assembly">
+<link rel="alternate" type="application/x-wiki" title="Edit" href="/w/index.php?title=6502_Assembly&amp;action=edit">
+<link rel="icon" href="/static/favicon/wikibooks.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="/w/opensearch_desc.php" title="Wikibooks (en)">
+<link rel="EditURI" type="application/rsd+xml" href="//en.wikibooks.org/w/api.php?action=rsd">
+<link rel="canonical" href="https://en.wikibooks.org/wiki/6502_Assembly">
+<link rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/deed.en">
+<link rel="alternate" type="application/atom+xml" title="Wikibooks Atom feed" href="/w/index.php?title=Special:RecentChanges&amp;feed=atom">
+<link rel="dns-prefetch" href="//meta.wikimedia.org" />
+<link rel="dns-prefetch" href="//login.wikimedia.org">
+</head>
+<body class="skin-vector-legacy mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-6502_Assembly rootpage-6502_Assembly skin-vector action-view"><div id="mw-page-base" class="noprint"></div>
+<div id="mw-head-base" class="noprint"></div>
+<div id="content" class="mw-body" role="main">
+	<a id="top"></a>
+	<div id="siteNotice"><div id="mw-dismissablenotice-anonplace"></div><script>(function(){var node=document.getElementById("mw-dismissablenotice-anonplace");if(node){node.outerHTML="\u003Cdiv class=\"mw-dismissable-notice\"\u003E\u003Cdiv class=\"mw-dismissable-notice-close\"\u003E[\u003Ca tabindex=\"0\" role=\"button\"\u003Edismiss\u003C/a\u003E]\u003C/div\u003E\u003Cdiv class=\"mw-dismissable-notice-body\"\u003E\u003C!-- CentralNotice --\u003E\u003Cdiv id=\"localNotice\" data-nosnippet=\"\"\u003E\u003Cdiv class=\"anonnotice\" lang=\"en\" dir=\"ltr\"\u003E\u003Cp\u003E-\n\u003C/p\u003E\u003C/div\u003E\u003C/div\u003E\u003C/div\u003E\u003C/div\u003E";}}());</script></div>
+	<div class="mw-indicators">
+	<div id="mw-indicator-status-icon" class="mw-indicator"><div class="mw-parser-output"><span typeof="mw:File"><a href="/wiki/Help:Development_stages" title="25% developed"><img alt="25% developed" src="//upload.wikimedia.org/wikipedia/commons/thumb/c/ce/25_percent.svg/24px-25_percent.svg.png" decoding="async" width="24" height="24" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/c/ce/25_percent.svg/36px-25_percent.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/c/ce/25_percent.svg/48px-25_percent.svg.png 2x" data-file-width="9" data-file-height="9" /></a></span></div></div>
+	</div>
+	<h1 id="firstHeading" class="firstHeading mw-first-heading"><span class="mw-page-title-main">6502 Assembly</span></h1>
+	<div id="bodyContent" class="vector-body">
+		<div id="siteSub" class="noprint">From Wikibooks, open books for an open world</div>
+		<div id="contentSub"><div id="mw-content-subtitle"><div id="mw-fr-revisiontag" class="flaggedrevs_basic flaggedrevs_draft_notsynced plainlinks noprint"><span title='Unreviewed changes are displayed on this page' class='flaggedrevs-icon oo-ui-widget oo-ui-widget-enabled oo-ui-iconElement-icon oo-ui-icon-block oo-ui-iconElement oo-ui-labelElement-invisible oo-ui-iconWidget'></span>The <a class="external text" href="https://en.wikibooks.org/w/index.php?title=6502_Assembly&amp;stable=1">latest reviewed version</a> was <a class="external text" href="https://en.wikibooks.org/w/index.php?title=Special:Log&amp;type=review&amp;page=6502_Assembly">checked</a> on <i>23 December 2022</i>. There are <a class="external text" href="https://en.wikibooks.org/w/index.php?title=6502_Assembly&amp;oldid=4222229&amp;diff=cur&amp;diffonly=0">6 pending changes</a> awaiting review.</div>
+</div></div>
+		<div id="contentSub2"></div>
+		
+		<div id="jump-to-nav"></div>
+		<a class="mw-jump-link" href="#mw-head">Jump to navigation</a>
+		<a class="mw-jump-link" href="#searchInput">Jump to search</a>
+		<div id="mw-content-text" class="mw-body-content"><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><figure class="mw-default-size" typeof="mw:File/Thumb"><a href="/wiki/File:MOS_6502_die.jpg" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/8/8b/MOS_6502_die.jpg/220px-MOS_6502_die.jpg" decoding="async" width="220" height="245" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/8/8b/MOS_6502_die.jpg/330px-MOS_6502_die.jpg 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/8/8b/MOS_6502_die.jpg/440px-MOS_6502_die.jpg 2x" data-file-width="2696" data-file-height="2998" /></a><figcaption>A 6502 die</figcaption></figure>
+<table cellspacing="0" cellpadding="0" style="clear: right; margin-bottom: .5em; float: right; padding: .5em 0 .8em 1.4em; background: none; width: auto;">
+<tbody><tr>
+<td><div id="toc" class="toc" role="navigation" aria-labelledby="mw-toc-heading"><input type="checkbox" role="button" id="toctogglecheckbox" class="toctogglecheckbox" style="display:none" /><div class="toctitle" lang="en" dir="ltr"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Syntax"><span class="tocnumber">1</span> <span class="toctext">Syntax</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Registers"><span class="tocnumber">2</span> <span class="toctext">Registers</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Memory_layout"><span class="tocnumber">3</span> <span class="toctext">Memory layout</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Memory_Addressing_Modes"><span class="tocnumber">4</span> <span class="toctext">Memory Addressing Modes</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Accumulator:_A"><span class="tocnumber">4.1</span> <span class="toctext">Accumulator: A</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Implied:_i"><span class="tocnumber">4.2</span> <span class="toctext">Implied: i</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Immediate:_#"><span class="tocnumber">4.3</span> <span class="toctext">Immediate: #</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Absolute:_a"><span class="tocnumber">4.4</span> <span class="toctext">Absolute: a</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Zero_Page:_zp"><span class="tocnumber">4.5</span> <span class="toctext">Zero Page: zp</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Relative:_r"><span class="tocnumber">4.6</span> <span class="toctext">Relative: r</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Absolute_Indirect:_(a)"><span class="tocnumber">4.7</span> <span class="toctext">Absolute Indirect: (a)</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Absolute_Indexed_with_X:_a,x"><span class="tocnumber">4.8</span> <span class="toctext">Absolute Indexed with X: a,x</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Absolute_Indexed_with_Y:_a,y"><span class="tocnumber">4.9</span> <span class="toctext">Absolute Indexed with Y: a,y</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Zero_Page_Indexed_with_X:_zp,x"><span class="tocnumber">4.10</span> <span class="toctext">Zero Page Indexed with X: zp,x</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Zero_Page_Indexed_with_Y:_zp,y"><span class="tocnumber">4.11</span> <span class="toctext">Zero Page Indexed with Y: zp,y</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Zero_Page_Indexed_Indirect:_(zp,x)"><span class="tocnumber">4.12</span> <span class="toctext">Zero Page Indexed Indirect: (zp,x)</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Zero_Page_Indirect_Indexed_with_Y:_(zp),y"><span class="tocnumber">4.13</span> <span class="toctext">Zero Page Indirect Indexed with Y: (zp),y</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-18"><a href="#Instructions"><span class="tocnumber">5</span> <span class="toctext">Instructions</span></a>
+<ul>
+<li class="toclevel-2 tocsection-19"><a href="#Load_and_Store"><span class="tocnumber">5.1</span> <span class="toctext">Load and Store</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#Arithmetic"><span class="tocnumber">5.2</span> <span class="toctext">Arithmetic</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#Increment_and_Decrement"><span class="tocnumber">5.3</span> <span class="toctext">Increment and Decrement</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#Shift_and_Rotate"><span class="tocnumber">5.4</span> <span class="toctext">Shift and Rotate</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#Logic"><span class="tocnumber">5.5</span> <span class="toctext">Logic</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="#Compare_and_Test_Bit"><span class="tocnumber">5.6</span> <span class="toctext">Compare and Test Bit</span></a></li>
+<li class="toclevel-2 tocsection-25"><a href="#Branch"><span class="tocnumber">5.7</span> <span class="toctext">Branch</span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#Transfer"><span class="tocnumber">5.8</span> <span class="toctext">Transfer</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#Stack"><span class="tocnumber">5.9</span> <span class="toctext">Stack</span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#Subroutines_and_Jump"><span class="tocnumber">5.10</span> <span class="toctext">Subroutines and Jump</span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#Set_and_Clear"><span class="tocnumber">5.11</span> <span class="toctext">Set and Clear</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#Miscellaneous"><span class="tocnumber">5.12</span> <span class="toctext">Miscellaneous</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-31"><a href="#Instruction_table"><span class="tocnumber">6</span> <span class="toctext">Instruction table</span></a></li>
+<li class="toclevel-1 tocsection-32"><a href="#References"><span class="tocnumber">7</span> <span class="toctext">References</span></a></li>
+<li class="toclevel-1 tocsection-33"><a href="#Further_reading"><span class="tocnumber">8</span> <span class="toctext">Further reading</span></a></li>
+</ul>
+</div>
+
+</td></tr></tbody></table>
+<p>This book is a guide to the 6502 Assembly language. This book will teach the different memory addressing modes and instructions of the 8-bit 6502 processor.
+</p><p>You might want to learn 6502 assembly language programming if you want to do Atari 2600/8-bit family/5200/7800 Programming, Commodore PET/VIC/64/128 Programming, Acorn 8 Bit Programming, Apple I/II Programming,
+<a href="/wiki/NES_Programming" title="NES Programming">NES Programming</a> or <a href="/wiki/Super_NES_Programming" title="Super NES Programming">Super NES Programming</a>.
+</p>
+<h2><span class="mw-headline" id="Syntax">Syntax</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=1" title="Edit section: Syntax" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=1" title="Edit section&#039;s source code: Syntax"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Syntax will vary between assemblers - this book will use the following syntax throughout:
+</p>
+<table class="wikitable">
+<caption>Numerical representations
+</caption>
+<tbody><tr>
+<th>Syntax</th>
+<th>Base</th>
+<th>Example
+</th></tr>
+<tr>
+<td><code>%00001111</code></td>
+<td>Binary</td>
+<td><code>LDA #%0001</code>
+</td></tr>
+<tr>
+<td><code>$FA</code></td>
+<td>Hexadecimal</td>
+<td><code>LDA #$0E</code>
+</td></tr>
+<tr>
+<td><code>123</code></td>
+<td>Decimal</td>
+<td><code>LDA #100</code>
+</td></tr></tbody></table>
+<h2><span class="mw-headline" id="Registers">Registers</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=2" title="Edit section: Registers" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=2" title="Edit section&#039;s source code: Registers"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h2>
+<p><span class="anchor" id="RegisterTable"></span>
+</p>
+<table class="wikitable">
+<caption>Registers
+</caption>
+<tbody><tr>
+<th>Register</th>
+<th>Size (bits)</th>
+<th>Purpose
+</th></tr>
+<tr>
+<td>Accumulator (A)</td>
+<td>8
+</td>
+<td>Used to perform calculations on data.<br />Most instructions can operate directly on the accumulator instead of spending CPU cycles to access memory.
+</td></tr>
+<tr>
+<td>X register (X)</td>
+<td>8
+</td>
+<td>Used as an index in some <a href="#Memory_Addressing_Modes">addressing modes</a>.
+</td></tr>
+<tr>
+<td>Y register (Y)</td>
+<td>8
+</td>
+<td>Used as an index in some <a href="#Memory_Addressing_Modes">addressing modes</a>.
+</td></tr>
+<tr>
+<td>Program Counter (PC)</td>
+<td>16
+</td>
+<td>Points to the address of the next instruction to be executed.
+</td></tr>
+<tr>
+<td>Stack Pointer (S)</td>
+<td>8
+</td>
+<td>Stores the stack index into which the next stack element will be written.<br />The address of this position is <code>$0100 + SP</code>. SP is initially set to <code>$FD</code>.
+<p>TSX and TXS are the only instructions that let you directly modify S.
+</p>
+</td></tr>
+<tr>
+<td>Status (P)</td>
+<td>8
+</td>
+<td>Each bit represents a status flag.
+<p>Flags indicate the state of the CPU, or information about the result of the previous instruction.  
+PHP and PLP can save/restore P from the stack.  Various instructions can directly set or clear bits in P: SEC, CLC, SEI, CLI, SED, CLD, CLV.<br />See the table below for a description of each flag.
+</p>
+</td></tr></tbody></table>
+<p><span class="anchor" id="StatusFlagTable"></span>
+</p>
+<table class="wikitable">
+<caption>Status Flags
+</caption>
+<tbody><tr>
+<th>Bit</th>
+<th>Symbol</th>
+<th>Name</th>
+<th>Description
+</th></tr>
+<tr>
+<td>7</td>
+<td>N</td>
+<td>Negative
+</td>
+<td>
+<p><a class="mw-selflink-fragment" href="#Compare_and_Test_Bit">Compare</a>: Set if the register's value is less than the input value<br />
+Otherwise: Set if the result was negative, i.e. bit 7 of the result was set.
+</p>
+</td></tr>
+<tr>
+<td>6</td>
+<td>V</td>
+<td>Overflow
+</td>
+<td>
+<p><a href="#Arithmetic">Arithmetic</a>: Set if a signed overflow occurred during addition or subtraction, i.e. the sign of the result differs from the sign of both the input and the accumulator.
+</p><p><code>BIT</code>: Set to bit 6 of the input.
+</p><p>Other: The original 6502 has an external pin called "SO" (Set Overflow) that hardware can use to make the V flag set.  The purpose is to react to hardware events quicker than an IRQ.  Most common 6502 compatible platforms do not have anything that uses this feature, or do not use it.
+</p>
+</td></tr>
+<tr>
+<td>5</td>
+<td>-</td>
+<td>(Unused)
+</td>
+<td>Always set
+</td></tr>
+<tr>
+<td>4
+</td>
+<td>B<sup id="cite_ref-1" class="reference"><a href="#cite_note-1">&#91;1&#93;</a></sup>
+</td>
+<td>Break
+</td>
+<td>Set if an interrupt request has been triggered by a <code>BRK</code> instruction
+</td></tr>
+<tr>
+<td>3</td>
+<td>D</td>
+<td>Decimal
+</td>
+<td>Decimal mode<a class="external autonumber" href="https://wikipedia.org/wiki/Binary-coded_decimal">[2]</a>: mathematical instructions will treat the inputs and outputs as "Binary Coded Decimal" (BCD) numbers.
+<p><br />E.g. <code>$09 + $01 = $10</code>
+<i>NOTE: The 6502-compatible CPU in the NES does not implement decimal mode, so decimal mode will not change the behavior on that CPU only, but you can still clear/set the flag.</i>
+</p>
+</td></tr>
+<tr>
+<td>2</td>
+<td>I</td>
+<td>Interrupt Disable
+</td>
+<td>Disables IRQ interrupts while set.  NMIs and RESETs are not affected.
+</td></tr>
+<tr>
+<td>1</td>
+<td>Z</td>
+<td>Zero
+</td>
+<td>
+<p><a class="mw-selflink-fragment" href="#Compare_and_Test_Bit">Compare</a>: Set if the register's value is equal to the input value
+</p><p><code>BIT</code>: Set if the result of logically ANDing the accumulator with the input results in 0.
+</p><p>Otherwise: Set if result was zero.
+</p><p><i>NOTE: Compare (CMP, CPX, CPY) instructions work by subtracting, but not keeping the result.  Therefore Z will be set if the value is 0, and therefore that's why BEQ tests the Z flag, and that's why you do not have to CMP #0 before BEQ.</i>
+</p>
+</td></tr>
+<tr>
+<td>0</td>
+<td>C</td>
+<td>Carry
+</td>
+<td>Carry/Borrow flag used in math and rotate operations
+<p><a href="#Arithmetic">Arithmetic</a>: Set if an unsigned overflow occurred during addition or subtraction, i.e. the result is less than the initial value (or equal to the initial value, if the carry flag was set going in)
+</p><p><a class="mw-selflink-fragment" href="#Compare_and_Test_Bit">Compare</a>: Set if register's value is greater than or equal to the input value
+</p><p><a href="#Shift_and_Rotate">Shifting</a>: Set to the value of the eliminated bit of the input, i.e. bit 7 when shifting left, or bit 0 when shifting right
+</p>
+</td></tr></tbody></table>
+<h2><span class="mw-headline" id="Memory_layout">Memory layout</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=3" title="Edit section: Memory layout" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=3" title="Edit section&#039;s source code: Memory layout"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>16-bit values are stored in memory in <a href="https://en.wikipedia.org/wiki/Endianness" class="extiw" title="w:Endianness">little-endian</a>, so the least significant byte is stored before the most significant. E.g. if address <code>$0000</code> contains <code>$FF</code> and address <code>$0001</code> contains <code>$00</code>, reading a two-byte value from <code>$0000</code> will result in <code>$00FF</code>.
+</p><p>Signed integers are in <a href="https://en.wikipedia.org/wiki/Two%27s_complement" class="extiw" title="w:Two&#39;s complement">two's complement</a> and can represent values from -128 (<code>%10000000</code>) to +127 (<code>%01111111</code>). Bit 7 is set if the integer is negative.
+</p><p>The 6502's program counter is 16 bits wide, so up to 2^16 (65536) bytes of memory are addressable. Certain regions of memory are reserved for particular purposes:
+</p>
+<table class="wikitable">
+<caption>Memory regions
+</caption>
+<tbody><tr>
+<th>Region</th>
+<th>Contents</th>
+<th>Description
+</th></tr>
+<tr>
+<td><code>$0000</code> - <code>$00FF</code>
+</td>
+<td>Zero page</td><td>The first page of memory, which is faster to access than other pages.<br />Instructions can specify addresses within the zero page with a single byte as opposed to two, so instructions that use the zero page instead of any other page require one less CPU cycle to execute</td>
+</tr>
+<tr>
+<td><code>$0100</code> - <code>$01FF</code>
+</td>
+<td><a href="/wiki/Data_Structures/Stacks_and_Queues#Stacks" title="Data Structures/Stacks and Queues">Stack</a></td><td>Last-in first-out data structure. Grows backwards from <code>$01FF</code> to <code>$0100</code>.<br />Used by some <a href="#Transfer">transfer</a>, <a href="#Stack">stack</a>, and <a href="#Subroutines_and_Jump">subroutine</a> instructions</td>
+</tr>
+<tr>
+<td><code>$0200</code> - <code>$FFFF</code>
+</td>
+<td>General-purpose</td><td>Memory that can be used for whatever purpose needed.<br />Devices that use the 6502 processor may choose to reserve sub-regions for other purposes, such as <a href="/wiki/Embedded_Systems/Memory#Memory-Mapped_I/O" title="Embedded Systems/Memory">memory-mapped I/O</a></td>
+</tr>
+</tbody></table>
+<h2><span class="mw-headline" id="Memory_Addressing_Modes">Memory Addressing Modes</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=4" title="Edit section: Memory Addressing Modes" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=4" title="Edit section&#039;s source code: Memory Addressing Modes"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>Each instruction uses one of thirteen memory addressing modes, which determines the operand of the instruction. An example is provided for each.
+</p>
+<h3><span class="mw-headline" id="Accumulator:_A">Accumulator: A</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=5" title="Edit section: Accumulator: A" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=5" title="Edit section&#039;s source code: Accumulator: A"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The Accumulator is implied as the operand, so no address needs to be specified.
+</p><p><b> Example </b>
+</p><p>Using the ASL (Arithmetic Shift Left) instruction with no operands, the Accumulator is always the value being shifted left.
+</p>
+<pre>ASL
+</pre>
+<h3><span class="mw-headline" id="Implied:_i">Implied: i</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=6" title="Edit section: Implied: i" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=6" title="Edit section&#039;s source code: Implied: i"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The operand is implied, so it does not need to be specified.
+</p><p><b> Example </b>
+</p><p>The operands being implied here are X, the source of the transfer, and A, the destination of the transfer.
+</p>
+<pre>TXA
+</pre>
+<h3><span id="Immediate:_.23"></span><span class="mw-headline" id="Immediate:_#">Immediate: #</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=7" title="Edit section: Immediate: #" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=7" title="Edit section&#039;s source code: Immediate: #"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The operand is used directly to perform the computation.
+</p><p><b> Example </b>
+</p><p>The value $22 is loaded into the Accumulator.
+</p>
+<pre>LDA #$22
+</pre>
+<h3><span class="mw-headline" id="Absolute:_a">Absolute: a</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=8" title="Edit section: Absolute: a" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=8" title="Edit section&#039;s source code: Absolute: a"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A full 16-bit address is specified and the byte at that address is used to perform the computation.
+</p><p><b> Example </b>
+</p><p>The value at address <code>$D010</code> is loaded into the X register.
+</p>
+<pre>LDX $D010
+</pre>
+<h3><span class="mw-headline" id="Zero_Page:_zp">Zero Page: zp</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=9" title="Edit section: Zero Page: zp" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=9" title="Edit section&#039;s source code: Zero Page: zp"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>A single byte specifies an address in the first page of memory (<code>$00xx</code>), also known as the zero page, and the byte at that address is used to perform the computation.
+</p><p><b> Example </b>
+</p><p>The value at address <code>$0002</code> is loaded into the Y register.
+</p>
+<pre>LDY $02
+</pre>
+<h3><span class="mw-headline" id="Relative:_r">Relative: r</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=10" title="Edit section: Relative: r" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=10" title="Edit section&#039;s source code: Relative: r"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The offset specified is added to the current address stored in the Program Counter (PC). Offsets can range from -128 to +127.
+</p><p><b> Example </b>
+</p><p>The offset <code>$2D</code> is added to the address in the Program Counter (say <code>$C100</code>). The destination of the branch (if taken) will be <code>$C12D</code>.
+</p>
+<pre>BPL $2D
+</pre>
+<h3><span id="Absolute_Indirect:_.28a.29"></span><span class="mw-headline" id="Absolute_Indirect:_(a)">Absolute Indirect: (a)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=11" title="Edit section: Absolute Indirect: (a)" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=11" title="Edit section&#039;s source code: Absolute Indirect: (a)"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The little-endian two-byte value stored at the specified address is used to perform the computation. Only used by the <code>JMP</code> instruction.
+</p><p><b> Example </b>
+</p><p>The addresses <code>$A001</code> and <code>$A002</code> are read, returning <code>$FF</code> and <code>$00</code> respectively. The address <code>$00FF</code> is then jumped to.
+</p>
+<pre>JMP ($A001)
+</pre>
+<h3><span id="Absolute_Indexed_with_X:_a.2Cx"></span><span class="mw-headline" id="Absolute_Indexed_with_X:_a,x">Absolute Indexed with X: a,x</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=12" title="Edit section: Absolute Indexed with X: a,x" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=12" title="Edit section&#039;s source code: Absolute Indexed with X: a,x"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The value in <code>X</code> is added to the specified address for a sum address. The value at the sum address is used to perform the computation.
+</p><p><b> Example </b>
+</p><p>The value <code>$02</code> in <code>X</code> is added to <code>$C001</code> for a sum of <code>$C003</code>. The value <code>$5A</code> at address <code>$C003</code> is used to perform the <i>add with carry</i> (<i><code>ADC</code></i>) operation.
+</p>
+<pre>ADC $C001,X
+</pre>
+<h3><span id="Absolute_Indexed_with_Y:_a.2Cy"></span><span class="mw-headline" id="Absolute_Indexed_with_Y:_a,y">Absolute Indexed with Y: a,y</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=13" title="Edit section: Absolute Indexed with Y: a,y" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=13" title="Edit section&#039;s source code: Absolute Indexed with Y: a,y"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The value in <code>Y</code> is added to the specified address for a sum address. The value at the sum address is used to perform the computation.
+</p><p><b> Example </b>
+</p><p>The value <code>$03</code> in <code>Y</code> is added to <code>$F001</code> for a sum of <code>$F004</code>. The value <code>$EF</code> at address <code>$F004</code> is incremented (<i><code>INC</code></i>) and <code>$F0</code> is written back to <code>$F004</code>.
+</p>
+<pre>INC $F001,Y
+</pre>
+<h3><span id="Zero_Page_Indexed_with_X:_zp.2Cx"></span><span class="mw-headline" id="Zero_Page_Indexed_with_X:_zp,x">Zero Page Indexed with X: zp,x</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=14" title="Edit section: Zero Page Indexed with X: zp,x" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=14" title="Edit section&#039;s source code: Zero Page Indexed with X: zp,x"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The value in <code>X</code> is added to the specified zero page address for a sum address. The value at the sum address is used to perform the computation.
+</p><p><b> Example </b>
+</p><p>The value <code>$02</code> in <code>X</code> is added to <code>$01</code> for a sum of <code>$03</code>. The value <code>$A5</code> at address <code>$0003</code> is loaded into the Accumulator.
+</p>
+<pre>LDA $01,X
+</pre>
+<h3><span id="Zero_Page_Indexed_with_Y:_zp.2Cy"></span><span class="mw-headline" id="Zero_Page_Indexed_with_Y:_zp,y">Zero Page Indexed with Y: zp,y</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=15" title="Edit section: Zero Page Indexed with Y: zp,y" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=15" title="Edit section&#039;s source code: Zero Page Indexed with Y: zp,y"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The value in <code>Y</code> is added to the specified zero page address for a sum address. The value at the sum address is used to perform the computation.
+</p><p><b> Example </b>
+</p><p>The value <code>$03</code> in <code>Y</code> is added to <code>$01</code> for a sum of <code>$04</code>. The value <code>$E3</code> at address <code>$0004</code> is loaded into the Accumulator.
+</p>
+<pre>LDA $01,Y
+</pre>
+<h3><span id="Zero_Page_Indexed_Indirect:_.28zp.2Cx.29"></span><span class="mw-headline" id="Zero_Page_Indexed_Indirect:_(zp,x)">Zero Page Indexed Indirect: (zp,x)</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=16" title="Edit section: Zero Page Indexed Indirect: (zp,x)" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=16" title="Edit section&#039;s source code: Zero Page Indexed Indirect: (zp,x)"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The value in <code>X</code> is added to the specified zero page address for a sum address. The little-endian address stored at the two-byte pair of sum address (LSB) and sum address plus one (MSB) is loaded and the value at that address is used to perform the computation.
+</p><p><b> Example </b>
+</p><p>The value <code>$02</code> in <code>X</code> is added to <code>$15</code> for a sum of <code>$17</code>. The address <code>$D010</code> at addresses <code>$0017</code> and <code>$0018</code> will be where the value <code>$0F</code> in the Accumulator is stored.
+</p>
+<pre>STA ($15,X)
+</pre>
+<h3><span id="Zero_Page_Indirect_Indexed_with_Y:_.28zp.29.2Cy"></span><span class="mw-headline" id="Zero_Page_Indirect_Indexed_with_Y:_(zp),y">Zero Page Indirect Indexed with Y: (zp),y</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=17" title="Edit section: Zero Page Indirect Indexed with Y: (zp),y" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=17" title="Edit section&#039;s source code: Zero Page Indirect Indexed with Y: (zp),y"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The value in <code>Y</code> is added to the address at the little-endian address stored at the two-byte pair of the specified address (LSB) and the specified address plus one (MSB). The value at the sum address is used to perform the computation. Indeed addressing mode actually repeats exactly the Accumulator register's digits.
+</p><p><b> Example </b>
+</p><p>The value <code>$03</code> in <code>Y</code> is added to the address <code>$C235</code> at addresses <code>$002A</code> and <code>$002B</code> for a sum of <code>$C238</code>. The Accumulator is then exclusive ORed with the value <code>$2F</code> at <code>$C238</code>.
+</p>
+<pre>EOR ($2A),Y
+</pre>
+<h2><span class="mw-headline" id="Instructions">Instructions</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=18" title="Edit section: Instructions" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=18" title="Edit section&#039;s source code: Instructions"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h2>
+<p>These are the instructions for the 6502 processor including an ASCII visual, a list of affected flags, and a table of opcodes for acceptable addressing modes.
+</p>
+<h3><span class="mw-headline" id="Load_and_Store">Load and Store</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=19" title="Edit section: Load and Store" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=19" title="Edit section&#039;s source code: Load and Store"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<table>
+<caption>
+</caption>
+<tbody><tr>
+<td><b> Load Accumulator with Memory: <code style="color: #36c;font-family: sans-serif;">LDA</code> </b>&#160;&#160;
+</td>
+<td><b> Load Index X with Memory: <code style="color: #36c;font-family: sans-serif;">LDX</code> </b>&#160;&#160;
+</td>
+<td><b> Load Index Y with Memory: <code style="color: #36c;font-family: sans-serif;">LDY</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>M -&gt; A
+</p><p>Flags: N, Z
+</p>
+</td>
+<td>
+<p>M -&gt; X
+</p><p>Flags: N, Z
+</p>
+</td>
+<td>
+<p>M -&gt; Y
+</p><p>Flags: N, Z
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>AD
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_X:_a.2Cx">a,x</a></td>
+<td>BD
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_Y:_a.2Cy">a,y</a></td>
+<td>B9
+</td></tr>
+<tr>
+<td><a href="#Immediate:_.23">#</a></td>
+<td>A9
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>A5
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_Indirect:_.28zp.2Cx.29">(zp,x)</a></td>
+<td>A1
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_X:_zp.2Cx">zp,x</a></td>
+<td>B5
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indirect_Indexed_with_Y:_.28zp.29.2Cy">(zp),y</a></td>
+<td>B1
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>AE
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_Y:_a.2Cy">a,y</a></td>
+<td>BE
+</td></tr>
+<tr>
+<td><a href="#Immediate:_.23">#</a></td>
+<td>A2
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>A6
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_Y:_zp.2Cy">zp,y</a></td>
+<td>B6
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>AC
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_X:_a.2Cx">a,x</a></td>
+<td>BC
+</td></tr>
+<tr>
+<td><a href="#Immediate:_.23">#</a></td>
+<td>A0
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>A4
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_X:_zp.2Cx">zp,x</a></td>
+<td>B4
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td><b> Store Accumulator in Memory: <code style="color: #36c;font-family: sans-serif;">STA</code> </b>&#160;&#160;
+</td>
+<td><b> Store Index X in Memory: <code style="color: #36c;font-family: sans-serif;">STX</code> </b>&#160;&#160;
+</td>
+<td><b> Store Index Y in Memory: <code style="color: #36c;font-family: sans-serif;">STY</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>A -&gt; M
+</p><p>Flags: none
+</p>
+</td>
+<td>
+<p>X -&gt; M
+</p><p>Flags: none
+</p>
+</td>
+<td>
+<p>Y -&gt; M
+</p><p>Flags: none
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>8D
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_X:_a.2Cx">a,x</a></td>
+<td>9D
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_Y:_a.2Cy">a,y</a></td>
+<td>99
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>85
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_Indirect:_.28zp.2Cx.29">(zp,x)</a></td>
+<td>81
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_X:_zp.2Cx">zp,x</a></td>
+<td>95
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indirect_Indexed_with_Y:_.28zp.29.2Cy">(zp),y</a></td>
+<td>91
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>8E
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>86
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_Y:_zp.2Cy">zp,y</a></td>
+<td>96
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>8C
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>84
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_X:_zp.2Cx">zp,x</a></td>
+<td>94
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+<h3><span class="mw-headline" id="Arithmetic">Arithmetic</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=20" title="Edit section: Arithmetic" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=20" title="Edit section&#039;s source code: Arithmetic"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<table>
+<caption>
+</caption>
+<tbody><tr>
+<td><b> Add Memory to Accumulator with Carry: <code style="color: #36c;font-family: sans-serif;">ADC</code> </b>&#160;&#160;
+</td>
+<td><b> Subtract Memory from Accumulator with Borrow: <code style="color: #36c;font-family: sans-serif;">SBC</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>A + M + C -&gt; A
+</p><p>Flags: N, V, Z, C
+</p>
+</td>
+<td>
+<p>A - M - ~C -&gt; A
+</p><p>Flags: N, V, Z, C
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>6D
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_X:_a.2Cx">a,x</a></td>
+<td>7D
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_Y:_a.2Cy">a,y</a></td>
+<td>79
+</td></tr>
+<tr>
+<td><a href="#Immediate:_.23">#</a></td>
+<td>69
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>65
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_Indirect:_.28zp.2Cx.29">(zp,x)</a></td>
+<td>61
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_X:_zp.2Cx">zp,x</a></td>
+<td>75
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indirect_Indexed_with_Y:_.28zp.29.2Cy">(zp),y</a></td>
+<td>71
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>ED
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_X:_a.2Cx">a,x</a></td>
+<td>FD
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_Y:_a.2Cy">a,y</a></td>
+<td>F9
+</td></tr>
+<tr>
+<td><a href="#Immediate:_.23">#</a></td>
+<td>E9
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>E5
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_Indirect:_.28zp.2Cx.29">(zp,x)</a></td>
+<td>E1
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_X:_zp.2Cx">zp,x</a></td>
+<td>F5
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indirect_Indexed_with_Y:_.28zp.29.2Cy">(zp),y</a></td>
+<td>F1
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+<h3><span class="mw-headline" id="Increment_and_Decrement">Increment and Decrement</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=21" title="Edit section: Increment and Decrement" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=21" title="Edit section&#039;s source code: Increment and Decrement"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<table>
+<caption>
+</caption>
+<tbody><tr>
+<td><b> Increment Memory by One: <code style="color: #36c;font-family: sans-serif;">INC</code> </b>&#160;&#160;
+</td>
+<td><b> Increment Index X by One: <code style="color: #36c;font-family: sans-serif;">INX</code> </b>&#160;&#160;
+</td>
+<td><b> Increment Index Y by One: <code style="color: #36c;font-family: sans-serif;">INY</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>M + 1 -&gt; M
+</p><p>Flags: N, Z
+</p>
+</td>
+<td>
+<p>X + 1 -&gt; X
+</p><p>Flags: N, Z 
+</p>
+</td>
+<td>
+<p>Y + 1 -&gt; Y
+</p><p>Flags: N, Z
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>EE
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_X:_a.2Cx">a,x</a></td>
+<td>FE
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>E6
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_X:_zp.2Cx">zp,x</a></td>
+<td>F6
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>E8
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>C8
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td><b> Decrement Memory by One: <code style="color: #36c;font-family: sans-serif;">DEC</code> </b>&#160;&#160;
+</td>
+<td><b> Decrement Index X by One: <code style="color: #36c;font-family: sans-serif;">DEX</code> </b>&#160;&#160;
+</td>
+<td><b> Decrement Index Y by One: <code style="color: #36c;font-family: sans-serif;">DEY</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>M - 1 -&gt; M
+</p><p>Flags: N, Z
+</p>
+</td>
+<td>
+<p>X - 1 -&gt; X
+</p><p>Flags: N, Z
+</p>
+</td>
+<td>
+<p>Y - 1 -&gt; Y
+</p><p>Flags: N, Z
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>CE
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_X:_a.2Cx">a,x</a></td>
+<td>DE
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>C6
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_X:_zp.2Cx">zp,x</a></td>
+<td>D6
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>CA
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>88
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+<h3><span class="mw-headline" id="Shift_and_Rotate">Shift and Rotate</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=22" title="Edit section: Shift and Rotate" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=22" title="Edit section&#039;s source code: Shift and Rotate"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<table>
+<caption>
+</caption>
+<tbody><tr>
+<td><b> Arithmetic Shift Left One Bit: <code style="color: #36c;font-family: sans-serif;">ASL</code> </b>&#160;&#160;
+</td>
+<td><b> Logical Shift Right One Bit: <code style="color: #36c;font-family: sans-serif;">LSR</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>C &lt;- 7 6 5 4 3 2 1 0 &lt;- 0
+</p><p>Flags: N, Z, C
+</p>
+</td>
+<td>
+<p>0 -&gt; 7 6 5 4 3 2 1 0 -&gt; C
+</p><p>Flags: N, Z, C
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>0E
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_X:_a.2Cx">a,x</a></td>
+<td>1E
+</td></tr>
+<tr>
+<td><a href="#Accumulator:_A">A</a></td>
+<td>0A
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>06
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_X:_zp.2Cx">zp,x</a></td>
+<td>16
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>4E
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_X:_a.2Cx">a,x</a></td>
+<td>5E
+</td></tr>
+<tr>
+<td><a href="#Accumulator:_A">A</a></td>
+<td>4A
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>46
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_X:_zp.2Cx">zp,x</a></td>
+<td>56
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td><b> Rotate Left One Bit: <code style="color: #36c;font-family: sans-serif;">ROL</code> </b>&#160;&#160;
+</td>
+<td><b> Rotate Right One Bit: <code style="color: #36c;font-family: sans-serif;">ROR</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>C &lt;- 7 6 5 4 3 2 1 0 &lt;- C
+</p><p>Flags: N, Z, C
+</p>
+</td>
+<td>
+<p>C -&gt; 7 6 5 4 3 2 1 0 -&gt; C
+</p><p>Flags: N, Z, C
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>2E
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_X:_a.2Cx">a,x</a></td>
+<td>3E
+</td></tr>
+<tr>
+<td><a href="#Accumulator:_A">A</a></td>
+<td>2A
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>26
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_X:_zp.2Cx">zp,x</a></td>
+<td>36
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>6E
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_X:_a.2Cx">a,x</a></td>
+<td>7E
+</td></tr>
+<tr>
+<td><a href="#Accumulator:_A">A</a></td>
+<td>6A
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>66
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_X:_zp.2Cx">zp,x</a></td>
+<td>76
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+<h3><span class="mw-headline" id="Logic">Logic</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=23" title="Edit section: Logic" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=23" title="Edit section&#039;s source code: Logic"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<table>
+<caption>
+</caption>
+<tbody><tr>
+<td><b> AND Memory with Accumulator: <code style="color: #36c;font-family: sans-serif;">AND</code> </b>&#160;&#160;
+</td>
+<td><b> OR Memory with Accumulator: <code style="color: #36c;font-family: sans-serif;">ORA</code> </b>&#160;&#160;
+</td>
+<td><b> Exclusive-OR Memory with Accumulator: <code style="color: #36c;font-family: sans-serif;">EOR</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>A &amp; M -&gt; A
+</p><p>Flags: N, Z
+</p>
+</td>
+<td>
+<p>A | M -&gt; A
+</p><p>Flags: N, Z
+</p>
+</td>
+<td>
+<p>A ^ M -&gt; A
+</p><p>Flags: N, Z
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>2D
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_X:_a.2Cx">a,x</a></td>
+<td>3D
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_Y:_a.2Cy">a,y</a></td>
+<td>39
+</td></tr>
+<tr>
+<td><a href="#Immediate:_.23">#</a></td>
+<td>29
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>25
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_Indirect:_.28zp.2Cx.29">(zp,x)</a></td>
+<td>21
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_X:_zp.2Cx">zp,x</a></td>
+<td>35
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indirect_Indexed_with_Y:_.28zp.29.2Cy">(zp),y</a></td>
+<td>31
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>0D
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_X:_a.2Cx">a,x</a></td>
+<td>1D
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_Y:_a.2Cy">a,y</a></td>
+<td>19
+</td></tr>
+<tr>
+<td><a href="#Immediate:_.23">#</a></td>
+<td>09
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>05
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_Indirect:_.28zp.2Cx.29">(zp,x)</a></td>
+<td>01
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_X:_zp.2Cx">zp,x</a></td>
+<td>15
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indirect_Indexed_with_Y:_.28zp.29.2Cy">(zp),y</a></td>
+<td>11
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>4D
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_X:_a.2Cx">a,x</a></td>
+<td>5D
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_Y:_a.2Cy">a,y</a></td>
+<td>59
+</td></tr>
+<tr>
+<td><a href="#Immediate:_.23">#</a></td>
+<td>49
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>45
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_Indirect:_.28zp.2Cx.29">(zp,x)</a></td>
+<td>41
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_X:_zp.2Cx">zp,x</a></td>
+<td>55
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indirect_Indexed_with_Y:_.28zp.29.2Cy">(zp),y</a></td>
+<td>51
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+<h3><span class="mw-headline" id="Compare_and_Test_Bit">Compare and Test Bit</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=24" title="Edit section: Compare and Test Bit" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=24" title="Edit section&#039;s source code: Compare and Test Bit"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<p>The Negative (N), Zero (Z), and Carry (C) <a href="#StatusFlagTable">status flags</a> are used for conditional (branch) instructions.
+</p><p>All Compare instructions affect flags in the same way:
+</p>
+<table class="wikitable">
+<tbody><tr>
+<th>Condition</th>
+<th>N</th>
+<th>Z</th>
+<th>C
+</th></tr>
+<tr>
+<td>Register &lt; Memory</td>
+<td>1</td>
+<td>0</td>
+<td>0
+</td></tr>
+<tr>
+<td>Register = Memory</td>
+<td>0</td>
+<td>1</td>
+<td>1
+</td></tr>
+<tr>
+<td>Register &gt; Memory</td>
+<td>0</td>
+<td>0</td>
+<td>1
+</td></tr></tbody></table>
+<table>
+<caption>
+</caption>
+<tbody><tr>
+<td><b> Compare Memory and Accumulator: <code style="color: #36c;font-family: sans-serif;">CMP</code> </b>&#160;&#160;
+</td>
+<td><b> Compare Memory and Index X: <code style="color: #36c;font-family: sans-serif;">CPX</code> </b>&#160;&#160;
+</td>
+<td><b> Compare Memory with Index Y: <code style="color: #36c;font-family: sans-serif;">CPY</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>A - M
+</p><p>Flags: N, Z, C
+</p>
+</td>
+<td>
+<p>X - M
+</p><p>Flags: N, Z, C
+</p>
+</td>
+<td>
+<p>Y - M
+</p><p>Flags: N, Z, C
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>CD
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_X:_a.2Cx">a,x</a></td>
+<td>DD
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indexed_with_Y:_a.2Cy">a,y</a></td>
+<td>D9
+</td></tr>
+<tr>
+<td><a href="#Immediate:_.23">#</a></td>
+<td>C9
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>C5
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_Indirect:_.28zp.2Cx.29">(zp,x)</a></td>
+<td>C1
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indexed_with_X:_zp.2Cx">zp,x</a></td>
+<td>D5
+</td></tr>
+<tr>
+<td><a href="#Zero_Page_Indirect_Indexed_with_Y:_.28zp.29.2Cy">(zp),y</a></td>
+<td>D1
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>EC
+</td></tr>
+<tr>
+<td><a href="#Immediate:_.23">#</a></td>
+<td>E0
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>E4
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>CC
+</td></tr>
+<tr>
+<td><a href="#Immediate:_.23">#</a></td>
+<td>C0
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>C4
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+<p><b> Test Bits in Memory with Accumulator: <code style="color: #36c;font-family: sans-serif;">BIT</code> </b>
+</p><p>A &amp; M
+</p><p>Flags: N = M7, V = M6, Z
+</p>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>2C
+</td></tr>
+<tr>
+<td><a href="#Immediate:_.23">#</a></td>
+<td>89
+</td></tr>
+<tr>
+<td><a href="#Zero_Page:_zp">zp</a></td>
+<td>24
+</td></tr></tbody></table>
+<h3><span class="mw-headline" id="Branch">Branch</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=25" title="Edit section: Branch" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=25" title="Edit section&#039;s source code: Branch"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<table>
+<caption>
+</caption>
+<tbody><tr>
+<td><b> Branch on Carry Clear: <code style="color: #36c;font-family: sans-serif;">BCC</code> </b>&#160;&#160;
+</td>
+<td><b> Branch on Carry Set: <code style="color: #36c;font-family: sans-serif;">BCS</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>Branch if C = 0
+</p><p>Flags: none
+</p>
+</td>
+<td>
+<p>Branch if C = 1
+</p><p>Flags: none
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Relative:_r">r</a></td>
+<td>90
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Relative:_r">r</a></td>
+<td>B0
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td><b> Branch on Result not Zero: <code style="color: #36c;font-family: sans-serif;">BNE</code> </b>&#160;&#160;
+</td>
+<td><b> Branch on Result Zero: <code style="color: #36c;font-family: sans-serif;">BEQ</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>Branch if Z = 0
+</p><p>Flags: none
+</p>
+</td>
+<td>
+<p>Branch if Z = 1
+</p><p>Flags: none
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Relative:_r">r</a></td>
+<td>D0
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Relative:_r">r</a></td>
+<td>F0
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td><b> Branch on Result Plus: <code style="color: #36c;font-family: sans-serif;">BPL</code> </b>&#160;&#160;
+</td>
+<td><b> Branch on Result Minus: <code style="color: #36c;font-family: sans-serif;">BMI</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>Branch if N = 0
+</p><p>Flags: none
+</p>
+</td>
+<td>
+<p>Branch if N = 1
+</p><p>Flags: none
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Relative:_r">r</a></td>
+<td>10
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Relative:_r">r</a></td>
+<td>30
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td><b> Branch on Overflow Clear: <code style="color: #36c;font-family: sans-serif;">BVC</code> </b>&#160;&#160;
+</td>
+<td><b> Branch on Overflow Set: <code style="color: #36c;font-family: sans-serif;">BVS</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>Branch if V = 0
+</p><p>Flags: none
+</p>
+</td>
+<td>
+<p>Branch if V = 1
+</p><p>Flags: none
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Relative:_r">r</a></td>
+<td>50
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Relative:_r">r</a></td>
+<td>70
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+<h3><span class="mw-headline" id="Transfer">Transfer</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=26" title="Edit section: Transfer" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=26" title="Edit section&#039;s source code: Transfer"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<table>
+<caption>
+</caption>
+<tbody><tr>
+<td><b> Transfer Accumulator to Index X: <code style="color: #36c;font-family: sans-serif;">TAX</code> </b>&#160;&#160;
+</td>
+<td><b> Transfer Index X to Accumulator: <code style="color: #36c;font-family: sans-serif;">TXA</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>A -&gt; X
+</p><p>Flags: N, Z
+</p>
+</td>
+<td>
+<p>X -&gt; A
+</p><p>Flags: N, Z
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>AA
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>8A
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td><b> Transfer Accumulator to Index Y: <code style="color: #36c;font-family: sans-serif;">TAY</code> </b>&#160;&#160;
+</td>
+<td><b> Transfer Index Y to Accumulator: <code style="color: #36c;font-family: sans-serif;">TYA</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>A -&gt; Y
+</p><p>Flags: N, Z
+</p>
+</td>
+<td>
+<p>Y -&gt; A
+</p><p>Flags: N, Z
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>A8
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>98
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td><b> Transfer Stack Pointer to Index X: <code style="color: #36c;font-family: sans-serif;">TSX</code> </b>&#160;&#160;
+</td>
+<td><b> Transfer Index X to Stack Pointer: <code style="color: #36c;font-family: sans-serif;">TXS</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>S -&gt; X
+</p><p>Flags: N, Z
+</p>
+</td>
+<td>
+<p>X -&gt; S
+</p><p>Flags: none
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>BA
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>9A
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+<h3><span class="mw-headline" id="Stack">Stack</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=27" title="Edit section: Stack" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=27" title="Edit section&#039;s source code: Stack"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<table>
+<caption>
+</caption>
+<tbody><tr>
+<td><b> Push Accumulator on Stack: <code style="color: #36c;font-family: sans-serif;">PHA</code> </b>&#160;&#160;
+</td>
+<td><b> Pull Accumulator from Stack: <code style="color: #36c;font-family: sans-serif;">PLA</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>A -&gt; S
+</p><p>Flags: none
+</p>
+</td>
+<td>
+<p>S -&gt; A
+</p><p>Flags: N, Z
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>48
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>68
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td><b> Push Processor Status on Stack: <code style="color: #36c;font-family: sans-serif;">PHP</code> </b>&#160;&#160;
+</td>
+<td><b> Pull Processor Status from Stack: <code style="color: #36c;font-family: sans-serif;">PLP</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>P -&gt; S
+</p><p>Flags: none
+</p>
+</td>
+<td>
+<p>S -&gt; P
+</p><p>Flags: all
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>08
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>28
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+<p>The processor status is stored as a single byte with the following flags bits from high to low: NV--DIZC.
+</p>
+<h3><span class="mw-headline" id="Subroutines_and_Jump">Subroutines and Jump</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=28" title="Edit section: Subroutines and Jump" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=28" title="Edit section&#039;s source code: Subroutines and Jump"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b> Jump to New Location: <code style="color: #36c;font-family: sans-serif;">JMP</code> </b>
+</p><p>Jump to new location by changing the value of the program counter.
+</p><p><b>Warning:</b> When used with the <a href="#Absolute_Indirect:_(a)">absolute indirect</a> addressing mode, a hardware bug can result in unexpected behavior when the specified address is <code>$xxFF</code>.<br />
+E.g. <code>JMP ($11FF)</code> will read the low byte from <code>$11FF</code> and the high byte from <code>$1100</code>, instead of reading the high byte from <code>$1200</code> as one would expect. This is due to an overflow in the lower byte of the indirect address not being carried into the upper byte.
+</p><p>Flags: none
+</p>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>4C
+</td></tr>
+<tr>
+<td><a href="#Absolute_Indirect:_(a)">(a)</a></td>
+<td>6C
+</td></tr></tbody></table>
+<p><b> Jump to New Location Saving Return Address: <code style="color: #36c;font-family: sans-serif;">JSR</code> </b>
+</p><p>Jumps to a subroutine
+</p><p>The address before the next instruction (PC - 1) is pushed onto the stack: first the upper byte followed by the lower byte. As the stack grows backwards, the return address is therefore stored as a little-endian number in memory.<br />
+PC is set to the target address.
+</p><p>Flags: none
+</p>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Absolute:_a">a</a></td>
+<td>20
+</td></tr></tbody></table>
+<p><b> Return from Subroutine: <code style="color: #36c;font-family: sans-serif;">RTS</code> </b>
+</p><p>Return from a subroutine to the point where it called with <code>JSR</code>.
+</p><p>The return address is popped from the stack (low byte first, then high byte).<br />The return address is incremented and stored in PC.
+</p><p>Flags: none
+</p>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>60
+</td></tr></tbody></table>
+<p><b> Return from Interrupt: <code style="color: #36c;font-family: sans-serif;">RTI</code> </b>
+</p><p>Return from an interrupt.
+</p><p>P is popped from the stack.<br />
+PC is popped from the stack.
+</p><p>Flags: all
+</p>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>40
+</td></tr></tbody></table>
+<h3><span class="mw-headline" id="Set_and_Clear">Set and Clear</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=29" title="Edit section: Set and Clear" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=29" title="Edit section&#039;s source code: Set and Clear"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<table>
+<caption>
+</caption>
+<tbody><tr>
+<td><b> Clear Carry Flag: <code style="color: #36c;font-family: sans-serif;">CLC</code> </b>&#160;&#160;
+</td>
+<td><b> Set Carry Flag: <code style="color: #36c;font-family: sans-serif;">SEC</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>0 -&gt; C
+</p><p>Flags: C = 0
+</p>
+</td>
+<td>
+<p>1 -&gt; C
+</p><p>Flags: C = 1
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>18
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>38
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td><b> Clear Decimal Mode: <code style="color: #36c;font-family: sans-serif;">CLD</code> </b>&#160;&#160;
+</td>
+<td><b> Set Decimal Mode: <code style="color: #36c;font-family: sans-serif;">SED</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>0 -&gt; D
+</p><p>Flags: D = 0
+</p>
+</td>
+<td>
+<p>1 -&gt; D
+</p><p>Flags: D = 1
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>D8
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>F8
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td><b> Clear Interrupt Disable Status: <code style="color: #36c;font-family: sans-serif;">CLI</code> </b>&#160;&#160;
+</td>
+<td><b> Set Interrupt Disable Status: <code style="color: #36c;font-family: sans-serif;">SEI</code> </b>&#160;&#160;
+</td></tr>
+<tr>
+<td>
+<p>0 -&gt; I
+</p><p>Flags: I = 0
+</p>
+</td>
+<td>
+<p>1 -&gt; I
+</p><p>Flags: I = 1
+</p>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>58
+</td></tr></tbody></table>
+</td>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>78
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td><b> Clear Overflow Flag: <code style="color: #36c;font-family: sans-serif;">CLV</code> </b>&#160;&#160;
+</td>
+<td>
+</td></tr>
+<tr>
+<td>
+<p>0 -&gt; V
+</p><p>Flags: V = 0
+</p>
+</td>
+<td>
+</td></tr>
+<tr>
+<td>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>B8
+</td></tr></tbody></table>
+</td></tr></tbody></table>
+<h3><span class="mw-headline" id="Miscellaneous">Miscellaneous</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=30" title="Edit section: Miscellaneous" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=30" title="Edit section&#039;s source code: Miscellaneous"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h3>
+<p><b> Break: <code style="color: #36c;font-family: sans-serif;">BRK</code> </b>&#160;&#160;
+</p><p>Force an Interrupt
+</p><p>Flags: B = 1, I = 1
+</p>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>00
+</td></tr></tbody></table>
+<p><b> No Operation: <code style="color: #36c;font-family: sans-serif;">NOP</code> </b>&#160;&#160;
+</p><p>No Operation
+</p><p>Flags: none
+</p>
+<table class="wikitable">
+<tbody><tr>
+<th>Addressing Mode</th>
+<th>Opcode
+</th></tr>
+<tr>
+<td><a href="#Implied:_i">i</a></td>
+<td>EA
+</td></tr></tbody></table>
+<h2><span class="mw-headline" id="Instruction_table">Instruction table</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=31" title="Edit section: Instruction table" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=31" title="Edit section&#039;s source code: Instruction table"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h2>
+<table class="wikitable">
+<caption>Instruction table
+</caption>
+<tbody><tr>
+<th>High nibble</th>
+<th colspan="16">Low nibble
+</th></tr>
+<tr>
+<td></td>
+<td>00</td>
+<td>01</td>
+<td>02</td>
+<td>03</td>
+<td>04</td>
+<td>05</td>
+<td>06</td>
+<td>07</td>
+<td>08</td>
+<td>09</td>
+<td>0A</td>
+<td>0B</td>
+<td>0C</td>
+<td>0D</td>
+<td>0E</td>
+<td>0F
+</td></tr>
+<tr>
+<td>00</td>
+<td>BRK i</td>
+<td>ORA (zp,x)</td>
+<td></td>
+<td></td>
+<td></td>
+<td>ORA zp</td>
+<td>ASL zp</td>
+<td></td>
+<td>PHP i</td>
+<td>ORA #</td>
+<td>ASL A</td>
+<td></td>
+<td></td>
+<td>ORA a</td>
+<td>ASL a</td>
+<td>
+</td></tr>
+<tr>
+<td>10</td>
+<td>BPL r</td>
+<td>ORA (zp),y</td>
+<td></td>
+<td></td>
+<td></td>
+<td>ORA zp,x</td>
+<td>ASL zp,x</td>
+<td></td>
+<td>CLC i</td>
+<td>ORA a,y</td>
+<td></td>
+<td></td>
+<td></td>
+<td>ORA a,x</td>
+<td>ASL a,x</td>
+<td>
+</td></tr>
+<tr>
+<td>20</td>
+<td>JSR a</td>
+<td>AND (zp,x)</td>
+<td></td>
+<td></td>
+<td>BIT zp</td>
+<td>AND zp</td>
+<td>ROL zp</td>
+<td></td>
+<td>PLP i</td>
+<td>AND #</td>
+<td>ROL A</td>
+<td></td>
+<td>BIT a</td>
+<td>AND a</td>
+<td>ROL a</td>
+<td>
+</td></tr>
+<tr>
+<td>30</td>
+<td>BMI r</td>
+<td>AND (zp),y</td>
+<td></td>
+<td></td>
+<td></td>
+<td>AND zp,x</td>
+<td>ROL zp,x</td>
+<td></td>
+<td>SEC i</td>
+<td>AND a,y</td>
+<td></td>
+<td></td>
+<td></td>
+<td>AND a,x</td>
+<td>ROL a,x</td>
+<td>
+</td></tr>
+<tr>
+<td>40</td>
+<td>RTI i</td>
+<td>EOR (zp,x)</td>
+<td></td>
+<td></td>
+<td></td>
+<td>EOR zp</td>
+<td>LSR zp</td>
+<td></td>
+<td>PHA i</td>
+<td>EOR #</td>
+<td>LSR A</td>
+<td></td>
+<td>JMP a</td>
+<td>EOR a</td>
+<td>LSR a</td>
+<td>
+</td></tr>
+<tr>
+<td>50</td>
+<td>BVC r</td>
+<td>EOR (zp),y</td>
+<td></td>
+<td></td>
+<td></td>
+<td>EOR zp,x</td>
+<td>LSR zp,x</td>
+<td></td>
+<td>CLI i</td>
+<td>EOR a,y</td>
+<td></td>
+<td></td>
+<td></td>
+<td>EOR a,x</td>
+<td>LSR a,x</td>
+<td>
+</td></tr>
+<tr>
+<td>60</td>
+<td>RTS i</td>
+<td>ADC (zp,x)</td>
+<td></td>
+<td></td>
+<td></td>
+<td>ADC zp</td>
+<td>ROR zp</td>
+<td></td>
+<td>PLA i</td>
+<td>ADC #</td>
+<td>ROR A</td>
+<td></td>
+<td>JMP (a)</td>
+<td>ADC a</td>
+<td>ROR a</td>
+<td>
+</td></tr>
+<tr>
+<td>70</td>
+<td>BVS r</td>
+<td>ADC (zp),y</td>
+<td></td>
+<td></td>
+<td></td>
+<td>ADC zp,x</td>
+<td>ROR zp,x</td>
+<td></td>
+<td>SEI i</td>
+<td>ADC a,y</td>
+<td></td>
+<td></td>
+<td></td>
+<td>ADC a,x</td>
+<td>ROR a,x</td>
+<td>
+</td></tr>
+<tr>
+<td>80</td>
+<td></td>
+<td>STA (zp,x)</td>
+<td></td>
+<td></td>
+<td>STY zp</td>
+<td>STA zp</td>
+<td>STX zp</td>
+<td></td>
+<td>DEY i</td>
+<td>BIT #</td>
+<td>TXA i</td>
+<td></td>
+<td>STY a</td>
+<td>STA a</td>
+<td>STX a</td>
+<td>
+</td></tr>
+<tr>
+<td>90</td>
+<td>BCC r</td>
+<td>STA (zp),y</td>
+<td></td>
+<td></td>
+<td>STY zp,x</td>
+<td>STA zp,x</td>
+<td>STX zp,y</td>
+<td></td>
+<td>TYA i</td>
+<td>STA a,y</td>
+<td>TXS i</td>
+<td></td>
+<td></td>
+<td>STA a,x</td>
+<td></td>
+<td>
+</td></tr>
+<tr>
+<td>A0</td>
+<td>LDY #</td>
+<td>LDA (zp,x)</td>
+<td>LDX #</td>
+<td></td>
+<td>LDY zp</td>
+<td>LDA zp</td>
+<td>LDX zp</td>
+<td></td>
+<td>TAY i</td>
+<td>LDA #</td>
+<td>TAX i</td>
+<td></td>
+<td>LDY a</td>
+<td>LDA a</td>
+<td>LDX a</td>
+<td>
+</td></tr>
+<tr>
+<td>B0</td>
+<td>BCS r</td>
+<td>LDA (zp),y</td>
+<td></td>
+<td></td>
+<td>LDY zp,x</td>
+<td>LDA zp,x</td>
+<td>LDX zp,y</td>
+<td></td>
+<td>CLV i</td>
+<td>LDA a,y</td>
+<td>TSX i</td>
+<td></td>
+<td>LDY a,x</td>
+<td>LDA a,x</td>
+<td>LDX a,y</td>
+<td>
+</td></tr>
+<tr>
+<td>C0</td>
+<td>CPY #</td>
+<td>CMP (zp,x)</td>
+<td></td>
+<td></td>
+<td>CPY zp</td>
+<td>CMP zp</td>
+<td>DEC zp</td>
+<td></td>
+<td>INY i</td>
+<td>CMP #</td>
+<td>DEX i</td>
+<td></td>
+<td>CPY a</td>
+<td>CMP a</td>
+<td>DEC a</td>
+<td>
+</td></tr>
+<tr>
+<td>D0</td>
+<td>BNE r</td>
+<td>CMP (zp),y</td>
+<td></td>
+<td></td>
+<td></td>
+<td>CMP zp,x</td>
+<td>DEC zp,x</td>
+<td></td>
+<td>CLD i</td>
+<td>CMP a,y</td>
+<td></td>
+<td></td>
+<td></td>
+<td>CMP a,x</td>
+<td>DEC a,x</td>
+<td>
+</td></tr>
+<tr>
+<td>E0</td>
+<td>CPX #</td>
+<td>SBC (zp,x)</td>
+<td></td>
+<td></td>
+<td>CPX zp</td>
+<td>SBC zp</td>
+<td>INC zp</td>
+<td></td>
+<td>INX i</td>
+<td>SBC #</td>
+<td>NOP i</td>
+<td></td>
+<td>CPX a</td>
+<td>SBC a</td>
+<td>INC a</td>
+<td>
+</td></tr>
+<tr>
+<td>F0</td>
+<td>BEQ r</td>
+<td>SBC (zp),y</td>
+<td></td>
+<td></td>
+<td></td>
+<td>SBC zp,x</td>
+<td>INC zp,x</td>
+<td></td>
+<td>SED i</td>
+<td>SBC a,y</td>
+<td></td>
+<td></td>
+<td></td>
+<td>SBC a,x</td>
+<td>INC a,x</td>
+<td>
+</td></tr></tbody></table>
+<h2><span class="mw-headline" id="References">References</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=32" title="Edit section: References" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=32" title="Edit section&#039;s source code: References"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h2>
+<ol class="references">
+<li id="cite_note-1"><span class="mw-cite-backlink"><a href="#cite_ref-1">↑</a></span> <span class="reference-text"><a rel="nofollow" class="external autonumber" href="http://nesdev.com/the%20&#39;B&#39;%20flag%20&amp;%20BRK%20instruction.txt">[1]</a>, The B flag does not represent an actual CPU register</span>
+</li>
+</ol>
+<h2><span class="mw-headline" id="Further_reading">Further reading</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit&amp;section=33" title="Edit section: Further reading" class="mw-editsection-visualeditor"><span>edit</span></a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=6502_Assembly&amp;action=edit&amp;section=33" title="Edit section&#039;s source code: Further reading"><span>edit source</span></a><span class="mw-editsection-bracket">]</span></span></h2>
+<table class="plainlinks noprint messagebox notice" style="width:250px; float:right; clear:right; margin:0px; margin-left:10px;">  
+<tbody><tr style="vertical-align:middle;"><td style="padding:0.1em; text-align:center; vertical-align:middle; width:45px; border:none;">
+<span typeof="mw:File"><span><img src="//upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/40px-Wikipedia-logo-v2.svg.png" decoding="async" width="40" height="37" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/60px-Wikipedia-logo-v2.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/80px-Wikipedia-logo-v2.svg.png 2x" data-file-width="103" data-file-height="94" /></span></span></td>
+<td style="color:black; text-align:left; vertical-align:middle; padding:0.5em; padding-left:0em; border:none;">
+<p><a href="https://en.wikipedia.org/wiki/" class="extiw" title="w:">Wikipedia</a> has related information at <a class="external text" href="https://en.wikipedia.org/wiki/MOS_Technology_6502"><i><b>MOS Technology 6502</b></i></a>
+</p>
+</td></tr></tbody></table>
+<ul><li>Owad, Tom, "Apple I Replica Creation", Syngress, 2005. <a href="/wiki/Special:BookSources/193183640X" title="Special:BookSources/193183640X">ISBN 193183640X</a></li>
+<li><a rel="nofollow" class="external text" href="http://www.6502.org/">6502.org</a> the 6502 microprocessor resource, particularly the <a rel="nofollow" class="external text" href="http://6502.org/tutorials/">Tutorials and Primers page</a>.</li>
+<li><a href="/wiki/NES_Programming" title="NES Programming">NES Programming</a>: The Nintendo Entertainment System uses a version of the 6502</li>
+<li><a href="/wiki/65c02_Assembly" title="65c02 Assembly">65c02 Assembly</a>, a descendant of the 6502, used in many home computers, video game consoles, and embedded systems.</li>
+<li><a href="/wiki/Super_NES_Programming" title="Super NES Programming">Super NES Programming</a>: the Super NES uses the 65c816, a descendant of the 6502</li>
+<li><a href="/wiki/History_of_Apple_Inc." title="History of Apple Inc.">History of Apple Inc.</a>: early Apple computers all used some version of the 6502</li>
+<li><a href="/wiki/History_of_Computers/The_Rise_of_the_Microcomputer" title="History of Computers/The Rise of the Microcomputer">History of Computers/The Rise of the Microcomputer</a></li>
+<li><a href="/wiki/X86_Disassembly/Disassemblers_and_Decompilers#Disassembly_of_8_bit_CPU_code" title="X86 Disassembly/Disassemblers and Decompilers">X86 Disassembly/Disassemblers and Decompilers#Disassembly of 8 bit CPU code</a> mentions some 6502 disassemblers</li>
+<li><a href="/wiki/Computer_Programming/Hello_world#Accumulator_.2B_index_register_machine:_MOS_Technology_6502.2C_CBM_KERNEL.2C_MOS_assembler_syntax" title="Computer Programming/Hello world">Computer Programming/Hello world#Accumulator .2B index register machine: MOS Technology 6502.2C CBM KERNEL.2C MOS assembler syntax</a></li></ul>
+<!-- 
+NewPP limit report
+Parsed by mw2303
+Cached time: 20231218225643
+Cache expiry: 2592000
+Reduced expiry: false
+Complications: [show‐toc]
+CPU time usage: 0.200 seconds
+Real time usage: 0.276 seconds
+Preprocessor visited node count: 2337/1000000
+Post‐expand include size: 30663/2097152 bytes
+Template argument size: 5586/2097152 bytes
+Highest expansion depth: 38/100
+Expensive parser function count: 0/500
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 435/5000000 bytes
+Lua time usage: 0.091/10.000 seconds
+Lua memory usage: 2551017/52428800 bytes
+Number of Wikibase entities loaded: 0/400
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  191.337      1 -total
+ 75.65%  144.754      1 Template:Shelves
+ 29.54%   56.528      1 Template:Subjects/leaf
+ 28.75%   55.008      1 Template:Subjects/0
+ 20.73%   39.669      2 Template:Subjects/1
+ 17.20%   32.912      2 Template:Subjects/2
+ 16.59%   31.734     16 Template:Parsable
+ 16.51%   31.584     14 Template:Evalx
+ 16.45%   31.475      1 Template:Shelf:Map
+ 13.52%   25.878      4 Template:Subjects/3
+-->
+
+<!-- Saved in parser cache with key enwikibooks:pcache:idhash:74734-0!canonical and timestamp 20231218225643 and revision id 4338037. Rendering was triggered because: page-view
+ -->
+</div><!--esi <esi:include src="/esitest-fa8a495983347898/content" /> --><noscript><img src="https://login.wikimedia.org/wiki/Special:CentralAutoLogin/start?type=1x1" alt="" width="1" height="1" style="border: none; position: absolute;"></noscript>
+<div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://en.wikibooks.org/w/index.php?title=6502_Assembly&amp;oldid=4338037">https://en.wikibooks.org/w/index.php?title=6502_Assembly&amp;oldid=4338037</a>"</div></div>
+		<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Categories</a>: <ul><li><a href="/wiki/Category:Book:6502_Assembly" title="Category:Book:6502 Assembly">Book:6502 Assembly</a></li><li><a href="/wiki/Category:Shelf:Assembly_languages" title="Category:Shelf:Assembly languages">Shelf:Assembly languages</a></li><li><a href="/wiki/Category:One-page_books" title="Category:One-page books">One-page books</a></li></ul></div><div id="mw-hidden-catlinks" class="mw-hidden-catlinks mw-hidden-cats-hidden">Hidden categories: <ul><li><a href="/wiki/Category:Alphabetical/6" title="Category:Alphabetical/6">Alphabetical/6</a></li><li><a href="/wiki/Category:Subject:Assembly_languages" title="Category:Subject:Assembly languages">Subject:Assembly languages</a></li><li><a href="/wiki/Category:Subject:Assembly_languages/all_books" title="Category:Subject:Assembly languages/all books">Subject:Assembly languages/all books</a></li><li><a href="/wiki/Category:Subject:Computer_programming_languages/all_books" title="Category:Subject:Computer programming languages/all books">Subject:Computer programming languages/all books</a></li><li><a href="/wiki/Category:Subject:Computer_programming/all_books" title="Category:Subject:Computer programming/all books">Subject:Computer programming/all books</a></li><li><a href="/wiki/Category:Subject:Computer_science/all_books" title="Category:Subject:Computer science/all books">Subject:Computer science/all books</a></li><li><a href="/wiki/Category:Subject:Computing/all_books" title="Category:Subject:Computing/all books">Subject:Computing/all books</a></li><li><a href="/wiki/Category:Subject:Books_by_subject/all_books" title="Category:Subject:Books by subject/all books">Subject:Books by subject/all books</a></li><li><a href="/wiki/Category:Book:Wikibooks_Stacks/Books" title="Category:Book:Wikibooks Stacks/Books">Book:Wikibooks Stacks/Books</a></li><li><a href="/wiki/Category:Shelf:Assembly_languages/all_books" title="Category:Shelf:Assembly languages/all books">Shelf:Assembly languages/all books</a></li><li><a href="/wiki/Category:Shelf:Computer_programming/all_books" title="Category:Shelf:Computer programming/all books">Shelf:Computer programming/all books</a></li><li><a href="/wiki/Category:Shelf:Computer_programming_languages/all_books" title="Category:Shelf:Computer programming languages/all books">Shelf:Computer programming languages/all books</a></li><li><a href="/wiki/Category:Shelf:Computer_science/all_books" title="Category:Shelf:Computer science/all books">Shelf:Computer science/all books</a></li><li><a href="/wiki/Category:Department:Computing/all_books" title="Category:Department:Computing/all books">Department:Computing/all books</a></li><li><a href="/wiki/Category:Partly_developed_books" title="Category:Partly developed books">Partly developed books</a></li><li><a href="/wiki/Category:Books_by_completion_status/all_books" title="Category:Books by completion status/all books">Books by completion status/all books</a></li></ul></div></div>
+	</div>
+</div>
+
+<div id="mw-navigation">
+	<h2>Navigation menu</h2>
+	<div id="mw-head">
+		
+<nav id="p-personal" class="mw-portlet mw-portlet-personal vector-user-menu-legacy vector-menu" aria-labelledby="p-personal-label" role="navigation"  >
+	<h3
+		id="p-personal-label"
+		
+		class="vector-menu-heading "
+	>
+		<span class="vector-menu-heading-label">Personal tools</span>
+	</h3>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="pt-anonuserpage" class="mw-list-item"><span title="The user page for the IP address you are editing as">Not logged in</span></li><li id="pt-anontalk" class="mw-list-item"><a href="/wiki/Special:MyTalk" title="Discussion about edits from this IP address [n]" accesskey="n"><span>Discussion for this IP address</span></a></li><li id="pt-anoncontribs" class="mw-list-item"><a href="/wiki/Special:MyContributions" title="A list of edits made from this IP address [y]" accesskey="y"><span>Contributions</span></a></li><li id="pt-createaccount" class="mw-list-item"><a href="/w/index.php?title=Special:CreateAccount&amp;returnto=6502+Assembly" title="You are encouraged to create an account and log in; however, it is not mandatory"><span>Create account</span></a></li><li id="pt-login" class="mw-list-item"><a href="/w/index.php?title=Special:UserLogin&amp;returnto=6502+Assembly" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o"><span>Log in</span></a></li>
+		</ul>
+		
+	</div>
+</nav>
+
+		<div id="left-navigation">
+			
+<nav id="p-namespaces" class="mw-portlet mw-portlet-namespaces vector-menu-tabs vector-menu-tabs-legacy vector-menu" aria-labelledby="p-namespaces-label" role="navigation"  >
+	<h3
+		id="p-namespaces-label"
+		
+		class="vector-menu-heading "
+	>
+		<span class="vector-menu-heading-label">Namespaces</span>
+	</h3>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-nstab-main" class="selected mw-list-item"><a href="/wiki/6502_Assembly" title="View the content page [c]" accesskey="c"><span>Book</span></a></li><li id="ca-talk" class="mw-list-item"><a href="/wiki/Talk:6502_Assembly" rel="discussion" title="Discussion about the content page [t]" accesskey="t"><span>Discussion</span></a></li>
+		</ul>
+		
+	</div>
+</nav>
+
+			
+<nav id="p-variants" class="mw-portlet mw-portlet-variants emptyPortlet vector-menu-dropdown vector-menu" aria-labelledby="p-variants-label" role="navigation"  >
+	<input type="checkbox"
+		id="p-variants-checkbox"
+		role="button"
+		aria-haspopup="true"
+		data-event-name="ui.dropdown-p-variants"
+		class="vector-menu-checkbox"
+		aria-labelledby="p-variants-label"
+	>
+	<label
+		id="p-variants-label"
+		
+		class="vector-menu-heading "
+	>
+		<span class="vector-menu-heading-label">English</span>
+	</label>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</nav>
+
+		</div>
+		<div id="right-navigation">
+			
+<nav id="p-views" class="mw-portlet mw-portlet-views vector-menu-tabs vector-menu-tabs-legacy vector-menu" aria-labelledby="p-views-label" role="navigation"  >
+	<h3
+		id="p-views-label"
+		
+		class="vector-menu-heading "
+	>
+		<span class="vector-menu-heading-label">Views</span>
+	</h3>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-view" class="mw-list-item"><a href="/w/index.php?title=6502_Assembly&amp;stable=1"><span>Read</span></a></li><li id="ca-current" class="collapsible selected mw-list-item"><a href="/w/index.php?title=6502_Assembly&amp;stable=0&amp;redirect=no" title="View this page with the pending changes [v]" accesskey="v"><span>Latest draft</span></a></li><li id="ca-ve-edit" class="mw-list-item"><a href="/w/index.php?title=6502_Assembly&amp;veaction=edit" title="Edit this page [v]" accesskey="v"><span>Edit</span></a></li><li id="ca-edit" class="collapsible mw-list-item"><a href="/w/index.php?title=6502_Assembly&amp;action=edit" title="Edit the source code of this page [e]" accesskey="e"><span>Edit source</span></a></li><li id="ca-history" class="mw-list-item"><a href="/w/index.php?title=6502_Assembly&amp;action=history" title="Past revisions of this page [h]" accesskey="h"><span>View history</span></a></li>
+		</ul>
+		
+	</div>
+</nav>
+
+			
+<nav id="p-cactions" class="mw-portlet mw-portlet-cactions emptyPortlet vector-menu-dropdown vector-menu" aria-labelledby="p-cactions-label" role="navigation"  title="More options" >
+	<input type="checkbox"
+		id="p-cactions-checkbox"
+		role="button"
+		aria-haspopup="true"
+		data-event-name="ui.dropdown-p-cactions"
+		class="vector-menu-checkbox"
+		aria-labelledby="p-cactions-label"
+	>
+	<label
+		id="p-cactions-label"
+		
+		class="vector-menu-heading "
+	>
+		<span class="vector-menu-heading-label">More</span>
+	</label>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</nav>
+
+			
+<div id="p-search" role="search" class="vector-search-box-vue  vector-search-box-show-thumbnail vector-search-box-auto-expand-width vector-search-box">
+	<h3 >Search</h3>
+	<form action="/w/index.php" id="searchform" class="vector-search-box-form">
+		<div id="simpleSearch"
+			class="vector-search-box-inner"
+			 data-search-loc="header-navigation">
+			<input class="vector-search-box-input"
+				 type="search" name="search" placeholder="Search Wikibooks" aria-label="Search Wikibooks" autocapitalize="sentences" title="Search Wikibooks [f]" accesskey="f" id="searchInput"
+			>
+			<input type="hidden" name="title" value="Special:Search">
+			<input id="mw-searchButton"
+				 class="searchButton mw-fallbackSearchButton" type="submit" name="fulltext" title="Search the pages for this text" value="Search">
+			<input id="searchButton"
+				 class="searchButton" type="submit" name="go" title="Go to a page with this exact name if it exists" value="Go">
+		</div>
+	</form>
+</div>
+
+		</div>
+	</div>
+	
+<div id="mw-panel" class="vector-legacy-sidebar">
+	<div id="p-logo" role="banner">
+		<a class="mw-wiki-logo" href="/wiki/Main_Page"
+			title="Visit the main page"></a>
+	</div>
+	
+<nav id="p-navigation" class="mw-portlet mw-portlet-navigation vector-menu-portal portal vector-menu" aria-labelledby="p-navigation-label" role="navigation"  >
+	<h3
+		id="p-navigation-label"
+		
+		class="vector-menu-heading "
+	>
+		<span class="vector-menu-heading-label">Navigation</span>
+	</h3>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="n-mainpage" class="mw-list-item"><a href="/wiki/Main_Page" title="Visit the main page [z]" accesskey="z"><span>Main Page</span></a></li><li id="n-help" class="mw-list-item"><a href="/wiki/Help:Contents" title="Find help on how to use and edit Wikibooks"><span>Help</span></a></li><li id="n-Browse" class="mw-list-item"><a href="/wiki/Wikibooks:Card_Catalog_Office" title="Check out what Wikibooks has to offer"><span>Browse</span></a></li><li id="n-Cookbook" class="mw-list-item"><a href="/wiki/Cookbook:Table_of_Contents" title="Learn recipes from around the world"><span>Cookbook</span></a></li><li id="n-Wikijunior" class="mw-list-item"><a href="/wiki/Wikijunior" title="Books for children"><span>Wikijunior</span></a></li><li id="n-Featured-books" class="mw-list-item"><a href="/wiki/Wikibooks:Featured_books" title="The best of Wikibooks"><span>Featured books</span></a></li><li id="n-recentchanges" class="mw-list-item"><a href="/wiki/Special:RecentChanges" title="A list of recent changes in the wiki [r]" accesskey="r"><span>Recent changes</span></a></li><li id="n-sitesupport" class="mw-list-item"><a href="//donate.wikimedia.org/wiki/Special:FundraiserRedirector?utm_source=donate&amp;utm_medium=sidebar&amp;utm_campaign=C13_en.wikibooks.org&amp;uselang=en" title="Support Wikibooks"><span>Donations</span></a></li><li id="n-randomrootpage" class="mw-list-item"><a href="/wiki/Special:RandomInCategory/Book:Wikibooks_Stacks/Books"><span>Random book</span></a></li><li id="n-Using-Wikibooks" class="mw-list-item"><a href="/wiki/Using_Wikibooks"><span>Using Wikibooks</span></a></li>
+		</ul>
+		
+	</div>
+</nav>
+
+	
+<nav id="p-community" class="mw-portlet mw-portlet-community vector-menu-portal portal vector-menu" aria-labelledby="p-community-label" role="navigation"  >
+	<h3
+		id="p-community-label"
+		
+		class="vector-menu-heading "
+	>
+		<span class="vector-menu-heading-label">Community</span>
+	</h3>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="n-Reading-room-forum" class="mw-list-item"><a href="/wiki/Wikibooks:Reading_room"><span>Reading room forum</span></a></li><li id="n-portal" class="mw-list-item"><a href="/wiki/Wikibooks:Community_Portal" title="Find your way around the Wikibooks community"><span>Community portal</span></a></li><li id="n-currentevents" class="mw-list-item"><a href="/wiki/Wikibooks:Reading_room/Bulletin_Board" title="Important community news"><span>Bulletin Board</span></a></li><li id="n-maintenance" class="mw-list-item"><a href="/wiki/Wikibooks:Maintenance" title="Frequent tasks that you can help with"><span>Help out!</span></a></li><li id="n-Policies-and-guidelines" class="mw-list-item"><a href="/wiki/Wikibooks:Policies_and_guidelines" title="Pages detailing important rules and procedures"><span>Policies and guidelines</span></a></li><li id="n-contact" class="mw-list-item"><a href="/wiki/Wikibooks:Contact_us" title="Alternative methods of communication"><span>Contact us</span></a></li>
+		</ul>
+		
+	</div>
+</nav>
+
+<nav id="p-tb" class="mw-portlet mw-portlet-tb vector-menu-portal portal vector-menu" aria-labelledby="p-tb-label" role="navigation"  >
+	<h3
+		id="p-tb-label"
+		
+		class="vector-menu-heading "
+	>
+		<span class="vector-menu-heading-label">Tools</span>
+	</h3>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="t-whatlinkshere" class="mw-list-item"><a href="/wiki/Special:WhatLinksHere/6502_Assembly" title="A list of all wiki pages that link here [j]" accesskey="j"><span>What links here</span></a></li><li id="t-recentchangeslinked" class="mw-list-item"><a href="/wiki/Special:RecentChangesLinked/6502_Assembly" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k"><span>Related changes</span></a></li><li id="t-upload" class="mw-list-item"><a href="//commons.wikimedia.org/wiki/Special:UploadWizard?uselang=en" title="Upload files [u]" accesskey="u"><span>Upload file</span></a></li><li id="t-specialpages" class="mw-list-item"><a href="/wiki/Special:SpecialPages" title="A list of all special pages [q]" accesskey="q"><span>Special pages</span></a></li><li id="t-permalink" class="mw-list-item"><a href="/w/index.php?title=6502_Assembly&amp;oldid=4338037" title="Permanent link to this revision of this page"><span>Permanent link</span></a></li><li id="t-info" class="mw-list-item"><a href="/w/index.php?title=6502_Assembly&amp;action=info" title="More information about this page"><span>Page information</span></a></li><li id="t-cite" class="mw-list-item"><a href="/w/index.php?title=Special:CiteThisPage&amp;page=6502_Assembly&amp;id=4338037&amp;wpFormIdentifier=titleform" title="Information on how to cite this page"><span>Cite this page</span></a></li><li id="t-urlshortener" class="mw-list-item"><a href="/w/index.php?title=Special:UrlShortener&amp;url=https%3A%2F%2Fen.wikibooks.org%2Fwiki%2F6502_Assembly"><span>Get shortened URL</span></a></li><li id="t-wikibase" class="mw-list-item"><a href="https://www.wikidata.org/wiki/Special:EntityPage/Q19368646" title="Link to connected data repository item [g]" accesskey="g"><span>Wikidata item</span></a></li>
+		</ul>
+		
+	</div>
+</nav>
+
+<nav id="p-sister_projects" class="mw-portlet mw-portlet-sister_projects vector-menu-portal portal vector-menu" aria-labelledby="p-sister_projects-label" role="navigation"  >
+	<h3
+		id="p-sister_projects-label"
+		
+		class="vector-menu-heading "
+	>
+		<span class="vector-menu-heading-label">Sister projects</span>
+	</h3>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="n-Wikipedia" class="mw-list-item"><a href="https://en.wikipedia.org/wiki/Main_Page"><span>Wikipedia</span></a></li><li id="n-Wikiversity" class="mw-list-item"><a href="https://en.wikiversity.org/wiki/Wikiversity:Main_Page"><span>Wikiversity</span></a></li><li id="n-Wiktionary" class="mw-list-item"><a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page"><span>Wiktionary</span></a></li><li id="n-Wikiquote" class="mw-list-item"><a href="https://en.wikiquote.org/wiki/Main_Page"><span>Wikiquote</span></a></li><li id="n-Wikisource" class="mw-list-item"><a href="https://en.wikisource.org/wiki/Main_Page"><span>Wikisource</span></a></li><li id="n-Wikinews" class="mw-list-item"><a href="https://en.wikinews.org/wiki/Main_Page"><span>Wikinews</span></a></li><li id="n-Wikivoyage" class="mw-list-item"><a href="https://en.wikivoyage.org/wiki/Main_Page"><span>Wikivoyage</span></a></li><li id="n-Commons" class="mw-list-item"><a href="https://commons.wikimedia.org/wiki/Main_Page"><span>Commons</span></a></li><li id="n-Wikidata" class="mw-list-item"><a href="https://www.wikidata.org/wiki/Wikidata:Main_Page"><span>Wikidata</span></a></li><li id="n-MediaWiki" class="mw-list-item"><a href="https://www.mediawiki.org/wiki/Main_Page"><span>MediaWiki</span></a></li><li id="n-Meta-Wiki" class="mw-list-item"><a href="https://meta.wikimedia.org/wiki/Main_Page"><span>Meta-Wiki</span></a></li>
+		</ul>
+		
+	</div>
+</nav>
+
+<nav id="p-coll-print_export" class="mw-portlet mw-portlet-coll-print_export vector-menu-portal portal vector-menu" aria-labelledby="p-coll-print_export-label" role="navigation"  >
+	<h3
+		id="p-coll-print_export-label"
+		
+		class="vector-menu-heading "
+	>
+		<span class="vector-menu-heading-label">Print/export</span>
+	</h3>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="coll-create_a_book" class="mw-list-item"><a href="/w/index.php?title=Special:Book&amp;bookcmd=book_creator&amp;referer=6502+Assembly"><span>Create a collection</span></a></li><li id="coll-download-as-rl" class="mw-list-item"><a href="/w/index.php?title=Special:DownloadAsPdf&amp;page=6502_Assembly&amp;action=show-download-screen"><span>Download as PDF</span></a></li><li id="t-print" class="mw-list-item"><a href="/w/index.php?title=6502_Assembly&amp;printable=yes" title="Printable version of this page [p]" accesskey="p"><span>Printable version</span></a></li>
+		</ul>
+		
+	</div>
+</nav>
+
+	
+<nav id="p-lang" class="mw-portlet mw-portlet-lang vector-menu-portal portal vector-menu" aria-labelledby="p-lang-label" role="navigation"  >
+	<h3
+		id="p-lang-label"
+		
+		class="vector-menu-heading "
+	>
+		<span class="vector-menu-heading-label">In other languages</span>
+	</h3>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li class="interlanguage-link interwiki-zh mw-list-item"><a href="https://zh.wikibooks.org/wiki/6502%E7%B5%84%E5%90%88%E8%AA%9E%E8%A8%80" title="6502組合語言 – Chinese" lang="zh" hreflang="zh" class="interlanguage-link-target"><span>中文</span></a></li>
+		</ul>
+		<div class="after-portlet after-portlet-lang"><span class="wb-langlinks-edit wb-langlinks-link"><a href="https://www.wikidata.org/wiki/Special:EntityPage/Q19368646#sitelinks-wikibooks" title="Edit interlanguage links" class="wbc-editpage">Edit links</a></span></div>
+	</div>
+</nav>
+
+</div>
+
+</div>
+
+<footer id="footer" class="mw-footer" role="contentinfo" >
+	<ul id="footer-info">
+	<li id="footer-info-lastmod"> This page was last edited on 1 November 2023, at 02:27.</li>
+	<li id="footer-info-copyright">Text is available under the <a href="//creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike License</a>; additional terms may apply.  By using this site, you agree to the <a href="//foundation.wikimedia.org/wiki/Terms_of_Use">Terms of Use</a> and <a href="//foundation.wikimedia.org/wiki/Privacy_policy">Privacy Policy.</a></li>
+</ul>
+
+	<ul id="footer-places">
+	<li id="footer-places-privacy"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Privacy_policy">Privacy policy</a></li>
+	<li id="footer-places-about"><a href="/wiki/Wikibooks:Welcome">About Wikibooks</a></li>
+	<li id="footer-places-disclaimers"><a href="/wiki/Wikibooks:General_disclaimer">Disclaimers</a></li>
+	<li id="footer-places-wm-codeofconduct"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Universal_Code_of_Conduct">Code of Conduct</a></li>
+	<li id="footer-places-developers"><a href="https://developer.wikimedia.org">Developers</a></li>
+	<li id="footer-places-statslink"><a href="https://stats.wikimedia.org/#/en.wikibooks.org">Statistics</a></li>
+	<li id="footer-places-cookiestatement"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Cookie_statement">Cookie statement</a></li>
+	<li id="footer-places-mobileview"><a href="//en.m.wikibooks.org/w/index.php?title=6502_Assembly&amp;mobileaction=toggle_view_mobile" class="noprint stopMobileRedirectToggle">Mobile view</a></li>
+</ul>
+
+	<ul id="footer-icons" class="noprint">
+	<li id="footer-copyrightico"><a href="https://wikimediafoundation.org/"><img src="/static/images/footer/wikimedia-button.png" srcset="/static/images/footer/wikimedia-button-1.5x.png 1.5x, /static/images/footer/wikimedia-button-2x.png 2x" width="88" height="31" alt="Wikimedia Foundation" loading="lazy" /></a></li>
+	<li id="footer-poweredbyico"><a href="https://www.mediawiki.org/"><img src="/static/images/footer/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/static/images/footer/poweredby_mediawiki_132x47.png 1.5x, /static/images/footer/poweredby_mediawiki_176x62.png 2x" width="88" height="31" loading="lazy"></a></li>
+</ul>
+
+</footer>
+
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgHostname":"mw2313","wgBackendResponseTime":108,"wgPageParseReport":{"limitreport":{"cputime":"0.200","walltime":"0.276","ppvisitednodes":{"value":2337,"limit":1000000},"postexpandincludesize":{"value":30663,"limit":2097152},"templateargumentsize":{"value":5586,"limit":2097152},"expansiondepth":{"value":38,"limit":100},"expensivefunctioncount":{"value":0,"limit":500},"unstrip-depth":{"value":0,"limit":20},"unstrip-size":{"value":435,"limit":5000000},"entityaccesscount":{"value":0,"limit":400},"timingprofile":["100.00%  191.337      1 -total"," 75.65%  144.754      1 Template:Shelves"," 29.54%   56.528      1 Template:Subjects/leaf"," 28.75%   55.008      1 Template:Subjects/0"," 20.73%   39.669      2 Template:Subjects/1"," 17.20%   32.912      2 Template:Subjects/2"," 16.59%   31.734     16 Template:Parsable"," 16.51%   31.584     14 Template:Evalx"," 16.45%   31.475      1 Template:Shelf:Map"," 13.52%   25.878      4 Template:Subjects/3"]},"scribunto":{"limitreport-timeusage":{"value":"0.091","limit":"10.000"},"limitreport-memusage":{"value":2551017,"limit":52428800}},"cachereport":{"origin":"mw2303","timestamp":"20231218225643","ttl":2592000,"transientcontent":false}}});});</script>
+<script type="application/ld+json">{"@context":"https:\/\/schema.org","@type":"Article","name":"6502 Assembly","url":"https:\/\/en.wikibooks.org\/wiki\/6502_Assembly","sameAs":"http:\/\/www.wikidata.org\/entity\/Q19368646","mainEntity":"http:\/\/www.wikidata.org\/entity\/Q19368646","author":{"@type":"Organization","name":"Contributors to Wikimedia projects"},"publisher":{"@type":"Organization","name":"Wikimedia Foundation, Inc.","logo":{"@type":"ImageObject","url":"https:\/\/www.wikimedia.org\/static\/images\/wmf-hor-googpub.png"}},"datePublished":"2006-05-07T01:25:21Z","dateModified":"2023-11-01T02:27:41Z","headline":"instruction set"}</script>
+</body>
+</html>

@@ -16,7 +16,7 @@ impl SubDevice {
     }
 }
 
-/// A de-multiplexor that take ownership of multiple bus devices
+/// A multiplexor that take ownership of multiple bus devices
 /// and exposes a multiplexed bus
 pub struct MuxBus {
     devices: Vec<SubDevice>,
