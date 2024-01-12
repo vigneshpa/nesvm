@@ -6,7 +6,6 @@ use crate::{Bus, Tick};
 
 use self::{addressing_mode::Operand, opcode::Opcode};
 
-#[derive(Default)]
 struct StatusRegister {
     carry: bool,
     zero: bool,
@@ -21,32 +20,62 @@ struct StatusRegister {
 impl StatusRegister {
     pub fn as_array(&self) -> [bool; 8] {
         [
-            self.negative,
-            self.overflow,
-            self._unused,
-            self.break_,
-            self._decimal_mode,
-            self.disable_interrupts,
-            self.zero,
             self.carry,
+            self.zero,
+            self.disable_interrupts,
+            self._decimal_mode,
+            self.break_,
+            self._unused,
+            self.overflow,
+            self.negative,
         ]
     }
 
     pub fn from_array(data: [bool; 8]) -> Self {
         Self {
-            negative: data[0],
-            overflow: data[1],
-            _unused: data[2],
-            break_: data[3],
-            _decimal_mode: data[4],
-            disable_interrupts: data[5],
-            zero: data[6],
-            carry: data[7],
+            carry: data[0],
+            zero: data[1],
+            disable_interrupts: data[2],
+            _decimal_mode: data[3],
+            break_: data[4],
+            _unused: data[5],
+            overflow: data[6],
+            negative: data[7],
         }
+    }
+
+    pub fn set_array(&mut self, data: [bool; 8]) {
+        self.carry = data[0];
+        self.zero = data[1];
+        self.disable_interrupts = data[2];
+        self._decimal_mode = data[3];
+        self.break_ = data[4];
+        self._unused = data[5];
+        self.overflow = data[6];
+        self.negative = data[7];
+    }
+
+    fn get_u8(&self) -> u8 {
+        let mut acc = 0u8;
+        for el in self.as_array() {
+            if el {
+                acc |= 0b1000_0000u8;
+            }
+            acc = acc >> 1;
+        }
+        acc
+    }
+
+    fn set_u8(&mut self, mut data: u8) {
+        let mut arr = [false; 8];
+        for el in &mut arr {
+            *el = (data & 0b1u8) != 0;
+            data = data >> 1;
+        }
+        self.set_array(arr);
     }
 }
 
-#[derive(Default)]
 pub struct Registers {
     accumulator: u8,
     xindex: u8,
@@ -66,14 +95,28 @@ pub struct CPU<B: Bus> {
 }
 
 impl<B: Bus> CPU<B> {
-    pub fn new(bus: B) -> Self {
-        let mut ret = Self {
-            registers: Registers::default(),
+    pub fn new(bus: B, start_address: u16) -> Self {
+        Self {
+            registers: Registers {
+                accumulator:0,
+                xindex:0,
+                yindex:0,
+                program_counter: start_address,
+                stack_pointer: 0xfdu8,
+                status_register: StatusRegister {
+                    carry: false,
+                    zero: false,
+                    disable_interrupts: false,
+                    _decimal_mode: false,
+                    break_: false,
+                    _unused: true,
+                    overflow: false,
+                    negative: false,
+                },
+            },
             pending_cycles: 0,
             bus,
-        };
-        ret.registers.stack_pointer = 0xfdu8;
-        ret
+        }
     }
 
     pub fn from_state(registers: Registers, bus: B) -> Self {

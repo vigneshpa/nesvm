@@ -12,24 +12,6 @@ pub fn signed_add(a: u16, b: u8) -> u16 {
     concat(high, low)
 }
 
-pub fn shift_left(val: u8) -> u8 {
-    val << 1
-}
-
-pub fn shift_right(val: u8) -> u8 {
-    val >> 1
-}
-
-pub fn rotate_left(val: u8) -> u8 {
-    let low = val & (0b1u8 << 7);
-    let high = val << 1;
-    low | high
-}
-pub fn rotate_right(val: u8) -> u8 {
-    let low = val >> 1;
-    let high = val & 0b1u8;
-    low | high
-}
 
 pub fn increment(val: u8) -> u8 {
     val.wrapping_add(1)

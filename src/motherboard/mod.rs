@@ -27,7 +27,7 @@ impl MotherBoardBuilder {
 
     pub fn get_board(self) -> MotherBoard {
         MotherBoard {
-            cpu: CPU::new(self.system_bus),
+            cpu: CPU::new(self.system_bus, 0),
         }
     }
 }

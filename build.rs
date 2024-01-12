@@ -27,7 +27,10 @@ fn generate_opcode_match(){
     for (ins, details) in insmap {
         let modes = details.as_object().unwrap().get("opcodes").unwrap().as_object().unwrap();
         for (mode, opcode) in modes {
-            let mode = source.get("modes").unwrap().get(mode).unwrap().as_str().unwrap();
+            let mode = match source.get("modes").unwrap().get(mode) {
+                Some(mode) => mode.as_str().unwrap(),
+                None => mode,
+            };
             let opcode = opcode.as_str().unwrap();
             let cycles = cycles.get(opcode).unwrap().as_i64().unwrap();
             writeln!(&mut sink, "    0x{} => Opcode {{ instruction: {}, mode: {}, cycles: {} }},", opcode, ins, mode, cycles).unwrap();

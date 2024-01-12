@@ -87,7 +87,7 @@ impl AddressingMode {
             Self::Absolute => Operand::Memory(cpu.read_next_u16()),
             Self::ZeroPage => Operand::Memory(cpu.read_next() as u16),
             Self::Relative => Operand::Memory(utils::signed_add(pc, cpu.read_next())),
-            // Specal case: Must be handled at the JMP instruction
+            // Specal case for JMP instruction
             Self::AbsoluteIndirect => Operand::Memory({
                 let low = cpu.read_next();
                 let high = cpu.read_next();
