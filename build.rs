@@ -34,6 +34,7 @@ fn generate_opcode_match(){
         }
     }
 
+    writeln!(&mut sink, "    _ => panic!(\"Unknown Opcode\")").unwrap();
     writeln!(&mut sink, "}}").unwrap();
 }
 
