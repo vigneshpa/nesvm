@@ -2,19 +2,18 @@ use std::ops::{IndexMut, Index};
 
 use crate::Bus;
 
+/// A container for Random Access Memory (RAM) that implements the `Bus` trait
 pub struct RAM {
     inner: Box<[u8]>,
 }
 
 impl RAM {
+    /// Create a new zero-initilized RAM with the given capacity
     pub fn new(capacity: usize) -> Self {
-        if capacity > u16::MAX as usize + 1 {
-            panic!("Cannot allocate RAM with capacity {capacity}, as the Bus has only 16-bit address lines");
-        }
-        Self {
-            inner: vec![0u8; capacity].into_boxed_slice(),
-        }
+        let mem = vec![0u8; capacity];
+        Self::from_slice(&mem)
     }
+    /// Create a new RAM initilized with the given slice
     pub fn from_slice(slice: &[u8]) -> Self {
         if slice.len() > u16::MAX as usize + 1 {
             panic!("Cannot allocate RAM with capacity {}, as the Bus has only 16-bit address lines", slice.len());

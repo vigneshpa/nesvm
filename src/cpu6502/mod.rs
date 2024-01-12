@@ -18,7 +18,7 @@ struct StatusRegister {
 }
 
 impl StatusRegister {
-    pub fn as_array(&self) -> [bool; 8] {
+    fn as_array(&self) -> [bool; 8] {
         [
             self.carry,
             self.zero,
@@ -31,7 +31,7 @@ impl StatusRegister {
         ]
     }
 
-    pub fn from_array(data: [bool; 8]) -> Self {
+    fn from_array(data: [bool; 8]) -> Self {
         Self {
             carry: data[0],
             zero: data[1],
@@ -44,7 +44,7 @@ impl StatusRegister {
         }
     }
 
-    pub fn set_array(&mut self, data: [bool; 8]) {
+    fn set_array(&mut self, data: [bool; 8]) {
         self.carry = data[0];
         self.zero = data[1];
         self.disable_interrupts = data[2];
@@ -76,7 +76,7 @@ impl StatusRegister {
     }
 }
 
-pub struct Registers {
+struct Registers {
     accumulator: u8,
     xindex: u8,
     yindex: u8,
@@ -86,6 +86,7 @@ pub struct Registers {
     status_register: StatusRegister,
 }
 
+/// A virtual 6502 CPU implementation
 pub struct CPU<B: Bus> {
     // CPU State
     registers: Registers,
@@ -95,6 +96,11 @@ pub struct CPU<B: Bus> {
 }
 
 impl<B: Bus> CPU<B> {
+
+    /// Creates a new 6502 virtual CPU
+    /// 
+    /// * `bus` - The bus onto which the cpu is connected
+    /// * `start_address` - Address at which the CPU must start executing instructions
     pub fn new(bus: B, start_address: u16) -> Self {
         Self {
             registers: Registers {
@@ -119,7 +125,7 @@ impl<B: Bus> CPU<B> {
         }
     }
 
-    pub fn from_state(registers: Registers, bus: B) -> Self {
+    fn from_state(registers: Registers, bus: B) -> Self {
         Self {
             registers,
             pending_cycles: 0,
@@ -127,27 +133,27 @@ impl<B: Bus> CPU<B> {
         }
     }
 
-    pub fn set_pending_cycles(&mut self, cycles: u8) {
+    fn set_pending_cycles(&mut self, cycles: u8) {
         self.pending_cycles = cycles;
     }
 
-    pub fn read_next(&mut self) -> u8 {
+    fn read_next(&mut self) -> u8 {
         let next = self.bus.get(self.registers.program_counter);
         self.registers.program_counter = self.registers.program_counter.wrapping_add(1);
         next
     }
 
-    pub fn read_next_u16(&mut self) -> u16 {
+    fn read_next_u16(&mut self) -> u16 {
         let low = self.read_next();
         let high = self.read_next();
         crate::utils::concat(low, high)
     }
 
-    pub fn load(&self, operand: Operand) -> u8 {
+    fn load(&self, operand: Operand) -> u8 {
         operand.load(self)
     }
 
-    pub fn store(&mut self, operand: Operand, data: u8) {
+    fn store(&mut self, operand: Operand, data: u8) {
         operand.store(data, self);
     }
 }

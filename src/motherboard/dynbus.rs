@@ -1,50 +1,73 @@
 use crate::Bus;
 
-use self::ram::RAM;
-
-pub mod ram;
-
-pub enum Device {
+enum Device {
     SubDevice(Box<dyn Bus>),
     Mirror(u16),
 }
 
-pub struct Port {
+struct Port {
     start: u16,
-    end: u32,
+    end: u16,
     device: Device,
 }
 
 /// A dyncmic Bus multiplexor that take ownership of multiple bus devices
 /// and exposes a multiplexed bus.
+/// 
+/// The bus can be configured in runtime (dynamic)
 pub struct DynBus {
     ports: Vec<Port>,
 }
 
 impl DynBus {
+
+    /// Creates a new dynamic with no connected devices
     pub fn new() -> Self {
         Self { ports: Vec::new() }
     }
 
-    pub fn mount(&mut self, port: Port) {
+    /// Mount a device to the bus.
+    /// 
+    /// Moves ownership of the sub_device to the dyncmic bus.
+    /// 
+    /// * `start` - Startig address to map
+    /// * `end` - Ending address to map (inclusive)
+    /// * `sub_device` - The device to be mounted
+    pub fn mount_device(&mut self, start: u16, end: u16, sub_device: impl Bus + 'static) {
+        self.mount(Port {
+            start,
+            end,
+            device:Device::SubDevice(Box::new(sub_device)),
+        });
+    }
+
+    pub fn mirror(&mut self, start: u16, end:u16, base: u16) {
+        self.mount(Port{
+            start,
+            end,
+            device: Device::Mirror(base),
+        });
+    }
+
+    fn mount(&mut self, port: Port) {
         self.ports.push(port);
         self.validate();
     }
 
     fn validate(&mut self) {
         self.ports.sort_by_key(|d| d.start);
-        let mut prev = 0u32;
+        let mut prev = 0u16;
         for dev in &self.ports {
-            if (dev.start as u32) < prev {
+            if (dev.start) < prev {
                 panic!("Device address ranges overlap");
             }
-            prev = dev.end;
+            prev = dev.end + 1;
         }
     }
 
     fn lookup_port(&self, address: u16) -> Option<&Port> {
         for port in &self.ports {
-            if port.start <= address && (address as u32) < port.end {
+            if port.start <= address && address <= port.end {
                 return Some(port);
             }
         }
@@ -53,7 +76,7 @@ impl DynBus {
 
     fn lookup_port_mut(&mut self, address: u16) -> Option<&mut Port> {
         for port in &mut self.ports {
-            if port.start <= address && (address as u32) < port.end {
+            if port.start <= address && address <= port.end {
                 return Some(port);
             }
         }
@@ -89,41 +112,5 @@ impl Bus for DynBus {
             }
             // dev.device.set(address - dev.start, data)
         }
-    }
-}
-
-pub struct DynBusBuilder {
-    inner: DynBus,
-}
-
-impl DynBusBuilder {
-    pub fn new() -> Self {
-        Self {
-            inner: DynBus::new(),
-        }
-    }
-
-    pub fn mount_memory(mut self, start: u16, end: u32, capacity: usize) -> Self {
-        let ram = RAM::new(capacity);
-        self.inner.mount(Port {
-            start,
-            end,
-            device: Device::SubDevice(Box::new(ram)),
-        });
-        self
-    }
-
-    pub fn mount_initilized_memory(mut self, start: u16, init: &[u8]) -> Self {
-        let ram = RAM::from_slice(init);
-        self.inner.mount(Port {
-            start,
-            end: start as u32 + init.len() as u32,
-            device: Device::SubDevice(Box::new(ram)),
-        });
-        self
-    }
-
-    pub fn get(self) -> DynBus {
-        self.inner
     }
 }
