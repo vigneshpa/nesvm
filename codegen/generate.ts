@@ -104,7 +104,7 @@ async function extractCyclesTetanes() {
 
     const source = await readFile("codegen/tetanes.txt");
 
-    const regex = /Instr\(0x([0-9A-F]{2})\s*,\s*([A-Z]{3})\s*,\s*([A-Z]{3})\s*,\s*([0-9]+)\s*\)/g
+    const regex = /Instr\(0x([0-9A-F]{2})\s*,\s*([A-Z0-9]{3})\s*,\s*([A-Z]{3})\s*,\s*([0-9]+)\s*\)/g
 
     const matches = [...source.matchAll(regex)];
 
