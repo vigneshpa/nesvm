@@ -15,6 +15,14 @@ impl RAM {
             inner: vec![0u8; capacity].into_boxed_slice(),
         }
     }
+    pub fn from_slice(slice: &[u8]) -> Self {
+        if slice.len() > u16::MAX as usize + 1 {
+            panic!("Cannot allocate RAM with capacity {}, as the Bus has only 16-bit address lines", slice.len());
+        }
+        Self {
+            inner: Vec::from(slice).into_boxed_slice(),
+        }
+    }
 }
 
 impl Bus for RAM {
