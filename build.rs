@@ -2,10 +2,8 @@ use std::fs::File;
 use std::env;
 use std::io::Write;
 
-fn get_out_dir(path: &str) -> String {
-    let mut out_dir = env::var("OUT_DIR").unwrap();
-    out_dir.push_str(path);
-    out_dir
+fn main() {
+    generate_opcode_match();
 }
 
 fn generate_opcode_match(){
@@ -38,6 +36,9 @@ fn generate_opcode_match(){
 
     writeln!(&mut sink, "}}").unwrap();
 }
-fn main() {
-    generate_opcode_match();
+
+fn get_out_dir(path: &str) -> String {
+    let mut out_dir = env::var("OUT_DIR").unwrap();
+    out_dir.push_str(path);
+    out_dir
 }
