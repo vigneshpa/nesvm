@@ -1,5 +1,7 @@
 use crate::Bus;
 
+pub mod ram;
+
 pub struct SubDevice {
     start: u16,
     end: u32,
@@ -16,13 +18,13 @@ impl SubDevice {
     }
 }
 
-/// A multiplexor that take ownership of multiple bus devices
-/// and exposes a multiplexed bus. This bus can be configured during runtime
-pub struct MuxBus {
+/// A dyncmic Bus multiplexor that take ownership of multiple bus devices
+/// and exposes a multiplexed bus.
+pub struct DynBus {
     devices: Vec<SubDevice>,
 }
 
-impl MuxBus {
+impl DynBus {
     pub fn new() -> Self {
         Self {
             devices: Vec::new(),
@@ -64,7 +66,7 @@ impl MuxBus {
     }
 }
 
-impl Bus for MuxBus {
+impl Bus for DynBus {
     fn get(&self, address: u16) -> u8 {
         let device = self.lookup_device(address);
         match device {

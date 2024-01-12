@@ -1,4 +1,4 @@
-use std::ops::{Index, IndexMut};
+use std::ops::{IndexMut, Index};
 
 use crate::Bus;
 

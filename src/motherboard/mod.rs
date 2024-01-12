@@ -1,21 +1,17 @@
-mod muxbus;
-mod ram;
+mod dynbus;
 
-use self::{
-    muxbus::{MuxBus, SubDevice},
-    ram::RAM,
-};
+use self::dynbus::{DynBus, SubDevice, ram::RAM};
 use crate::{cpu6502::CPU, Tick};
 
 pub struct MotherBoardBuilder {
-    system_bus: MuxBus,
+    system_bus: DynBus,
 }
 
 /// A Bus de-multiplexor
 impl MotherBoardBuilder {
     pub fn new() -> Self {
         Self {
-            system_bus: MuxBus::new(),
+            system_bus: DynBus::new(),
         }
     }
 
@@ -33,7 +29,7 @@ impl MotherBoardBuilder {
 }
 
 pub struct MotherBoard {
-    cpu: CPU<MuxBus>,
+    cpu: CPU<DynBus>,
 }
 
 impl Tick for MotherBoard {
