@@ -12,7 +12,7 @@ impl Opcode {
         use AddressingMode::*;
 
          // Generated from the build script
-        let opcode = include!(concat!(env!("OUT_DIR"), "/opcode_match.rs"));
+        let opcode = include!(concat!(env!("OUT_DIR"), "/opcode_match"));
         opcode
     }
 }

@@ -10,7 +10,7 @@ fn generate_opcode_match(){
     println!("cargo:rerun-if-changed=codegen/source.json");
     println!("cargo:rerun-if-changed=codegen/cycles.json");
 
-    let mut sink = File::create(get_out_dir("/opcode_match.rs")).unwrap();
+    let mut sink = File::create(get_out_dir("/opcode_match")).unwrap();
 
     let source = File::open("codegen/source.json").unwrap();
     let cycles = File::open("codegen/cycles.json").unwrap();
