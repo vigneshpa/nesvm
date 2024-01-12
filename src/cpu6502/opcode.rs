@@ -1,9 +1,9 @@
 use super::{addressing_mode::AddressingMode, instruction::Instruction};
 
-struct Opcode {
-    instruction: Instruction,
-    mode: AddressingMode,
-    cycles: u8,
+pub struct Opcode {
+    pub instruction: Instruction,
+    pub mode: AddressingMode,
+    pub cycles: u8,
 }
 
 impl Opcode {
@@ -11,9 +11,8 @@ impl Opcode {
         use Instruction::*;
         use AddressingMode::*;
 
-        // Match
-        match code {
-            _ => todo!("Unknown code")
-        }
+         // Generated from the build script
+        let opcode = include!(concat!(env!("OUT_DIR"), "/opcode_match.rs"));
+        opcode
     }
 }

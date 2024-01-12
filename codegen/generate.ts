@@ -3,27 +3,13 @@
 
 await wikiBooksExtract();
 await extractCyclesTetanes();
-await generateRustMatchArms();
 
-async function generateRustMatchArms() {
-    const source = await readJSON("codegen/source.json");
-    const cycles = await readJSON("codegen/cycles.json");
-
-    for(const instruction of Object.keys(source.instructions)) {
-        const modes = source.instructions[instruction].opcodes;
-        for(const mode of Object.keys(modes)){
-            const opcode = modes[mode];
-            const cyc = cycles[opcode] as number;
-            const amode = source.modes[mode];
-            console.log(opcode, instruction, amode, cyc);
-        }
-    }
-}
+const root = "./";
 
 
 async function wikiBooksExtract() {
 
-    const source = await readFile("codegen/6502_Assembly.dump.txt");
+    const source = await readFile(root + "6502_Assembly.dump.txt");
 
     const parsed = source.split("\n\n\n")
         .map(sec => sec.split("\n\n")
@@ -97,12 +83,12 @@ async function wikiBooksExtract() {
         modes,
         instructions
     }
-    await writeJSON("codegen/source.json", final);
+    await writeJSON(root + "source.json", final);
 }
 
 async function extractCyclesTetanes() {
 
-    const source = await readFile("codegen/tetanes.txt");
+    const source = await readFile(root + "tetanes.txt");
 
     const regex = /Instr\(0x([0-9A-F]{2})\s*,\s*([A-Z0-9]{3})\s*,\s*([A-Z]{3})\s*,\s*([0-9]+)\s*\)/g
 
@@ -116,7 +102,7 @@ async function extractCyclesTetanes() {
         cycles[opc] = cyc;
     }
 
-    await writeJSON("codegen/cycles.json", cycles);
+    await writeJSON(root + "cycles.json", cycles);
 };
 
 async function readFile(source: string) {

@@ -4,10 +4,7 @@ mod opcode;
 
 use crate::{Bus, Tick};
 
-use self::{
-    addressing_mode::{AddressingMode, Operand},
-    instruction::Instruction,
-};
+use self::{addressing_mode::Operand, opcode::Opcode};
 
 #[derive(Default)]
 struct StatusRegister {
@@ -120,15 +117,13 @@ impl<B: Bus> Tick for CPU<B> {
             //
             // Execute instruction
             let opcode = self.read_next();
+            let opcode = Opcode::decode(opcode);
 
-            self.pending_cycles = cycles::required_for_opcode(opcode);
+            self.pending_cycles = opcode.cycles;
 
-            let mode = AddressingMode::from_opcode(opcode);
-            let instruction = Instruction::from_opcode(opcode);
+            let operand = opcode.mode.fetch_operand(self);
 
-            let operand = mode.fetch_operand(self);
-
-            instruction.executor(self, operand).run();
+            opcode.instruction.executor(self, operand).run();
         }
 
         self.pending_cycles -= 1;
