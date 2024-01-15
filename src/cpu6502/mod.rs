@@ -195,7 +195,9 @@ impl<B: Bus> CPU<B> {
     }
 
     fn read_irq_vector(&self) -> u16 {
-        todo!()
+        let low = self.bus.read(0xFFFE);
+        let high = self.bus.read(0xFFFF);
+        concat(low, high)
     }
 
     fn push(&mut self, data: u8) {
