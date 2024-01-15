@@ -85,29 +85,29 @@ impl DynBus {
 }
 
 impl Bus for DynBus {
-    fn get(&self, address: u16) -> u8 {
+    fn read(&self, address: u16) -> u8 {
         let port = self.lookup_port(address);
         match port {
             Some(port) => match &port.device {
-                Device::SubDevice(device) => device.get(address - port.start),
+                Device::SubDevice(device) => device.read(address - port.start),
                 Device::Mirror(base) => {
                     let off = address - port.start;
-                    self.get(base + off)
+                    self.read(base + off)
                 }
             },
             None => 0,
         }
     }
 
-    fn set(&mut self, address: u16, data: u8) -> () {
+    fn write(&mut self, address: u16, data: u8) -> () {
         let port = self.lookup_port_mut(address);
         if let Some(port) = port {
             match &mut port.device {
-                Device::SubDevice(device) => device.set(address - port.start, data),
+                Device::SubDevice(device) => device.write(address - port.start, data),
                 Device::Mirror(base) => {
                     let base = *base;
                     let off = address - port.start;
-                    self.set(base + off, data);
+                    self.write(base + off, data);
                 }
             }
             // dev.device.set(address - dev.start, data)

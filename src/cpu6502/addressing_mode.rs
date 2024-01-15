@@ -60,14 +60,14 @@ impl Operand {
         match self {
             Self::Implied => 0,
             Self::Accumulator => cpu.registers.accumulator,
-            Self::Memory(pointer) => cpu.bus.get(*pointer),
+            Self::Memory(pointer) => cpu.bus.read(*pointer),
         }
     }
     pub fn store<B: Bus>(&self, data: u8, cpu: &mut CPU<B>) {
         match self {
             Self::Implied => (),
             Self::Accumulator => cpu.registers.accumulator = data,
-            Self::Memory(pointer) => cpu.bus.set(*pointer, data),
+            Self::Memory(pointer) => cpu.bus.write(*pointer, data),
         }
     }
 }
@@ -91,8 +91,8 @@ impl AddressingMode {
             Self::AbsoluteIndirect => Operand::Memory({
                 let low = cpu.read_next();
                 let high = cpu.read_next();
-                let low = cpu.bus.get(concat(low, high));
-                let high = cpu.bus.get(concat(low, increment(high)));
+                let low = cpu.bus.read(concat(low, high));
+                let high = cpu.bus.read(concat(low, increment(high)));
                 let pointer = concat(low, high);
                 pointer
             }),
@@ -110,15 +110,15 @@ impl AddressingMode {
             }
             Self::ZeroPageIndexedIndirect => {
                 let sum_address = cpu.read_next() as u16 + cpu.registers.xindex as u16;
-                let low = cpu.bus.get(sum_address);
-                let high = cpu.bus.get(sum_address + 1);
+                let low = cpu.bus.read(sum_address);
+                let high = cpu.bus.read(sum_address + 1);
                 let pointer = utils::concat(low, high);
                 Operand::Memory(pointer)
             }
             Self::ZeroPageIndirectIndexedWithY => {
                 let off = cpu.read_next() as u16;
-                let low = cpu.bus.get(off);
-                let high = cpu.bus.get(off + 1);
+                let low = cpu.bus.read(off);
+                let high = cpu.bus.read(off + 1);
                 let pointer = utils::concat(low, high);
                 Operand::Memory(pointer)
             }

@@ -25,11 +25,11 @@ impl RAM {
 }
 
 impl Bus for RAM {
-    fn get(&self, address: u16) -> u8 {
+    fn read(&self, address: u16) -> u8 {
         self.inner[address as usize]
     }
 
-    fn set(&mut self, address: u16, data: u8) {
+    fn write(&mut self, address: u16, data: u8) {
         self.inner[address as usize] = data;
     }
 }

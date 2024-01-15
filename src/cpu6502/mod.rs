@@ -158,7 +158,7 @@ impl<B: Bus> CPU<B> {
     }
 
     fn read_next(&mut self) -> u8 {
-        let next = self.bus.get(self.registers.program_counter);
+        let next = self.bus.read(self.registers.program_counter);
         self.registers.program_counter = self.registers.program_counter.wrapping_add(1);
         next
     }
@@ -200,14 +200,14 @@ impl<B: Bus> CPU<B> {
 
     fn push(&mut self, data: u8) {
         let sp = self.get_sp();
-        self.bus.set(sp as u16 | 0x100, data);
+        self.bus.write(sp as u16 | 0x100, data);
         self.set_sp(decrement(sp)); // sp--
     }
 
     fn pull(&mut self) -> u8 {
         let sp = increment(self.get_sp()); // sp++
         self.set_sp(sp);
-        self.bus.get(sp as u16 | 0x100)
+        self.bus.read(sp as u16 | 0x100)
     }
 
     fn get_carry(&self) -> bool {

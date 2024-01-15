@@ -15,11 +15,11 @@ impl ROM {
 }
 
 impl Bus for ROM {
-    fn get(&self, address: u16) -> u8 {
-        self.inner.get(address)
+    fn read(&self, address: u16) -> u8 {
+        self.inner.read(address)
     }
 
-    fn set(&mut self, _address: u16, _data: u8) -> () {}
+    fn write(&mut self, _address: u16, _data: u8) -> () {}
 }
 
 impl Index<u16> for ROM {
