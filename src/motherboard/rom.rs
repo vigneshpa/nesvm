@@ -1,5 +1,5 @@
+use std::ops::Index;
 use crate::Bus;
-
 use super::ram::RAM;
 
 /// A wrapper around RAM for Read Only Memory (ROM)
@@ -20,4 +20,11 @@ impl Bus for ROM {
     }
 
     fn set(&mut self, _address: u16, _data: u8) -> () {}
+}
+
+impl Index<u16> for ROM {
+    type Output = u8;
+    fn index(&self, index: u16) -> &Self::Output {
+        &self.inner[index]
+    }
 }
