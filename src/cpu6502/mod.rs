@@ -90,7 +90,8 @@ struct Registers {
 pub struct CPU<B: Bus> {
     // CPU State
     registers: Registers,
-    pending_cycles: u8,
+    cycles_pending: u8,
+    cycles_done:u8,
     // Functional parts
     bus: B,
 }
@@ -120,21 +121,10 @@ impl<B: Bus> CPU<B> {
                     negative: false,
                 },
             },
-            pending_cycles: 0,
+            cycles_pending: 0,
+            cycles_done: 0, 
             bus,
         }
-    }
-
-    fn from_state(registers: Registers, bus: B) -> Self {
-        Self {
-            registers,
-            pending_cycles: 0,
-            bus,
-        }
-    }
-
-    fn set_pending_cycles(&mut self, cycles: u8) {
-        self.pending_cycles = cycles;
     }
 
     fn read_next(&mut self) -> u8 {
@@ -162,19 +152,21 @@ impl<B: Bus> Tick for CPU<B> {
     fn tick(&mut self) {
         //
         // Retrun if previous instructions have pending cycles
-        if self.pending_cycles == 0 {
-            //
+        if self.cycles_pending == 0 {
+            self.cycles_done = 0;
+
             // Execute instruction
             let opcode = self.read_next();
             let opcode = Opcode::decode(opcode);
 
-            self.pending_cycles = opcode.cycles;
+            self.cycles_pending = opcode.cycles;
 
             let operand = opcode.mode.fetch_operand(self);
 
             opcode.instruction.executor(self, operand).run();
         }
 
-        self.pending_cycles -= 1;
+        self.cycles_done += 1;
+        self.cycles_pending -= 1;
     }
 }
