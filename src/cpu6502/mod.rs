@@ -191,6 +191,7 @@ impl<B: Bus> CPU<B> {
             self.registers.program_counter = self.read_irq_vector();
         }
         self.pending_irq = false;
+        self.registers.status_register.disable_interrupts = true;
     }
 
     fn read_irq_vector(&self) -> u16 {
