@@ -14,6 +14,11 @@ impl<B: Bus> Tick for CPU<B> {
         if self.cycles_pending == 0 {
             self.cycles_done = 0;
 
+            if self.pending_irq {
+                self.handle_irq();
+                return;
+            }
+
             // Execute instruction
             let opcode = self.read_next();
             let opcode = Opcode::decode(opcode);
@@ -23,10 +28,6 @@ impl<B: Bus> Tick for CPU<B> {
             let operand = opcode.mode.fetch_operand(self);
 
             opcode.instruction.executor(self, operand).run();
-
-            if self.pending_irq {
-                self.handle_interrupt();
-            }
         }
 
         self.cycles_done += 1;
@@ -114,6 +115,15 @@ struct Registers {
     status_register: StatusRegister,
 }
 
+impl Registers {
+    fn reset(&mut self) {
+        self.accumulator = 0;
+        self.xindex = 0;
+        self.yindex = 0;
+        self.stack_pointer = 0xFDu8;
+    }
+}
+
 /// A virtual 6502 CPU implementation
 pub struct CPU<B: Bus> {
     // CPU State
@@ -123,6 +133,7 @@ pub struct CPU<B: Bus> {
     // Functional parts
     bus: B,
     pending_irq: bool,
+    pending_nmi: bool,
 }
 
 impl<B: Bus> CPU<B> {
@@ -138,7 +149,7 @@ impl<B: Bus> CPU<B> {
                 xindex:0,
                 yindex:0,
                 program_counter: start_address,
-                stack_pointer: 0xfdu8,
+                stack_pointer: 0xFDu8,
                 status_register: StatusRegister {
                     carry: false,
                     zero: false,
@@ -153,6 +164,7 @@ impl<B: Bus> CPU<B> {
             cycles_pending: 0,
             cycles_done: 0,
             pending_irq: false,
+            pending_nmi: false,
             bus,
         }
     }
@@ -181,22 +193,45 @@ impl<B: Bus> CPU<B> {
         self.pending_irq = true;
     }
 
-    fn handle_interrupt(&mut self){
+    fn handle_irq(&mut self){
         if !self.registers.status_register.disable_interrupts {
             let (low, high) = split(self.registers.program_counter);
             let status = self.registers.status_register.get_u8();
             self.push(high);
             self.push(low);
             self.push(status);
-            self.registers.program_counter = self.read_irq_vector();
+            self.registers.program_counter = self.read_vector(0xFFFE);
+            self.registers.status_register.disable_interrupts = true;
         }
         self.pending_irq = false;
-        self.registers.status_register.disable_interrupts = true;
     }
 
-    fn read_irq_vector(&self) -> u16 {
-        let low = self.bus.read(0xFFFE);
-        let high = self.bus.read(0xFFFF);
+    pub fn raise_nmi(&mut self) {
+        self.pending_nmi = true;
+    }
+
+    fn handle_nmi(&mut self){
+        let (low, high) = split(self.registers.program_counter);
+        let status = self.registers.status_register.get_u8();
+        self.push(high);
+        self.push(low);
+        self.push(status);
+        self.registers.program_counter = self.read_vector(0xFFFA);
+        self.registers.status_register.disable_interrupts = true;
+        self.pending_nmi = false;
+        self.pending_irq = false;
+    }
+
+    pub fn reset(&mut self){
+        self.registers.program_counter = self.read_vector(0xFFFC);
+        self.cycles_pending = 0;
+        self.cycles_done = 0;
+        
+    }
+
+    fn read_vector(&self, base: u16) -> u16 {
+        let low = self.bus.read(base);
+        let high = self.bus.read(base + 1);
         concat(low, high)
     }
 
