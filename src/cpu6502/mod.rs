@@ -7,6 +7,50 @@ use crate::utils::*;
 
 use self::{addressing_mode::Operand, opcode::Opcode};
 
+struct StatusRegister {
+    carry: bool,
+    zero: bool,
+    disable_interrupts: bool,
+    _decimal_mode: bool,
+    break_: bool,
+    _unused: bool,
+    overflow: bool,
+    negative: bool,
+}
+
+struct Registers {
+    accumulator: u8,
+    xindex: u8,
+    yindex: u8,
+
+    stack_pointer: u8,
+    program_counter: u16,
+    status_register: StatusRegister,
+}
+
+impl Registers {
+    fn reset(&mut self) {
+        self.accumulator = 0;
+        self.xindex = 0;
+        self.yindex = 0;
+        self.stack_pointer = 0xFDu8;
+    }
+}
+
+/// A virtual 6502 CPU implementation
+pub struct CPU<B: Bus> {
+    // CPU State
+    registers: Registers,
+    cycles_pending: u8,
+    cycles_done:u8,
+    // Functional parts
+    bus: B,
+    pending_irq: bool,
+    pending_nmi: bool,
+}
+
+
+
 impl<B: Bus> Tick for CPU<B> {
     fn tick(&mut self) {
         //
@@ -35,16 +79,7 @@ impl<B: Bus> Tick for CPU<B> {
     }
 }
 
-struct StatusRegister {
-    carry: bool,
-    zero: bool,
-    disable_interrupts: bool,
-    _decimal_mode: bool,
-    break_: bool,
-    _unused: bool,
-    overflow: bool,
-    negative: bool,
-}
+
 
 impl StatusRegister {
     fn as_array(&self) -> [bool; 8] {
@@ -103,37 +138,6 @@ impl StatusRegister {
         }
         self.set_array(arr);
     }
-}
-
-struct Registers {
-    accumulator: u8,
-    xindex: u8,
-    yindex: u8,
-
-    stack_pointer: u8,
-    program_counter: u16,
-    status_register: StatusRegister,
-}
-
-impl Registers {
-    fn reset(&mut self) {
-        self.accumulator = 0;
-        self.xindex = 0;
-        self.yindex = 0;
-        self.stack_pointer = 0xFDu8;
-    }
-}
-
-/// A virtual 6502 CPU implementation
-pub struct CPU<B: Bus> {
-    // CPU State
-    registers: Registers,
-    cycles_pending: u8,
-    cycles_done:u8,
-    // Functional parts
-    bus: B,
-    pending_irq: bool,
-    pending_nmi: bool,
 }
 
 impl<B: Bus> CPU<B> {
@@ -226,7 +230,6 @@ impl<B: Bus> CPU<B> {
         self.registers.program_counter = self.read_vector(0xFFFC);
         self.cycles_pending = 0;
         self.cycles_done = 0;
-        
     }
 
     fn read_vector(&self, base: u16) -> u16 {
