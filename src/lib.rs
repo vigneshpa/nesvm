@@ -1,7 +1,9 @@
 #![allow(dead_code)]
 
 pub mod cpu6502;
+pub mod ppu2c02;
 pub mod motherboard;
+pub mod gamepack;
 pub mod utils;
 
 pub trait Tick {

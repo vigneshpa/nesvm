@@ -61,6 +61,7 @@ impl DynBus {
             if (dev.start) < prev {
                 panic!("Device address ranges overlap");
             }
+            // BUG: This Will not validate properly on some edge cases
             prev = dev.end.wrapping_add(1);
         }
     }
