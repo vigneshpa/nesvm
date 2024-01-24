@@ -8,10 +8,10 @@ pub struct Opcode {
 
 impl Opcode {
     pub fn decode(code: u8) -> Opcode {
-        use Instruction::*;
         use AddressingMode::*;
+        use Instruction::*;
 
-         // Generated from the build script
+        // Generated from the build script
         include!(concat!(env!("OUT_DIR"), "/opcode_match"))
     }
 }

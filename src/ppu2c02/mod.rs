@@ -9,8 +9,7 @@ impl PPU {
 }
 
 impl Tick for PPU {
-    fn tick(&mut self) {
-    }
+    fn tick(&mut self) {}
 }
 
 // PPU registers
@@ -26,6 +25,6 @@ impl Bus for PPU {
 
 impl Clone for PPU {
     fn clone(&self) -> Self {
-        Self {  }
+        Self {}
     }
 }

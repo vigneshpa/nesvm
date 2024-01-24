@@ -1,6 +1,6 @@
-use std::ops::Index;
-use crate::Bus;
 use super::ram::RAM;
+use crate::Bus;
+use std::ops::Index;
 
 /// A wrapper around RAM for Read Only Memory (ROM)
 pub struct ROM {

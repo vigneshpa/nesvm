@@ -2,8 +2,8 @@ mod addressing_mode;
 mod instruction;
 mod opcode;
 
-use crate::{Bus, Tick};
 use crate::utils::*;
+use crate::{Bus, Tick};
 
 use self::{addressing_mode::Operand, opcode::Opcode};
 
@@ -42,14 +42,12 @@ pub struct CPU<B: Bus> {
     // CPU State
     registers: Registers,
     cycles_pending: u8,
-    cycles_done:u8,
+    cycles_done: u8,
     // Functional parts
     bus: B,
     pending_irq: bool,
     pending_nmi: bool,
 }
-
-
 
 impl<B: Bus> Tick for CPU<B> {
     fn tick(&mut self) {
@@ -78,8 +76,6 @@ impl<B: Bus> Tick for CPU<B> {
         self.cycles_pending -= 1;
     }
 }
-
-
 
 impl StatusRegister {
     fn as_array(&self) -> [bool; 8] {
@@ -141,17 +137,16 @@ impl StatusRegister {
 }
 
 impl<B: Bus> CPU<B> {
-
     /// Creates a new 6502 virtual CPU
-    /// 
+    ///
     /// * `bus` - The bus onto which the cpu is connected
     /// * `start_address` - Address at which the CPU must start executing instructions
     pub fn new(bus: B, start_address: u16) -> Self {
         Self {
             registers: Registers {
-                accumulator:0,
-                xindex:0,
-                yindex:0,
+                accumulator: 0,
+                xindex: 0,
+                yindex: 0,
                 program_counter: start_address,
                 stack_pointer: 0xFDu8,
                 status_register: StatusRegister {
@@ -197,7 +192,7 @@ impl<B: Bus> CPU<B> {
         self.pending_irq = true;
     }
 
-    fn handle_irq(&mut self){
+    fn handle_irq(&mut self) {
         if !self.registers.status_register.disable_interrupts {
             let (low, high) = split(self.registers.program_counter);
             let status = self.registers.status_register.get_u8();
@@ -214,7 +209,7 @@ impl<B: Bus> CPU<B> {
         self.pending_nmi = true;
     }
 
-    fn handle_nmi(&mut self){
+    fn handle_nmi(&mut self) {
         let (low, high) = split(self.registers.program_counter);
         let status = self.registers.status_register.get_u8();
         self.push(high);
@@ -226,7 +221,7 @@ impl<B: Bus> CPU<B> {
         self.pending_irq = false;
     }
 
-    pub fn reset(&mut self){
+    pub fn reset(&mut self) {
         self.registers.program_counter = self.read_vector(0xFFFC);
         self.cycles_pending = 0;
         self.cycles_done = 0;
@@ -254,7 +249,7 @@ impl<B: Bus> CPU<B> {
         self.registers.status_register.carry
     }
 
-    fn set_carry(&mut self, val:bool) {
+    fn set_carry(&mut self, val: bool) {
         self.registers.status_register.carry = val;
     }
 
@@ -262,7 +257,7 @@ impl<B: Bus> CPU<B> {
         self.registers.status_register.overflow
     }
 
-    fn set_overflow(&mut self, val:bool) {
+    fn set_overflow(&mut self, val: bool) {
         self.registers.status_register.overflow = val;
     }
 

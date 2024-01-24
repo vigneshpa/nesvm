@@ -213,7 +213,8 @@ impl<'a, B: Bus> InstructionExecutor<'a, B> {
                 let c = if !self.cpu.get_carry() { 1 } else { 0 };
                 let diff = a - b - c;
                 self.cpu.set_carry(diff & 0x100 == 0);
-                self.cpu.set_overflow(((a ^ diff) & (!b ^ diff) & 0x80) == 0);
+                self.cpu
+                    .set_overflow(((a ^ diff) & (!b ^ diff) & 0x80) == 0);
                 let diff = diff as u8;
                 self.cpu.set_nz(diff);
                 self.cpu.set_acc(diff);
@@ -260,14 +261,14 @@ impl<'a, B: Bus> InstructionExecutor<'a, B> {
                 self.cpu.set_carry(val & 0x80 != 0);
                 self.cpu.set_nz(data);
                 self.store(data);
-            },
+            }
             LSR => {
                 let val = self.load();
                 let data = val >> 1;
                 self.cpu.set_carry(val & 0x01 != 0);
                 self.cpu.set_nz(data);
                 self.store(data);
-            },
+            }
             ROL => {
                 let val = self.load();
                 let mut data = val << 1;
@@ -277,7 +278,7 @@ impl<'a, B: Bus> InstructionExecutor<'a, B> {
                 self.cpu.set_carry(val & 0x80 != 0);
                 self.cpu.set_nz(data);
                 self.store(data);
-            },
+            }
             ROR => {
                 let val = self.load();
                 let mut data = val >> 1;
@@ -287,7 +288,7 @@ impl<'a, B: Bus> InstructionExecutor<'a, B> {
                 self.cpu.set_carry(val & 0x01 != 0);
                 self.cpu.set_nz(data);
                 self.store(data);
-            },
+            }
 
             // Bitwise
             AND => {
@@ -398,25 +399,29 @@ impl<'a, B: Bus> InstructionExecutor<'a, B> {
             PHP => self.cpu.push(self.cpu.registers.status_register.get_u8()),
             PLP => {
                 let data = self.cpu.pull();
-                self.cpu.registers.status_register.set_u8(data)
+                self.cpu.registers.status_register.set_u8(data);
             }
 
             // Jump
 
             // Jump to new location by changing the value of the program counter.
-            JMP => if let Operand::Memory(memory) = self.operand {
-                self.cpu.registers.program_counter = memory
-            },
+            JMP => {
+                if let Operand::Memory(memory) = self.operand {
+                    self.cpu.registers.program_counter = memory
+                }
+            }
 
             // Jumps to a subroutine
             // The address before the next instruction (PC - 1) is pushed onto the stack: first the upper byte followed by the lower byte. As the stack grows backwards, the return address is therefore stored as a little-endian number in memory.
             // PC is set to the target address.
-            JSR => if let Operand::Memory(memory) = self.operand {
+            JSR => {
+                if let Operand::Memory(memory) = self.operand {
                     let (low, high) = split(self.cpu.registers.program_counter - 1);
                     self.cpu.push(high);
                     self.cpu.push(low);
                     self.cpu.registers.program_counter = memory;
-            },
+                }
+            }
 
             // Return from a subroutine to the point where it called with JSR.
             // The return address is popped from the stack (low byte first, then high byte).

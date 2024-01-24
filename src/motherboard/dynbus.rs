@@ -13,23 +13,22 @@ struct Port {
 
 /// A dyncmic Bus multiplexor that take ownership of multiple bus devices
 /// and exposes a multiplexed bus.
-/// 
+///
 /// The bus can be configured in runtime (dynamic)
 pub struct DynBus {
     ports: Vec<Port>,
 }
 
 impl DynBus {
-
-    /// Creates a new dynamic with no connected devices
+    /// Creates a new dynamic bus with no connected devices
     pub fn new() -> Self {
         Self { ports: Vec::new() }
     }
 
     /// Mount a device to the bus.
-    /// 
+    ///
     /// Moves ownership of the sub_device to the dyncmic bus.
-    /// 
+    ///
     /// * `start` - Startig address to map
     /// * `end` - Ending address to map (inclusive)
     /// * `sub_device` - The device to be mounted
@@ -37,12 +36,12 @@ impl DynBus {
         self.mount(Port {
             start,
             end,
-            device:Device::SubDevice(Box::new(sub_device)),
+            device: Device::SubDevice(Box::new(sub_device)),
         });
     }
 
-    pub fn mirror(&mut self, start: u16, end:u16, base: u16) {
-        self.mount(Port{
+    pub fn mirror(&mut self, start: u16, end: u16, base: u16) {
+        self.mount(Port {
             start,
             end,
             device: Device::Mirror(base),

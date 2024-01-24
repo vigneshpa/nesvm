@@ -1,15 +1,11 @@
 use nesvm::{
     cpu6502::CPU,
+    motherboard::{dynbus::DynBus, ram::RAM},
     ppu2c02::PPU,
-    motherboard::{
-        dynbus::DynBus,
-        ram::RAM
-    },
     Tick,
 };
 
 fn main() {
-
     let mut ppu = PPU::new();
 
     let mut bus = DynBus::new();

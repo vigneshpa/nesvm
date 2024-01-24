@@ -1,4 +1,4 @@
-use std::ops::{IndexMut, Index};
+use std::ops::{Index, IndexMut};
 
 use crate::Bus;
 
@@ -16,7 +16,10 @@ impl RAM {
     /// Create a new RAM initilized with the given slice
     pub fn from_slice(slice: &[u8]) -> Self {
         if slice.len() > u16::MAX as usize + 1 {
-            panic!("Cannot allocate RAM with capacity {}, as the Bus has only 16-bit address lines", slice.len());
+            panic!(
+                "Cannot allocate RAM with capacity {}, as the Bus has only 16-bit address lines",
+                slice.len()
+            );
         }
         Self {
             inner: Vec::from(slice).into_boxed_slice(),

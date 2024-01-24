@@ -12,7 +12,6 @@ pub fn signed_add(a: u16, b: u8) -> u16 {
     concat(high, low)
 }
 
-
 pub fn increment(val: u8) -> u8 {
     val.wrapping_add(1)
 }
