@@ -1,14 +1,13 @@
 [package]
-name = "nesvm"
+name = "nes-core"
 version = "0.1.0"
 edition = "2021"
 authors = ["Vignesh Paranthaman <vignesh-p@outlook.com>"]
-description = "An NES emulator"
+description = "An NES emulator (core)"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-path = "src/lib.rs"
 crate-type = ["rlib"]
 
 [dependencies]
