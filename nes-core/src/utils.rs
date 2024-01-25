@@ -1,5 +1,5 @@
 pub fn concat(low: u8, high: u8) -> u16 {
-    ((high as u16) << 8) & (low as u16)
+    ((high as u16) << 8) | (low as u16)
 }
 
 pub fn split(val: u16) -> (u8, u8) {

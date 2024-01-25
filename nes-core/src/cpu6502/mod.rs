@@ -44,7 +44,7 @@ pub struct CPU<B: Bus> {
     cycles_pending: u8,
     cycles_done: u8,
     // Functional parts
-    bus: B,
+    pub bus: B,
     pending_irq: bool,
     pending_nmi: bool,
 }
