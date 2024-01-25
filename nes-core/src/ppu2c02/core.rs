@@ -11,11 +11,11 @@ impl Core {
 }
 
 impl Bus for Core {
-    fn read(&self, address: u16) -> u8 {
+    fn read(&self, _address: u16) -> u8 {
         todo!()
     }
 
-    fn write(&mut self, address: u16, data: u8) {
+    fn write(&mut self, _address: u16, _data: u8) {
         todo!()
     }
 }
