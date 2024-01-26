@@ -1,7 +1,7 @@
-mod core;
+mod ppucore;
 
 use std::{cell::RefCell, rc::Rc};
-use core::Core;
+use ppucore::Core;
 use crate::{Bus, Tick};
 
 pub struct PPU {
