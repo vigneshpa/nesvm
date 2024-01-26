@@ -81,7 +81,7 @@ impl AddressingMode {
             Self::Accumulator => Operand::Accumulator,
             Self::Implied => Operand::Implied,
             Self::Immediate => {
-                cpu.registers.program_counter += pc.wrapping_add(1);
+                cpu.registers.program_counter = pc.wrapping_add(1);
                 Operand::Memory(pc)
             }
             Self::Absolute => Operand::Memory(cpu.read_next_u16()),

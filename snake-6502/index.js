@@ -42,7 +42,7 @@ function render(p, n) {
     ctx.putImageData(image, 0, 0);
 }
 const wasm = await WebAssembly.instantiateStreaming(
-    fetch("../target/wasm32-unknown-unknown/release/snake6502.wasm"),
+    fetch("../target/wasm32-unknown-unknown/release/snake.wasm"),
     {
         env: {
             rng,
@@ -60,7 +60,7 @@ while (true) {
     await sleep(1);
     wasm.instance.exports.step(game);
 }
-wasm.instance.exports.destroy(game);
+// wasm.instance.exports.destroy(game);
 
 
 function sleep(ms) {

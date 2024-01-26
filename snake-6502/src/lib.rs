@@ -1,7 +1,6 @@
 mod game;
 use game::{Game, GameBus};
 
-#[link(name="host")]
 extern "C" {
     /// Imported function to read random number generator
     #[link_name = "rng"]

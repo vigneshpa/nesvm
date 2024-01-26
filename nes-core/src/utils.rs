@@ -7,9 +7,10 @@ pub fn split(val: u16) -> (u8, u8) {
 }
 
 pub fn signed_add(a: u16, b: u8) -> u16 {
-    let (mut low, high) = crate::utils::split(a);
-    low = low.wrapping_add(b);
-    concat(high, low)
+    a.wrapping_add(b as i8 as u16)
+    // let (mut low, high) = crate::utils::split(a);
+    // low = low.wrapping_add(b);
+    // concat(high, low)
 }
 
 pub fn increment(val: u8) -> u8 {
