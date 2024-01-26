@@ -5,7 +5,6 @@ mod opcode;
 use crate::utils::*;
 use crate::{Bus, Tick};
 
-use self::instruction::Instruction;
 use self::{addressing_mode::Operand, opcode::Opcode};
 
 struct StatusRegister {
@@ -65,10 +64,6 @@ impl<B: Bus> Tick for CPU<B> {
             // Execute instruction
             let opcode = self.read_next();
             let opcode = Opcode::decode(opcode);
-
-            if let Instruction::BPL = opcode.instruction {
-                println!("BreakPoint")
-            }
 
             self.cycles_pending = opcode.cycles;
 

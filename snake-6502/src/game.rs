@@ -18,10 +18,11 @@ impl Game {
 }
 
 pub struct GameBus {
-    memory: [u8; 0xFFFF],
+    memory: [u8; 0xFFFF + 1],
     rng: Box<dyn Fn()->u8>,
     btn: Box<dyn Fn()->u8>,
     render: Box<dyn Fn(&[u8])->()>,
+    reset: Box<dyn Fn()->()>,
 }
 
 impl GameBus {
@@ -29,23 +30,29 @@ impl GameBus {
         rng: impl Fn()->u8 + 'static,
         btn: impl Fn()->u8 + 'static,
         render: impl Fn(&[u8])->() + 'static,
+        reset: impl Fn()->() + 'static,
     ) -> Self {
-        let mut memory = [0u8; 0xFFFF];
+        let mut memory = [0u8; 0xFFFF + 1];
         memory[0x0600..(0x0600 + GAME_CODE.len())].copy_from_slice(&GAME_CODE);
         let rng = Box::new(rng);
         let btn = Box::new(btn);
         let render = Box::new(render);
+        let reset = Box::new(reset);
         Self {
             memory,
             rng,
             btn,
             render,
+            reset
         }
     }
 }
 
 impl Bus for GameBus {
     fn read(&self, address: u16) -> u8 {
+        if address == 0xFFFE {
+            (self.reset)();
+        }
         if address == 0x00FE {
             (self.rng)()
         } else if address == 0x00FF {

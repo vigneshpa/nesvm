@@ -11,14 +11,18 @@ extern "C" {
     /// Imported function to render graphics
     #[link_name = "render"]
     fn ffi_render(buffer: *const u8, length: usize);
-    /// Imported function to log out
-    #[link_name = "flog"]
-    fn ffi_flog(data:f32);
+    /// Imported function to reset the game
+    #[allow(dead_code)]
+    #[link_name = "reset"]
+    fn ffi_reset();
 }
 
 #[export_name = "create"]
 pub extern "C" fn ffi_create() -> *mut Game {
-    let bus = GameBus::new(rng, btn, render);
+    let bus = GameBus::new(
+        rng, btn, render,
+        reset
+    );
     let game = Game::new(bus);
     Box::into_raw(game)
 }
@@ -46,9 +50,8 @@ fn btn() -> u8 {
     unsafe { ffi_btn() }
 }
 
-#[allow(dead_code)]
-fn flog(data: f32) {
-    unsafe { ffi_flog(data) }
+fn reset() {
+    unsafe { ffi_reset() }
 }
 
 fn render(buffer: &[u8]) {
