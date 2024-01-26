@@ -322,42 +322,42 @@ impl<'a, B: Bus> InstructionExecutor<'a, B> {
             // Branching
             BCC => {
                 if !self.cpu.registers.status_register.carry {
-                    self.branch(self.load())
+                    self.branch()
                 }
             }
             BCS => {
                 if self.cpu.registers.status_register.carry {
-                    self.branch(self.load())
+                    self.branch()
                 }
             }
             BNE => {
                 if !self.cpu.registers.status_register.zero {
-                    self.branch(self.load())
+                    self.branch()
                 }
             }
             BEQ => {
                 if self.cpu.registers.status_register.zero {
-                    self.branch(self.load())
+                    self.branch()
                 }
             }
             BPL => {
                 if !self.cpu.registers.status_register.negative {
-                    self.branch(self.load())
+                    self.branch()
                 }
             }
             BMI => {
                 if self.cpu.registers.status_register.negative {
-                    self.branch(self.load())
+                    self.branch()
                 }
             }
             BVC => {
                 if !self.cpu.registers.status_register.overflow {
-                    self.branch(self.load())
+                    self.branch()
                 }
             }
             BVS => {
                 if self.cpu.registers.status_register.overflow {
-                    self.branch(self.load())
+                    self.branch()
                 }
             }
 
@@ -491,8 +491,9 @@ impl<'a, B: Bus> InstructionExecutor<'a, B> {
         }
     }
 
-    fn branch(&mut self, data: u8) {
-        let pc = self.cpu.registers.program_counter;
-        self.cpu.registers.program_counter = signed_add(pc, data);
+    fn branch(&mut self) {
+        if let Operand::Memory(address) = self.operand {
+            self.cpu.registers.program_counter = address;
+        }
     }
 }
