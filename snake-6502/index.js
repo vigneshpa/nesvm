@@ -84,7 +84,7 @@ function render(p, n) {
     rendered = true;
 }
 const wasm = await WebAssembly.instantiateStreaming(
-    fetch("../target/wasm32-unknown-unknown/release/snake.wasm"),
+    fetch("../target/wasm32-unknown-unknown/release/snake_6502.wasm"),
     {
         env: {
             rng,
