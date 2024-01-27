@@ -19,8 +19,7 @@ document.body.addEventListener("keydown", e => {
 // WebAssembly Imported functions
 
 function rng() {
-    const rng = Math.floor(Math.random() * 255);
-    return rng;
+    return Math.floor(Math.random() * 255);
 }
 
 function btn() {
@@ -29,16 +28,16 @@ function btn() {
     return key;
 }
 
-function reset() {
-    throw new Error("Game Over");
-}
-
 let rendered = false;
 function render(p, n) {
     const arr = new Uint8Array(wasm.instance.exports.memory.buffer, p, n);
     const image = constructImage(arr, 10);
     ctx.putImageData(image, 0, 0);
     rendered = true;
+}
+
+function reset() {
+    throw new Error("Game Over");
 }
 
 // Instantiating the webassembly module
@@ -59,10 +58,10 @@ console.log(wasm.instance.exports);
 
 function step() {
     let cycles = 0;
-    rendered = false;
     while (!rendered) {
         cycles += wasm.instance.exports.step();
     }
+    rendered = false;
     requestAnimationFrame(step);
     console.log(cycles);
 }
