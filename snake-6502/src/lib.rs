@@ -37,8 +37,8 @@ fn render(buffer: &[u8]) {
 
 static mut GAME: Game = Game::new();
 
-#[export_name = "get_memory"]
-pub extern "C" fn ffi_create() -> *mut u8 {
+#[export_name = "get_game_memory"]
+pub extern "C" fn ffi_get_game_memory() -> *mut u8 {
     unsafe {
         GAME.cpu.bus.memory.as_mut_ptr()
     }
