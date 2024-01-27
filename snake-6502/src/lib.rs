@@ -13,7 +13,7 @@ extern "C" {
     fn ffi_reset();
 }
 
-// Safe wrappers for imported ffi functions
+// Safe wrappers sround imported ffi functions
 
 fn rng() -> u8 {
     unsafe { ffi_rng() }
