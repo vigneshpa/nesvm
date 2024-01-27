@@ -35,25 +35,19 @@ fn render(buffer: &[u8]) {
 
 // Exported ffi functions
 
-#[export_name = "create"]
-pub extern "C" fn ffi_create() -> *mut Game {
-    let bus = GameBus::new();
-    let game = Game::new(bus);
-    Box::into_raw(game)
-}
+static mut GAME: Game = Game::new();
 
-#[export_name = "step"]
-pub extern "C" fn ffi_step(p: *mut Game) {
+#[export_name = "get_memory"]
+pub extern "C" fn ffi_create() -> *mut u8 {
     unsafe {
-        (*p).step();
+        GAME.cpu.bus.memory.as_mut_ptr()
     }
 }
 
-#[export_name = "destroy"]
-pub extern "C" fn ffi_destroy(p: *mut Game) {
+#[export_name = "step"]
+pub extern "C" fn ffi_step() {
     unsafe {
-        let game = Box::from_raw(p);
-        drop(game);
+        GAME.step();
     }
 }
 
@@ -64,11 +58,11 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn new(bus: GameBus) -> Box<Self> {
+    pub const fn new() ->Self {
         let start_address = 0x0600u16;
+        let bus = GameBus::new();
         let cpu = CPU::new(bus, start_address);
-        let game = Self { cpu };
-        Box::new(game)
+        Self { cpu }
     }
     pub fn step(&mut self) {
         self.cpu.tick();
@@ -76,30 +70,31 @@ impl Game {
 }
 
 pub struct GameBus {
-    memory: [u8; 0xFFFF + 1]
+    memory: [u8; 0x0600]
 }
 
 impl GameBus {
-    pub fn new() -> Self {
-        let memory = [0u8; 0xFFFF + 1];
-        // memory[0x0600..(0x0600 + GAME_CODE.len())].copy_from_slice(&GAME_CODE);
+    pub const fn new() -> Self {
+        let memory = [0u8; 0x0600];
         Self { memory }
     }
 }
 
 impl Bus for GameBus {
     fn read(&self, address: u16) -> u8 {
-        if address == 0xFFFE {
-            reset();
-        }
-        if address == 0x00FE {
-            rng()
-        } else if address == 0x00FF {
-            btn()
+        if address < 0x0600 {
+            if address == 0x00FE {
+                rng()
+            } else if address == 0x00FF {
+                btn()
+            } else {
+                self.memory[address as usize]
+            }
         } else if 0x0600 <= address && (address < (0x0600 + GAME_CODE.len()) as u16) {
             GAME_CODE[(address - 0x0600) as usize]
         } else {
-            self.memory[address as usize]
+            reset();
+            0
         }
     }
 

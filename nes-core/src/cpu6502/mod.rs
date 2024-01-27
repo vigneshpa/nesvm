@@ -141,7 +141,7 @@ impl<B: Bus> CPU<B> {
     ///
     /// * `bus` - The bus onto which the cpu is connected
     /// * `start_address` - Address at which the CPU must start executing instructions
-    pub fn new(bus: B, start_address: u16) -> Self {
+    pub const fn new(bus: B, start_address: u16) -> Self {
         Self {
             registers: Registers {
                 accumulator: 0,

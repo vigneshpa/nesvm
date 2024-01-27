@@ -47,9 +47,9 @@ function scaleImage(image, scale) {
             const ii = i * scale;
             const jj = j * scale;
             const off2 = (ii * image2.width + jj) * 4;
-            for(let k = 0; k < scale; k++) {
+            for (let k = 0; k < scale; k++) {
                 const off3 = off2 + k * image2.width * 4;
-                for(let l = 0; l < scale; l++) {
+                for (let l = 0; l < scale; l++) {
                     image2.data[off3 + l * 4 + 0] = image.data[off + 0];
                     image2.data[off3 + l * 4 + 1] = image.data[off + 1];
                     image2.data[off3 + l * 4 + 2] = image.data[off + 2];
@@ -102,18 +102,12 @@ const wasm = await WebAssembly.instantiateStreaming(
 );
 
 console.log(wasm.instance.exports);
-const game = wasm.instance.exports.create();
 
 function step() {
-    try {
-        while (!rendered) {
-            wasm.instance.exports.step(game);
-        }
-        rendered = false;
-        requestAnimationFrame(step);
-    }catch(e){
-        wasm.instance.exports.destroy(game);
-        throw e;
+    while (!rendered) {
+        wasm.instance.exports.step();
     }
+    rendered = false;
+    requestAnimationFrame(step);
 }
 requestAnimationFrame(step);
