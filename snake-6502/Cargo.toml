@@ -1,3 +1,7 @@
+# Testing CPU with a snake game
+# https://bugzmanov.github.io/nes_ebook/chapter_3_4.html
+# https://skilldrick.github.io/easy6502/#snake
+
 [package]
 name = "snake-6502"
 version = "0.1.0"
