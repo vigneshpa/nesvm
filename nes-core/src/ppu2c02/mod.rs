@@ -17,7 +17,9 @@ impl PPU {
 }
 
 impl Tick for PPU {
-    fn tick(&mut self) {}
+    fn tick(&mut self) -> u8 {
+        0
+    }
 }
 
 // PPU registers

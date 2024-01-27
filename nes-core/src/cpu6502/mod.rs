@@ -41,8 +41,7 @@ impl Registers {
 pub struct CPU<B: Bus> {
     // CPU State
     registers: Registers,
-    cycles_pending: u8,
-    cycles_done: u8,
+    cycles: u8,
     // Functional parts
     pub bus: B,
     pending_irq: bool,
@@ -50,30 +49,24 @@ pub struct CPU<B: Bus> {
 }
 
 impl<B: Bus> Tick for CPU<B> {
-    fn tick(&mut self) {
-        //
-        // Retrun if previous instructions have pending cycles
-        if self.cycles_pending == 0 {
-            self.cycles_done = 0;
+    fn tick(&mut self) -> u8 {
+        self.cycles = 0;
 
-            if self.pending_irq {
-                self.handle_irq();
-                return;
-            }
-
-            // Execute instruction
-            let opcode = self.read_next();
-            let opcode = Opcode::decode(opcode);
-
-            self.cycles_pending = opcode.cycles;
-
-            let operand = opcode.mode.fetch_operand(self);
-
-            opcode.instruction.executor(self, operand).run();
+        if self.pending_irq {
+            self.handle_irq();
+            return self.cycles;
         }
 
-        self.cycles_done += 1;
-        self.cycles_pending -= 1;
+        // Execute instruction
+        let opcode = self.read_next();
+        let opcode = Opcode::decode(opcode);
+
+        self.cycles += opcode.cycles;
+
+        let operand = opcode.mode.fetch_operand(self);
+
+        opcode.instruction.executor(self, operand).run();
+        self.cycles
     }
 }
 
@@ -160,8 +153,7 @@ impl<B: Bus> CPU<B> {
                     negative: false,
                 },
             },
-            cycles_pending: 0,
-            cycles_done: 0,
+            cycles: 0,
             pending_irq: false,
             pending_nmi: false,
             bus,
@@ -223,8 +215,7 @@ impl<B: Bus> CPU<B> {
 
     pub fn reset(&mut self) {
         self.registers.program_counter = self.read_vector(0xFFFC);
-        self.cycles_pending = 0;
-        self.cycles_done = 0;
+        self.cycles = 0;
     }
 
     fn read_vector(&self, base: u16) -> u16 {

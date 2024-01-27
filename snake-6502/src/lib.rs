@@ -45,9 +45,9 @@ pub extern "C" fn ffi_get_game_memory() -> *mut u8 {
 }
 
 #[export_name = "step"]
-pub extern "C" fn ffi_step() {
+pub extern "C" fn ffi_step() -> u8 {
     unsafe {
-        GAME.step();
+        GAME.step()
     }
 }
 
@@ -64,8 +64,8 @@ impl Game {
         let cpu = CPU::new(bus, start_address);
         Self { cpu }
     }
-    pub fn step(&mut self) {
-        self.cpu.tick();
+    pub fn step(&mut self) -> u8 {
+        self.cpu.tick()
     }
 }
 

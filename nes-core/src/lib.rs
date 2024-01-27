@@ -7,7 +7,7 @@ pub mod ppu2c02;
 pub mod utils;
 
 pub trait Tick {
-    fn tick(&mut self);
+    fn tick(&mut self) -> u8;
 }
 
 pub trait Bus {
