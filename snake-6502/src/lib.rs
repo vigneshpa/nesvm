@@ -9,7 +9,7 @@ extern "C" {
     #[link_name = "render"]
     fn ffi_render(buffer: *const u8, length: usize);
     /// Imported function to reset the game
-    #[link_name = "reset"]
+    #[link_name = "game_reset"]
     fn ffi_reset();
 }
 
