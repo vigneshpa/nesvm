@@ -33,6 +33,43 @@ function reset() {
     throw new Error("Game Over");
 }
 
+let rendered = false;
+function render(p, n) {
+    const arr = new Uint8Array(wasm.instance.exports.memory.buffer, p, n);
+    const image = constructImage(arr, 10);
+    ctx.putImageData(image, 0, 0);
+    rendered = true;
+}
+
+// Instantiating the webassembly module
+
+const wasm = await WebAssembly.instantiateStreaming(
+    fetch("../target/wasm32-unknown-unknown/release/snake_6502.wasm"),
+    {
+        env: {
+            rng,
+            btn,
+            render,
+            reset
+        }
+    }
+);
+
+console.log(wasm.instance.exports);
+
+function step() {
+    let cycles = 0;
+    rendered = false;
+    while (!rendered) {
+        cycles += wasm.instance.exports.step();
+    }
+    requestAnimationFrame(step);
+    console.log(cycles);
+}
+requestAnimationFrame(step);
+
+
+
 /**
  * Construct image with the given single channel image data and scale
  * @type {(image:Uint8Array, scale: number)=>ImageData}
@@ -66,37 +103,3 @@ function constructImage(data, scale) {
     }
     return image2;
 }
-
-let rendered = false;
-function render(p, n) {
-    const arr = new Uint8Array(wasm.instance.exports.memory.buffer, p, n);
-    const image = constructImage(arr, 10);
-    ctx.putImageData(image, 0, 0);
-    rendered = true;
-}
-
-// Instantiating the webassembly module
-const wasm = await WebAssembly.instantiateStreaming(
-    fetch("../target/wasm32-unknown-unknown/release/snake_6502.wasm"),
-    {
-        env: {
-            rng,
-            btn,
-            render,
-            reset
-        }
-    }
-);
-
-console.log(wasm.instance.exports);
-
-function step() {
-    let cycles = 0;
-    rendered = false;
-    while (!rendered) {
-        cycles += wasm.instance.exports.step();
-    }
-    requestAnimationFrame(step);
-    console.log(cycles);
-}
-requestAnimationFrame(step);
