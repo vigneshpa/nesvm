@@ -34,26 +34,32 @@ function reset() {
 }
 
 /**
- * Scale Up the given image data
- * @type {(image:ImageData, scale: number)=>ImageData}
+ * Construct image with the given single channel image data and scale
+ * @type {(image:Uint8Array, scale: number)=>ImageData}
  */
-function scaleImage(image, scale) {
+function constructImage(data, scale) {
     scale = Math.floor(scale);
     /** @type {ImageData} */
-    const image2 = ctx.createImageData(image.width * scale, image.height * scale);
-    for (let i = 0; i < image.width; i++) {
-        for (let j = 0; j < image.height; j++) {
-            const off = (i * image.width + j) * 4;
+    const image2 = ctx.createImageData(32 * scale, 32 * scale);
+    for (let i = 0; i < 32; i++) {
+        for (let j = 0; j < 32; j++) {
+            const off = i * 32 + j;
+            const n = data[off] > 0 ? 255 - data[off] : 0;
+
             const ii = i * scale;
             const jj = j * scale;
             const off2 = (ii * image2.width + jj) * 4;
             for (let k = 0; k < scale; k++) {
                 const off3 = off2 + k * image2.width * 4;
                 for (let l = 0; l < scale; l++) {
-                    image2.data[off3 + l * 4 + 0] = image.data[off + 0];
-                    image2.data[off3 + l * 4 + 1] = image.data[off + 1];
-                    image2.data[off3 + l * 4 + 2] = image.data[off + 2];
-                    image2.data[off3 + l * 4 + 3] = image.data[off + 3];
+                    // Red
+                    image2.data[off3 + l * 4 + 0] = n;
+                    // Green
+                    image2.data[off3 + l * 4 + 1] = n;
+                    // Blue
+                    image2.data[off3 + l * 4 + 2] = n;
+                    // Alpha
+                    image2.data[off3 + l * 4 + 3] = 255;
                 }
             }
         }
@@ -64,27 +70,8 @@ function scaleImage(image, scale) {
 let rendered = false;
 function render(p, n) {
     const arr = new Uint8Array(wasm.instance.exports.memory.buffer, p, n);
-    /** @type {ImageData} */
-    const image = ctx.createImageData(32, 32);
-    // console.log(image);
-    for (let i = 0; i < 32; i++) {
-        for (let j = 0; j < 32; j++) {
-            const k = i * 32 + j;
-            const n = arr[k] > 0 ? 255 - arr[k] : 0;
-            // console.log(n);
-
-            // Red
-            image.data[k * 4 + 0] = n;
-            // Green
-            image.data[k * 4 + 1] = n;
-            // Blue
-            image.data[k * 4 + 2] = n;
-            // Alpha
-            image.data[k * 4 + 3] = 255;
-        }
-    }
-    // ctx.putImageData(image, 0, 0);
-    ctx.putImageData(scaleImage(image, 10), 0, 0);
+    const image = constructImage(arr, 10);
+    ctx.putImageData(image, 0, 0);
     rendered = true;
 }
 
@@ -104,10 +91,12 @@ const wasm = await WebAssembly.instantiateStreaming(
 console.log(wasm.instance.exports);
 
 function step() {
-    while (!rendered) {
-        wasm.instance.exports.step();
-    }
+    let cycles = 0;
     rendered = false;
+    while (!rendered) {
+        cycles += wasm.instance.exports.step();
+    }
     requestAnimationFrame(step);
+    console.log(cycles);
 }
 requestAnimationFrame(step);
