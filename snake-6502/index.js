@@ -1,8 +1,8 @@
 const canvas = document.querySelector("canvas");
 /** @type {CanvasRenderingContext2D} */
 const ctx = canvas.getContext("2d");
-ctx.lineWidth = 1;
 
+// Key board handler
 let lastkey = 0;
 document.body.addEventListener("keydown", e => {
     lastkey = e.key.charCodeAt(0);
@@ -14,23 +14,27 @@ document.body.addEventListener("keydown", e => {
         lastkey = "d".charCodeAt(0);
     else if (e.keyCode === 40)
         lastkey = "s".charCodeAt(0);
-    // console.log(e);
 });
+
+// WebAssembly Imported functions
+
 function rng() {
     const rng = Math.floor(Math.random() * 255);
-    // console.log(rng);
     return rng;
 }
+
 function btn() {
     const key = lastkey;
     lastkey = 0;
     return key;
 }
+
 function reset() {
     throw new Error("Game Over");
 }
 
 /**
+ * Scale Up the given image data
  * @type {(image:ImageData, scale: number)=>ImageData}
  */
 function scaleImage(image, scale) {
@@ -66,7 +70,7 @@ function render(p, n) {
     for (let i = 0; i < 32; i++) {
         for (let j = 0; j < 32; j++) {
             const k = i * 32 + j;
-            const n = arr[k] > 0 ? 255 : 0;
+            const n = arr[k] > 0 ? 255 - arr[k] : 0;
             // console.log(n);
 
             // Red
@@ -83,6 +87,8 @@ function render(p, n) {
     ctx.putImageData(scaleImage(image, 10), 0, 0);
     rendered = true;
 }
+
+// Instantiating the webassembly module
 const wasm = await WebAssembly.instantiateStreaming(
     fetch("../target/wasm32-unknown-unknown/release/snake_6502.wasm"),
     {
@@ -111,8 +117,3 @@ function step() {
     }
 }
 requestAnimationFrame(step);
-
-
-// function sleep(ms) {
-//     return new Promise(res=>setTimeout(res, ms));
-// }
