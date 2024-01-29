@@ -66,7 +66,11 @@ const wasm = await WebAssembly.instantiateStreaming(
 console.log(wasm.instance.exports);
 
 let toSkip = 0;
-function step() {
+let t = 0;
+/** @type {(timestamp: number)=>void} */
+function step(timestamp) {
+    const delta = timestamp - t;
+    t = timestamp;
     if (toSkip > 0) {
         toSkip--;
         requestAnimationFrame(step);
@@ -78,7 +82,7 @@ function step() {
     }
     rendered = false;
     // console.log(cycles);
-    toSkip = Math.floor(cycles / 500);
+    toSkip = Math.floor(cycles /delta /30);
     requestAnimationFrame(step);
 }
 requestAnimationFrame(step);

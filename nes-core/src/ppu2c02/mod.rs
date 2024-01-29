@@ -1,29 +1,30 @@
-mod ppucore;
+mod core;
 
 use std::{cell::RefCell, rc::Rc};
-use ppucore::Core;
+use core::Core;
 use crate::{Bus, Tick};
 
-pub struct PPU {
-    inner: Rc<RefCell<Core>>
+pub struct PPU<B: Bus> {
+    inner: Rc<RefCell<Core<B>>>
 }
 
-impl PPU {
-    pub fn new() -> Self {
+impl<B: Bus> PPU<B> {
+    pub fn new(bus: B) -> Self {
         Self {
-            inner: Rc::new(RefCell::new(Core::new()))
+            inner: Rc::new(RefCell::new(Core::new(bus)))
         }
     }
 }
 
-impl Tick for PPU {
+impl<B: Bus> Tick for PPU<B> {
     fn tick(&mut self) -> u8 {
-        0
+        let mut core = self.inner.borrow_mut();
+        core.tick()
     }
 }
 
 // PPU registers
-impl Bus for PPU {
+impl<B: Bus> Bus for PPU<B> {
     fn read(&self, address: u16) -> u8 {
         let core = self.inner.borrow();
         core.read(address)
@@ -35,7 +36,7 @@ impl Bus for PPU {
     }
 }
 
-impl Clone for PPU {
+impl<B: Bus> Clone for PPU<B> {
     fn clone(&self) -> Self {
         Self {
             inner: self.inner.clone()
