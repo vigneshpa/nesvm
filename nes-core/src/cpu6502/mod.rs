@@ -2,7 +2,7 @@ mod addressing_mode;
 mod instruction;
 mod opcode;
 
-use crate::utils::*;
+use crate::utils;
 use crate::{Bus, Tick};
 
 use self::{addressing_mode::Operand, opcode::Opcode};
@@ -186,7 +186,7 @@ impl<B: Bus> CPU<B> {
 
     fn handle_irq(&mut self) {
         if !self.registers.status_register.disable_interrupts {
-            let (low, high) = split(self.registers.program_counter);
+            let (low, high) = utils::split(self.registers.program_counter);
             let status = self.registers.status_register.get_u8();
             self.push(high);
             self.push(low);
@@ -202,7 +202,7 @@ impl<B: Bus> CPU<B> {
     }
 
     fn handle_nmi(&mut self) {
-        let (low, high) = split(self.registers.program_counter);
+        let (low, high) = utils::split(self.registers.program_counter);
         let status = self.registers.status_register.get_u8();
         self.push(high);
         self.push(low);
@@ -221,17 +221,17 @@ impl<B: Bus> CPU<B> {
     fn read_vector(&self, base: u16) -> u16 {
         let low = self.bus.read(base);
         let high = self.bus.read(base + 1);
-        concat(low, high)
+        utils::concat(low, high)
     }
 
     fn push(&mut self, data: u8) {
         let sp = self.get_sp();
         self.bus.write(sp as u16 | 0x100, data);
-        self.set_sp(decrement(sp)); // sp--
+        self.set_sp(utils::decrement(sp)); // sp--
     }
 
     fn pull(&mut self) -> u8 {
-        let sp = increment(self.get_sp()); // sp++
+        let sp = utils::increment(self.get_sp()); // sp++
         self.set_sp(sp);
         self.bus.read(sp as u16 | 0x100)
     }
