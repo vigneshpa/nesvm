@@ -14,16 +14,8 @@ pub fn decrement(val: u8) -> u8 {
     val.wrapping_sub(1)
 }
 
-pub fn add(a: u8, b: u8) -> u8 {
-    a.wrapping_add(b)
-}
-
 pub fn add_with_carry(a: u8, b: u8, carry: bool) -> u8 {
     a.wrapping_add(b).wrapping_add(if carry { 1 } else { 0 })
-}
-
-pub fn sub(a: u8, b: u8) -> u8 {
-    a.wrapping_sub(b)
 }
 
 pub fn sub_with_carry(a: u8, b: u8, carry: bool) -> u8 {

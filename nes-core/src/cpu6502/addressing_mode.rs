@@ -1,7 +1,7 @@
 // Extracted from WikiBooks 6502 assembly
 
 use super::{Bus, CPU};
-use crate::utils::{self, concat, increment};
+use crate::utils;
 
 /// Addressing modes for 6052
 #[derive(Clone, Copy)]
@@ -100,9 +100,9 @@ impl AddressingMode {
             Self::AbsoluteIndirect => Operand::Memory({
                 let low = cpu.read_next();
                 let high = cpu.read_next();
-                let low = cpu.bus.read(concat(low, high));
-                let high = cpu.bus.read(concat(low, increment(high)));
-                let pointer = concat(low, high);
+                let low = cpu.bus.read(utils::concat(low, high));
+                let high = cpu.bus.read(utils::concat(low, utils::increment(high)));
+                let pointer = utils::concat(low, high);
                 pointer
             }),
             Self::AbsoluteIndexedWithX => {

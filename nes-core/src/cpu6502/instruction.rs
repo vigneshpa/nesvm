@@ -1,5 +1,5 @@
 use super::{addressing_mode::Operand, Bus, CPU};
-use crate::utils::*;
+use crate::utils;
 
 /// Instructions for 6502
 #[derive(Clone, Copy)]
@@ -222,34 +222,34 @@ impl<'a, B: Bus> InstructionExecutor<'a, B> {
 
             // Increment
             INC => {
-                let data = increment(self.load());
+                let data = utils::increment(self.load());
                 self.cpu.set_nz(data);
                 self.store(data);
             }
             INX => {
-                let data = increment(self.cpu.get_x());
+                let data = utils::increment(self.cpu.get_x());
                 self.cpu.set_nz(data);
                 self.cpu.set_x(data);
             }
             INY => {
-                let data = increment(self.cpu.get_y());
+                let data = utils::increment(self.cpu.get_y());
                 self.cpu.set_nz(data);
                 self.cpu.set_y(data);
             }
 
             // Decrement
             DEC => {
-                let data = decrement(self.load());
+                let data = utils::decrement(self.load());
                 self.cpu.set_nz(data);
                 self.store(data);
             }
             DEX => {
-                let data = decrement(self.cpu.get_x());
+                let data = utils::decrement(self.cpu.get_x());
                 self.cpu.set_nz(data);
                 self.cpu.set_x(data);
             }
             DEY => {
-                let data = decrement(self.cpu.get_y());
+                let data = utils::decrement(self.cpu.get_y());
                 self.cpu.set_nz(data);
                 self.cpu.set_y(data);
             }
@@ -416,7 +416,7 @@ impl<'a, B: Bus> InstructionExecutor<'a, B> {
             // PC is set to the target address.
             JSR => {
                 if let Operand::Memory(memory) = self.operand {
-                    let (low, high) = split(self.cpu.registers.program_counter - 1);
+                    let (low, high) = utils::split(self.cpu.registers.program_counter - 1);
                     self.cpu.push(high);
                     self.cpu.push(low);
                     self.cpu.registers.program_counter = memory;
@@ -429,7 +429,7 @@ impl<'a, B: Bus> InstructionExecutor<'a, B> {
             RTS => {
                 let low = self.cpu.pull();
                 let high = self.cpu.pull();
-                self.cpu.registers.program_counter = concat(low, high) + 1;
+                self.cpu.registers.program_counter = utils::concat(low, high) + 1;
             }
             // Return from an interrupt.
             // P is popped from the stack.
@@ -439,7 +439,7 @@ impl<'a, B: Bus> InstructionExecutor<'a, B> {
                 let low = self.cpu.pull();
                 let high = self.cpu.pull();
                 self.cpu.registers.status_register.set_u8(status);
-                self.cpu.registers.program_counter = concat(low, high);
+                self.cpu.registers.program_counter = utils::concat(low, high);
             }
 
             // Set and Clear
