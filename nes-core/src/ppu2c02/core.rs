@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+#![allow(unused)]
 use crate::{Bus, Tick};
 
 pub struct Core<B: Bus> {

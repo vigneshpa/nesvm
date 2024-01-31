@@ -1,6 +1,6 @@
 [workspace]
 
-members = [ "snake-6502","nes-core"]
+members = [ "snake-6502","nes-core", "webppu-core"]
 resolver = "2"
 
 

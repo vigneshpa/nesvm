@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+#![allow(unused)]
 use crate::Bus;
 
 pub fn decode_nes_file(_file:&[u8]) -> Box<dyn Mapper> {

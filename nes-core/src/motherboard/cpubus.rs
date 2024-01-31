@@ -1,17 +1,14 @@
 use crate::Bus;
 
-pub struct CpuBus {
+pub struct CpuBus<P: Bus, A: Bus, G: Bus> {
     memory: [u8; 0x0800],
-    ppu: Box<dyn Bus>,
-    apu: Box<dyn Bus>,
-    gamepack: Box<dyn Bus>
+    ppu: P,
+    apu: A,
+    gamepack: G,
 }
 
-impl CpuBus {
-    pub fn new(ppu: impl Bus + 'static, apu: impl Bus + 'static, gamepack: impl Bus + 'static) -> Self {
-        let ppu = Box::new(ppu);
-        let apu = Box::new(apu);
-        let gamepack = Box::new(gamepack);
+impl<P: Bus, A: Bus, G: Bus> CpuBus<P, A, G> {
+    pub const fn new(ppu: P, apu: A, gamepack: G) -> Self {
         Self {
             memory: [0u8; 0x0800],
             ppu,
@@ -21,7 +18,7 @@ impl CpuBus {
     }
 }
 
-impl Bus for CpuBus {
+impl<P: Bus, A: Bus, G: Bus> Bus for CpuBus<P, A, G> {
     fn read(&self, address: u16) -> u8 {
         if address <= 0x1FFF {
             self.memory[(address & 0x07FF) as usize]
