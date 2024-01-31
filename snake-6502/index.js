@@ -2,14 +2,20 @@
 // -----------------------------------
 // One could load the compiled shared library
 // in a native (C/C++/Rust) project and run the game
-
+//
 // But I prefer JS and WebAssembly :)
 
 const WASM_PATH = "../target/wasm32-unknown-unknown/release/snake_6502.wasm";
 const SCALE = 20;
-const canvas = document.querySelector("canvas");
-/** @type {CanvasRenderingContext2D} */
+const canvas = new OffscreenCanvas(32, 32);
 const ctx = canvas.getContext("2d");
+const image = new ImageData(32, 32, {colorSpace: "srgb"});
+
+const canvas_out = document.querySelector("canvas");
+canvas_out.width = 32 * SCALE;
+canvas_out.height = 32 * SCALE;
+const ctx_out = canvas_out.getContext("2d");
+ctx_out.scale(SCALE, SCALE);
 
 // Key board handler
 let lastkey = 0;
@@ -23,6 +29,9 @@ document.body.addEventListener("keydown", e => {
         lastkey = "d".charCodeAt(0);
     else if (e.keyCode === 40)
         lastkey = "s".charCodeAt(0);
+    else
+        return;
+    e.preventDefault();
 });
 
 // WebAssembly Imported functions
@@ -40,8 +49,9 @@ function btn() {
 let rendered = false;
 function render(p, n) {
     const arr = new Uint8Array(wasm.instance.exports.memory.buffer, p, n);
-    const image = constructImage(arr, SCALE);
+    constructImage(arr);
     ctx.putImageData(image, 0, 0);
+    ctx_out.drawImage(canvas, 0, 0);
     rendered = true;
 }
 
@@ -91,36 +101,23 @@ requestAnimationFrame(step);
 
 /**
  * Construct image with the given single channel image data and scale
- * @type {(image:Uint8Array, scale: number)=>ImageData}
+ * @type {(image:Uint8Array, scale: number)=>void}
  */
-function constructImage(data, scale) {
-    scale = Math.floor(scale);
-    /** @type {ImageData} */
-    const image2 = ctx.createImageData(32 * scale, 32 * scale);
+function constructImage(data) {
     for (let i = 0; i < 32; i++) {
         for (let j = 0; j < 32; j++) {
             const off = i * 32 + j;
             const n = data[off];
-
-            const ii = i * scale;
-            const jj = j * scale;
-            const off2 = (ii * image2.width + jj) * 4;
-            for (let k = 0; k < scale; k++) {
-                const off3 = off2 + k * image2.width * 4;
-                for (let l = 0; l < scale; l++) {
-                    // Red
-                    image2.data[off3 + l * 4 + 0] = getColor(n, 0);
-                    // Green
-                    image2.data[off3 + l * 4 + 1] = getColor(n, 1);
-                    // Blue
-                    image2.data[off3 + l * 4 + 2] = getColor(n, 2);
-                    // Alpha
-                    image2.data[off3 + l * 4 + 3] = 255;
-                }
-            }
+            // Red
+            image.data[off * 4 + 0] = getColor(n, 0);
+            // Green
+            image.data[off * 4 + 1] = getColor(n, 1);
+            // Blue
+            image.data[off * 4 + 2] = getColor(n, 2);
+            // Alpha
+            image.data[off * 4 + 3] = 255;
         }
     }
-    return image2;
 }
 
 const palette = [

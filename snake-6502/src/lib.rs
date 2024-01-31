@@ -1,3 +1,8 @@
+// A shared library for running the snake 6025
+// with the nes-core virtual CPU
+//
+// This is for testing the nes-core virtual 6502 CPU
+
 extern "C" {
     /// Imported function to read random number generator
     #[link_name = "rng"]
