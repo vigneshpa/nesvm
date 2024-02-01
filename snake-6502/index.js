@@ -9,7 +9,7 @@ const WASM_PATH = "../target/wasm32-unknown-unknown/release/snake_6502.wasm";
 const SCALE = 20;
 const canvas = new OffscreenCanvas(32, 32);
 const ctx = canvas.getContext("2d");
-const image = new ImageData(32, 32, {colorSpace: "srgb"});
+const image = new ImageData(32, 32);
 
 const canvas_out = document.querySelector("canvas");
 canvas_out.width = 32 * SCALE;
