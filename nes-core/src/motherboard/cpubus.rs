@@ -30,7 +30,7 @@ impl<P: Bus, A: Bus, G: Bus> Bus for CpuBus<P, A, G> {
             0
         }
         else {
-            self.gamepack.read(address - 0x4020)
+            self.gamepack.read(address)
         }
     }
 
@@ -44,7 +44,7 @@ impl<P: Bus, A: Bus, G: Bus> Bus for CpuBus<P, A, G> {
         } else if address <= 0x401F {
         }
         else {
-            self.gamepack.write(address - 0x4020, data);
+            self.gamepack.write(address, data);
         }
     }
 }

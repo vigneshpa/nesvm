@@ -1,4 +1,4 @@
-use self::mapper::{decode_nes_file, Mapper};
+use self::mapper::{parse_nes_file, Mapper};
 use crate::Bus;
 use std::{cell::RefCell, ops::Deref, rc::Rc};
 
@@ -11,7 +11,7 @@ pub struct GamePack {
 impl GamePack {
     pub fn new(nes_file: &[u8]) -> Self {
         Self {
-            mapper: Rc::new(RefCell::new(decode_nes_file(nes_file))),
+            mapper: Rc::new(RefCell::new(parse_nes_file(nes_file).unwrap())),
         }
     }
     pub fn get_ppu_half(&self) -> GamePackPPU {
