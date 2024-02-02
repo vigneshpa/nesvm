@@ -28,9 +28,9 @@ fn test() {
     let mut ppu = PPU::new(ppu_bus);
 
     let apu = RAM::new(0x0018);
-    let bus = CpuBus::new(ppu.clone(), apu, gamepack);
+    let cpu_bus = CpuBus::new(ppu.clone(), apu, gamepack);
 
-    let mut cpu = CPU::new(bus, 0);
+    let mut cpu = CPU::new(cpu_bus, 0);
 
     loop {
         ppu.tick();

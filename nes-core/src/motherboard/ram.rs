@@ -1,4 +1,4 @@
-use std::ops::{Index, IndexMut};
+use std::ops::{Deref, DerefMut};
 
 use crate::Bus;
 
@@ -27,25 +27,26 @@ impl RAM {
     }
 }
 
+impl Deref for RAM {
+    type Target = Box<[u8]>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+
+impl DerefMut for RAM {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.inner
+    }
+}
+
 impl Bus for RAM {
     fn read(&self, address: u16) -> u8 {
-        self.inner[address as usize]
+        self[address as usize]
     }
 
     fn write(&mut self, address: u16, data: u8) {
-        self.inner[address as usize] = data;
-    }
-}
-
-impl IndexMut<u16> for RAM {
-    fn index_mut(&mut self, index: u16) -> &mut Self::Output {
-        &mut self.inner[index as usize]
-    }
-}
-
-impl Index<u16> for RAM {
-    type Output = u8;
-    fn index(&self, index: u16) -> &Self::Output {
-        &self.inner[index as usize]
+        self[address as usize] = data;
     }
 }
