@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-#![allow(unused)]
 use crate::{gamepack::{GamePack, GamePackPPU}, Bus};
 
 pub struct PpuBus {

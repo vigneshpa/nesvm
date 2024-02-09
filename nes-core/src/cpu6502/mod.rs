@@ -1,4 +1,3 @@
-#![allow(dead_code)]
 mod addressing_mode;
 mod instruction;
 mod opcode;

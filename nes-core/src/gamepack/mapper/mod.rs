@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-#![allow(unused)]
 use crate::Bus;
 
 mod parser;

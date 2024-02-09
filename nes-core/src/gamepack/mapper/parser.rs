@@ -1,4 +1,4 @@
-use std::io::Read;
+use std::{error::Error, fmt::Display, io::Read};
 
 use super::{m000::Mapper000, Mapper};
 
@@ -14,6 +14,14 @@ impl INesParseErr {
         Self { message }
     }
 }
+
+impl Display for INesParseErr {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Error ocoured while parsing iNES file: {}", self.message)
+    }
+}
+
+impl Error for INesParseErr {}
 
 fn validate_signature(file: &[u8]) -> Result<()> {
     let mesg = "Signature is not a valid UTF-8 string";
@@ -38,8 +46,8 @@ pub enum System {
 }
 
 pub fn parse(file: &[u8]) -> Result<Box<dyn Mapper>> {
-    // let is_nes_2 = ((file[7] & 0b0000_1100) >> 2) == 2;
-    let is_nes_2 = false;
+    let is_nes_2 = ((file[7] & 0b0000_1100) >> 2) == 2;
+    // let is_nes_2 = false;
     if is_nes_2 {
         parse_v2(file)
     } else {
@@ -47,9 +55,10 @@ pub fn parse(file: &[u8]) -> Result<Box<dyn Mapper>> {
     }
 }
 
+#[allow(unused)]
 fn parse_v1(mut file: impl Read) -> Result<Box<dyn Mapper>> {
     let mut header = [0u8; 16];
-    file.read_exact(&mut header);
+    file.read_exact(&mut header).unwrap();
 
     validate_signature(&header)?;
     let n_prg_rom = header[4];
@@ -79,19 +88,22 @@ fn parse_v1(mut file: impl Read) -> Result<Box<dyn Mapper>> {
     };
 
     // Reading program ROM
-    let mut pgr_rom = Vec::with_capacity(n_prg_rom as usize * 16384);
-    let mut chr_rom = Vec::with_capacity(n_chr_rom as usize * 8192);
-    file.read_exact(pgr_rom.as_mut());
-    file.read_exact(chr_rom.as_mut());
+    let mut pgr_rom = Vec::new();
+    pgr_rom.resize(n_prg_rom as usize * 16384, 0);
+    let mut chr_rom = Vec::new();
+    chr_rom.resize(n_chr_rom as usize * 8192, 0);
+    file.read_exact(pgr_rom.as_mut()).unwrap();
+    file.read_exact(chr_rom.as_mut()).unwrap();
 
     // Constructing the mapper
-    if(mapper_n != 0) {
+    if mapper_n != 0 {
          return Err(INesParseErr::new("Unknown Mapper"));
     }
     let mapper = Mapper000 { chr_rom, pgr_rom };
     Ok(Box::new(mapper))
 }
 
+#[allow(unused)]
 fn parse_v2(mut file: &[u8]) -> Result<Box<dyn Mapper>> {
     validate_signature(file)?;
     let mut n_prg_rom = file[4] as u16;
