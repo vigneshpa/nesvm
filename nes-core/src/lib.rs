@@ -1,3 +1,8 @@
+use cpu6502::CPU;
+use gamepack::GamePack;
+use motherboard::{cpubus::CpuBus, ppubus::PpuBus, ram::RAM};
+use ppu2c02::PPU;
+
 pub mod cpu6502;
 pub mod gamepack;
 pub mod motherboard;
@@ -12,30 +17,36 @@ pub trait Bus {
     fn write(&mut self, address: u16, data: u8) -> ();
 }
 
+pub struct Core {
+    cpu: CPU<CpuBus>,
+    ppu: PPU<PpuBus>,
+}
 
-#[test]
-fn test() {
+// TODO: Fix to proper cycles implementation
+impl Tick for Core {
+    fn tick(&mut self) -> u8 {
+        let mut cycles = 0;
+        cycles += self.ppu.tick();
+        cycles += self.ppu.tick();
+        cycles += self.ppu.tick();
+        cycles += self.cpu.tick();
+        cycles
+    }
+}
 
-    use cpu6502::CPU;
-    use ppu2c02::PPU;
-    use motherboard::{cpubus::CpuBus, ppubus::PpuBus, ram::RAM};
-    use gamepack::GamePack;
+impl Core {
+    pub fn new(nes_file: &[u8]) -> Self {
 
-    let nes_file = [0u8; 100];
-    let gamepack = GamePack::new(&nes_file);
+        let gamepack = GamePack::new(nes_file);
 
-    let ppu_bus = PpuBus::new(gamepack.get_ppu_half());
-    let mut ppu = PPU::new(ppu_bus);
+        let ppu_bus = PpuBus::new(gamepack.clone());
+        let ppu = PPU::new(ppu_bus);
 
-    let apu = RAM::new(0x0018);
-    let cpu_bus = CpuBus::new(ppu.clone(), apu, gamepack);
+        let apu = RAM::new(0x0018);
+        let cpu_bus = CpuBus::new(ppu.clone(), apu, gamepack);
 
-    let mut cpu = CPU::new(cpu_bus, 0);
+        let cpu = CPU::new(cpu_bus, 0);
 
-    loop {
-        ppu.tick();
-        ppu.tick();
-        ppu.tick();
-        cpu.tick();
+        Self { cpu, ppu }
     }
 }

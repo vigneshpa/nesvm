@@ -1,16 +1,18 @@
-use crate::Bus;
+use crate::{gamepack::GamePack, ppu2c02::PPU, Bus};
 
-pub struct CpuBus<P: Bus, A: Bus, G: Bus> {
-    memory: [u8; 0x0800],
-    ppu: P,
-    apu: A,
-    gamepack: G,
+use super::{ppubus::PpuBus, ram::RAM};
+
+pub struct CpuBus {
+    memory: Box<[u8; 0x0800]>,
+    ppu: PPU<PpuBus>,
+    apu: RAM,
+    gamepack: GamePack,
 }
 
-impl<P: Bus, A: Bus, G: Bus> CpuBus<P, A, G> {
-    pub const fn new(ppu: P, apu: A, gamepack: G) -> Self {
+impl CpuBus {
+    pub fn new(ppu: PPU<PpuBus>, apu: RAM, gamepack: GamePack) -> Self {
         Self {
-            memory: [0u8; 0x0800],
+            memory: Box::new([0u8; 0x0800]),
             ppu,
             apu,
             gamepack,
@@ -18,7 +20,7 @@ impl<P: Bus, A: Bus, G: Bus> CpuBus<P, A, G> {
     }
 }
 
-impl<P: Bus, A: Bus, G: Bus> Bus for CpuBus<P, A, G> {
+impl Bus for CpuBus {
     fn read(&self, address: u16) -> u8 {
         if address <= 0x1FFF {
             self.memory[(address & 0x07FF) as usize]
