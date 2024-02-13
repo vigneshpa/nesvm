@@ -1,5 +1,5 @@
-const coreFile = new URL("../../target/wasm32-unknown-unknown/release/webnes_core.wasm", import.meta.url);
-// const coreFile = new URL("../../target/wasm32-unknown-unknown/debug/webnes_core.wasm", import.meta.url);
+const coreFile = new URL("../../target/wasm32-unknown-unknown/release/wasmnes.wasm", import.meta.url);
+// const coreFile = new URL("../../target/wasm32-unknown-unknown/debug/wasmnes.wasm", import.meta.url);
 
 interface CoreImports {
     render(fb: Uint8ClampedArray): void,
