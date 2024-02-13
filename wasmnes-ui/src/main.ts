@@ -1,4 +1,4 @@
-import WebNesCore from "./webnes-core";
+import WasmNES from "./wasmnes";
 
 export const SCALE = 3;
 const canvas = document.querySelector("canvas")!;
@@ -6,7 +6,7 @@ canvas.width = 320 * SCALE;
 canvas.height = 240 * SCALE;
 const ctx = canvas.getContext("bitmaprenderer", { alpha: false })!;
 
-const core = await WebNesCore.create({
+const core = await WasmNES.create({
     render,
 });
 (window as any).core = core;

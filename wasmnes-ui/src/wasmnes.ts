@@ -21,12 +21,12 @@ interface CoreWasmInstance extends WebAssembly.Instance {
 
 const decoder = new TextDecoder("UTF-8");
 
-export default class WebNesCore {
+export default class WasmNES {
     // Init
     private imports: CoreImports;
     private wasmInstance?: CoreWasmInstance;
     static async create(imports: CoreImports) {
-        const ret = new WebNesCore(imports);
+        const ret = new WasmNES(imports);
         await ret.init();
         return ret;
     }
@@ -45,11 +45,11 @@ export default class WebNesCore {
                 print(p: number, n: number) {
                     const data = new Uint8Array(core.wasm.exports.memory.buffer, p, n);
                     const text = decoder.decode(data);
-                    console.log("WebNesCore: ", text);
+                    console.log("WasmNES: ", text);
                 },
                 error(p: number, n: number) {
                     const data = new Uint8Array(core.wasm.exports.memory.buffer, p, n);
-                    const text = "WebNesCore: " + decoder.decode(data);
+                    const text = "WasmNES: " + decoder.decode(data);
                     // const e = new Error(text);
                     // throw e;
                     console.error(text);
