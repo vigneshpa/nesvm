@@ -8,6 +8,8 @@ pub mod gamepack;
 pub mod motherboard;
 pub mod ppu2c02;
 pub mod utils;
+pub mod logger;
+
 pub trait Tick {
     fn tick(&mut self) -> u8;
 }

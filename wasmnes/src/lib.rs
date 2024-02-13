@@ -1,19 +1,9 @@
 use std::panic;
 use allocator::WidePointer;
 use nes_core::{ppu2c02::VideoBackend, Emulator, Tick};
+use nes_core::log;
 
 mod allocator;
-
-#[macro_export]
-macro_rules! println {
-    () => {
-        $crate::print_wasm("")
-    };
-    ($($arg:tt),*) => {
-        let text = format!($($arg)*);
-        $crate::print_wasm(&text);
-    };
-}
 
 static mut EMU_PTR: usize = 0;
 
@@ -50,6 +40,7 @@ pub fn init() {
         let mesg = info.to_string();
         error(&mesg);
     }));
+    nes_core::logger::register_logger(print_wasm);
 }
 
 struct FfiVideo;
@@ -76,7 +67,7 @@ pub extern "C" fn load(nes_file: *mut WidePointer) {
         }
         EMU_PTR = Box::into_raw(emu) as usize;
     }
-    println!("Loaded new Game ROM");
+    log!("Loaded new Game ROM");
 }
 
 #[export_name = "step"]
@@ -87,7 +78,7 @@ pub extern "C" fn step() -> u8 {
         }
         let emu = EMU_PTR as *mut Emulator;
         let emu = &mut *emu;
-        println!("Stepping");
+        log!("Stepping");
         emu.tick()
     }
 }
@@ -100,7 +91,7 @@ pub extern "C" fn reset() {
         }
         let emu = EMU_PTR as *mut Emulator;
         let emu = &mut *emu;
-        println!("Resetting");
+        log!("Resetting");
         emu.reset();
     }
 }
