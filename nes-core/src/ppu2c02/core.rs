@@ -1,4 +1,4 @@
-use crate::{Bus, Tick};
+use crate::{log, Bus, Tick};
 
 pub trait VideoBackend {
     fn render(&mut self, fb: &[u8]) -> ();
@@ -26,7 +26,7 @@ impl<B: Bus> Tick for Core<B> {
                 buf[i] = 255;
             }
         }
-        println!("Rendering Black Frame");
+        // log!("Rendering Black Frame");
         self.video_backend.render(&buf);
         1
     }

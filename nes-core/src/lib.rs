@@ -49,7 +49,7 @@ impl Emulator {
 
         let cpu = CPU::new(cpu_bus, 0x8000);
 
-        println!("Created");
+        log!("Emulator Created");
 
         Self { cpu, ppu }
     }
