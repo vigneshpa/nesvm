@@ -4,14 +4,17 @@ use crate::{Bus, Tick};
 use core::Core;
 use std::{cell::RefCell, ops::Deref, rc::Rc};
 
+pub use self::core::VideoBackend;
+
+
 pub struct PPU<B: Bus> {
     inner: Rc<RefCell<Core<B>>>,
 }
 
 impl<B: Bus> PPU<B> {
-    pub fn new(bus: B) -> Self {
+    pub fn new(bus: B, video_backend: impl VideoBackend + 'static) -> Self {
         Self {
-            inner: Rc::new(RefCell::new(Core::new(bus))),
+            inner: Rc::new(RefCell::new(Core::new(bus, video_backend))),
         }
     }
 }

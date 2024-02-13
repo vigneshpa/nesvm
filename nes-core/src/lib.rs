@@ -1,7 +1,7 @@
 use cpu6502::CPU;
 use gamepack::GamePack;
 use motherboard::{cpubus::CpuBus, ppubus::PpuBus, ram::RAM};
-use ppu2c02::PPU;
+use ppu2c02::{VideoBackend, PPU};
 
 pub mod cpu6502;
 pub mod gamepack;
@@ -17,13 +17,13 @@ pub trait Bus {
     fn write(&mut self, address: u16, data: u8) -> ();
 }
 
-pub struct Core {
+pub struct Emulator {
     cpu: CPU<CpuBus>,
     ppu: PPU<PpuBus>,
 }
 
 // TODO: Fix to proper cycles implementation
-impl Tick for Core {
+impl Tick for Emulator {
     fn tick(&mut self) -> u8 {
         let mut cycles = 0;
         cycles += self.ppu.tick();
@@ -34,19 +34,24 @@ impl Tick for Core {
     }
 }
 
-impl Core {
-    pub fn new(nes_file: &[u8]) -> Self {
+impl Emulator {
+    pub fn new(nes_file: &[u8], video_backend: impl VideoBackend + 'static) -> Self {
 
         let gamepack = GamePack::new(nes_file);
 
         let ppu_bus = PpuBus::new(gamepack.clone());
-        let ppu = PPU::new(ppu_bus);
+        let ppu = PPU::new(ppu_bus, video_backend);
 
         let apu = RAM::new(0x0018);
         let cpu_bus = CpuBus::new(ppu.clone(), apu, gamepack);
 
-        let cpu = CPU::new(cpu_bus, 0);
+        let cpu = CPU::new(cpu_bus, 0x8000);
+
+        println!("Created");
 
         Self { cpu, ppu }
+    }
+    pub fn reset(&mut self) {
+        self.cpu.reset();
     }
 }

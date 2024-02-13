@@ -12,20 +12,39 @@ const core = await WebNesCore.create({
 (window as any).core = core;
 
 document.querySelector("button#load")!.addEventListener("click", async function selectROM() {
-    const files = await window.showOpenFilePicker({
-        id: "ines-rom-select",
-        multiple: false,
-        types: [{
-            description: "iNES ROM Files",
-            accept: {
-                "application/x-ines": ".nes"
-            }
-        }],
-        excludeAcceptAllOption:false
+    if (window.showOpenFilePicker) {
+
+        const files = await window.showOpenFilePicker({
+            id: "ines-rom-select",
+            multiple: false,
+            types: [{
+                description: "iNES ROM Files",
+                accept: {
+                    "application/x-ines": ".nes"
+                }
+            }],
+            excludeAcceptAllOption:false
+        });
+        const rom = await files[0].getFile();
+        core.load(await rom.arrayBuffer());
+    } else {
+        return await new Promise((resolve) => {
+            const el = document.createElement("input");
+            el.type = "file";
+            el.multiple = false;
+            el.addEventListener("change", async _ => {
+                const buf = await el.files![0].arrayBuffer();
+                core.load(buf);
+                el.remove();
+                resolve();
+            });
+            el.style.display = "none";
+            el.accept = ".nes,application/x-ines";
+            document.body.append(el);
+            el.click();
+        });
+    }
     });
-    const rom = await files[0].getFile();
-    core.load(await rom.arrayBuffer());
-});
 
 let isRunning = false;
 document.querySelector("button#start")!.addEventListener("click", function start() {

@@ -1,10 +1,21 @@
 use std::panic;
 use allocator::WidePointer;
-use nes_core::{Core, Tick};
+use nes_core::{ppu2c02::VideoBackend, Emulator, Tick};
 
 mod allocator;
 
-static mut CORE_PTR: usize = 0;
+#[macro_export]
+macro_rules! println {
+    () => {
+        $crate::print_wasm("")
+    };
+    ($($arg:tt),*) => {
+        let text = format!($($arg)*);
+        $crate::print_wasm(&text);
+    };
+}
+
+static mut EMU_PTR: usize = 0;
 
 extern "C" {
     #[link_name = "render"]
@@ -21,7 +32,7 @@ fn render(fb: &[u8]) {
     }
 }
 
-fn print(text:&str) {
+pub fn print_wasm(text:&str) {
     unsafe {
         ffi_print(text.as_ptr(), text.len());
     }
@@ -41,6 +52,13 @@ pub fn init() {
     }));
 }
 
+struct FfiVideo;
+impl VideoBackend for FfiVideo {
+    fn render(&mut self, fb: &[u8]) -> () {
+        render(fb)
+    }
+}
+
 
 #[export_name = "load"]
 pub extern "C" fn load(nes_file: *mut WidePointer) {
@@ -49,31 +67,40 @@ pub extern "C" fn load(nes_file: *mut WidePointer) {
         std::slice::from_raw_parts(nes_file.buf, nes_file.len)
     };
 
-    let core = Core::new(nes_file);
-    let core = Box::new(core);
+    let mut emu = Emulator::new(nes_file, FfiVideo);
+    emu.reset();
+    let emu = Box::new(emu);
     unsafe {
-        if CORE_PTR != 0 {
+        if EMU_PTR != 0 {
             panic!("ROM already loaded!");
         }
-        CORE_PTR = Box::into_raw(core) as usize;
+        EMU_PTR = Box::into_raw(emu) as usize;
     }
+    println!("Loaded new Game ROM");
 }
 
 #[export_name = "step"]
 pub extern "C" fn step() -> u8 {
     unsafe {
-        if CORE_PTR == 0 {
+        if EMU_PTR == 0 {
             panic!("Cannot step before loading a ROM!");
         }
-        let core = CORE_PTR as *mut Core;
-        let core = &mut *core;
-        print("Stepping");
-        core.tick()
+        let emu = EMU_PTR as *mut Emulator;
+        let emu = &mut *emu;
+        println!("Stepping");
+        emu.tick()
     }
 }
 
 #[export_name = "reset"]
 pub extern "C" fn reset() {
-    let empty = [];
-    render(&empty);
+    unsafe {
+        if EMU_PTR == 0 {
+            panic!("Cannot reset before loading a ROM!");
+        }
+        let emu = EMU_PTR as *mut Emulator;
+        let emu = &mut *emu;
+        println!("Resetting");
+        emu.reset();
+    }
 }

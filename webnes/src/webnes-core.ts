@@ -39,7 +39,7 @@ export default class WebNesCore {
             env: {
                 render(p: number, n: number) {
                     const fb = new Uint8ClampedArray(core.wasm.exports.memory.buffer, p, n);
-                    console.log("Render:", fb);
+                    // console.log("Render:", fb);
                     core.imports.render(fb);
                 },
                 print(p: number, n: number) {
@@ -50,8 +50,9 @@ export default class WebNesCore {
                 error(p: number, n: number) {
                     const data = new Uint8Array(core.wasm.exports.memory.buffer, p, n);
                     const text = "WebNesCore: " + decoder.decode(data);
-                    const e = new Error(text);
-                    throw e;
+                    // const e = new Error(text);
+                    // throw e;
+                    console.error(text);
                 }
             }
         }).then(source => {
