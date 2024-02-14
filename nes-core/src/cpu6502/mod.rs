@@ -28,15 +28,6 @@ struct Registers {
     status_register: StatusRegister,
 }
 
-impl Registers {
-    fn reset(&mut self) {
-        self.accumulator = 0;
-        self.xindex = 0;
-        self.yindex = 0;
-        self.stack_pointer = 0xFDu8;
-    }
-}
-
 /// A virtual 6502 CPU implementation
 pub struct CPU<B: Bus> {
     // CPU State
@@ -51,6 +42,11 @@ pub struct CPU<B: Bus> {
 impl<B: Bus> Tick for CPU<B> {
     fn tick(&mut self) -> u8 {
         self.cycles = 0;
+
+        if self.pending_nmi {
+            self.handle_nmi();
+            return self.cycles;
+        }
 
         if self.pending_irq {
             self.handle_irq();
@@ -84,6 +80,7 @@ impl StatusRegister {
         ]
     }
 
+    #[allow(unused)]
     fn from_array(data: [bool; 8]) -> Self {
         Self {
             carry: data[0],
@@ -244,6 +241,7 @@ impl<B: Bus> CPU<B> {
         self.registers.status_register.carry = val;
     }
 
+    #[allow(unused)]
     fn get_overflow(&self) -> bool {
         self.registers.status_register.overflow
     }
