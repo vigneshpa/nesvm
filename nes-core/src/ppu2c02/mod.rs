@@ -4,8 +4,9 @@ use crate::{Bus, Tick};
 use core::Core;
 use std::{cell::RefCell, ops::Deref, rc::Rc};
 
-pub use self::core::VideoBackend;
 
+pub use self::core::VideoBackend;
+pub use core::pixel::Pixel;
 
 pub struct PPU<B: Bus> {
     inner: Rc<RefCell<Core<B>>>,

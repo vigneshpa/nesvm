@@ -17,6 +17,12 @@ pub trait Tick {
 pub trait Bus {
     fn read(&self, address: u16) -> u8;
     fn write(&mut self, address: u16, data: u8) -> ();
+    fn read_to_slice(&self, mut address: u16, slice:&mut [u8]) {
+        for el in slice {
+            *el = self.read(address);
+            address += 1;
+        }
+    }
 }
 
 pub struct Emulator {

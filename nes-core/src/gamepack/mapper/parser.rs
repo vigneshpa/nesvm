@@ -1,6 +1,6 @@
 use std::{error::Error, fmt::Display, io::Read};
 
-use super::{m000::Mapper000, Mapper};
+use super::{m000::Mapper000, Mapper, NametableMirroring, System};
 
 type Result<T> = core::result::Result<T, INesParseErr>;
 
@@ -31,18 +31,6 @@ fn validate_signature(file: &[u8]) -> Result<()> {
     } else {
         Ok(())
     }
-}
-
-pub enum NametableMirroring {
-    Vertical,
-    Horizontal,
-}
-
-pub enum System {
-    NtscNES,
-    LicensedPalNES,
-    MultipleRegion,
-    Dendy,
 }
 
 pub fn parse(file: &[u8]) -> Result<Box<dyn Mapper>> {
@@ -86,6 +74,8 @@ fn parse_v1(mut file: impl Read) -> Result<Box<dyn Mapper>> {
         }
         false => None,
     };
+
+    drop(trainer);
 
     // Reading program ROM
     let mut pgr_rom = Vec::new();

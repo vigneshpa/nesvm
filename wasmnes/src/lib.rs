@@ -1,5 +1,7 @@
+use std::mem::size_of;
 use std::panic;
 use allocator::WidePointer;
+use nes_core::ppu2c02::Pixel;
 use nes_core::{ppu2c02::VideoBackend, Emulator, Tick};
 use nes_core::log;
 
@@ -9,16 +11,16 @@ static mut EMU_PTR: usize = 0;
 
 extern "C" {
     #[link_name = "render"]
-    fn ffi_render(fb: *const u8, n: usize);
+    fn ffi_render(fb: *const Pixel, n: usize);
     #[link_name = "print"]
     fn ffi_print(bytes: *const u8, n: usize);
     #[link_name = "error"]
     fn ffi_error(bytes: *const u8, n: usize);
 }
 
-fn render(fb: &[u8]) {
+fn render(fb: &[Pixel]) {
     unsafe {
-        ffi_render(fb.as_ptr(), fb.len());
+        ffi_render(fb.as_ptr(), fb.len() * size_of::<Pixel>());
     }
 }
 
@@ -45,7 +47,7 @@ pub fn init() {
 
 struct FfiVideo;
 impl VideoBackend for FfiVideo {
-    fn render(&mut self, fb: &[u8]) -> () {
+    fn render(&mut self, fb: &[Pixel]) -> () {
         render(fb)
     }
 }

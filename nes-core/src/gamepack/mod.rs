@@ -2,7 +2,9 @@ use self::mapper::{parse_nes_file, Mapper};
 use crate::Bus;
 use std::{cell::RefCell, ops::Deref, rc::Rc};
 
-pub mod mapper;
+mod mapper;
+pub use mapper::NametableMirroring;
+pub use mapper::System;
 
 pub struct GamePack {
     mapper: Rc<RefCell<Box<dyn Mapper>>>,
