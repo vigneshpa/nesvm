@@ -45,8 +45,8 @@ pub fn init() {
     nes_core::logger::register_logger(print_wasm);
 }
 
-struct FfiVideo;
-impl VideoBackend for FfiVideo {
+struct FFIVideo;
+impl VideoBackend for FFIVideo {
     fn render(&mut self, fb: &[Pixel]) -> () {
         render(fb)
     }
@@ -60,7 +60,7 @@ pub extern "C" fn load(nes_file: *mut WidePointer) {
         std::slice::from_raw_parts(nes_file.buf, nes_file.len)
     };
 
-    let mut emu = Emulator::new(nes_file, FfiVideo);
+    let mut emu = Emulator::new(nes_file, FFIVideo);
     emu.reset();
     let emu = Box::new(emu);
     unsafe {

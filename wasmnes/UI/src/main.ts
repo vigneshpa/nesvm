@@ -6,9 +6,7 @@ canvas.width = 320 * SCALE;
 canvas.height = 240 * SCALE;
 const ctx = canvas.getContext("bitmaprenderer", { alpha: false })!;
 
-const core = await WasmNES.create({
-    render,
-});
+const core = await WasmNES.create({ render });
 (window as any).core = core;
 
 document.querySelector("button#load")!.addEventListener("click", async function selectROM() {
