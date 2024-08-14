@@ -22,31 +22,23 @@ impl CpuBus {
 
 impl Bus for CpuBus {
     fn read(&self, address: u16) -> u8 {
-        if address <= 0x1FFF {
-            self.memory[(address & 0x07FF) as usize]
-        } else if address <= 0x3FFF {
-            self.ppu.read(address & 0x0007)
-        } else if address <= 0x4017 {
-            self.apu.read(address & 0x0017)
-        } else if address <= 0x401F {
-            0
-        }
-        else {
-            self.gamepack.read(address)
+        match address {
+            0x0000..=0x1FFF => self.memory[(address & 0x07FF) as usize],
+            0x2000..=0x3FFF => self.ppu.read(address & 0x0007),
+            0x4000..=0x4017 => self.apu.read(address & 0x0017),
+            0x4018..=0x401F => 0,
+            _ => self.gamepack.read(address),
         }
     }
 
     fn write(&mut self, address: u16, data: u8) -> () {
-        if address <= 0x1FFF {
-            self.memory[(address & 0x07FF) as usize] = data;
-        } else if address <= 0x3FFF {
-            self.ppu.write(address & 0x0007, data);
-        } else if address <= 0x4017 {
-            self.apu.write(address & 0x0017, data);
-        } else if address <= 0x401F {
-        }
-        else {
-            self.gamepack.write(address, data);
+        match address {
+            0x0000..=0x1FFF => self.memory[(address & 0x07FF) as usize] = data,
+            0x2000..=0x3FFF => self.ppu.write(address & 0x0007, data),
+            0x4000..=0x4017 => self.apu.write(address & 0x0017, data),
+            0x4018..=0x401F => {},
+            _ => self.gamepack.write(address, data),
+
         }
     }
 }
