@@ -12,6 +12,6 @@ impl Opcode {
         use Instruction::*;
 
         // Generated from the build script
-        include!(concat!(env!("OUT_DIR"), "/opcode_match"))
+        include!(concat!(env!("OUT_DIR"), "/opcode_match.rs"))
     }
 }
