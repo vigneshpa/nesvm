@@ -11,6 +11,7 @@ description = "An NES emulator (core)"
 crate-type = ["rlib"]
 
 [dependencies]
+log = "0.4.22"
 
 [build-dependencies]
 serde_json = "1.0.111"

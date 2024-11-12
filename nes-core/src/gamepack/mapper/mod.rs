@@ -17,7 +17,15 @@ pub enum System {
     MultipleRegion,
     Dendy,
 }
-pub trait Mapper: Bus {
-    fn ppu_read(&self, address: u16) -> u8;
-    fn ppu_write(&mut self, address: u16, data: u8) -> ();
+
+pub trait Mapper {
+    fn ppu_bus(&mut self) -> &mut dyn Bus;
+    fn cpu_bus(&mut self) -> &mut dyn Bus;
 }
+
+// pub trait Mapper<'a> {
+//     type MapperCPU: Bus + 'a;
+//     type MapperPPU: Bus + 'a;
+//     fn cpu_bus(&'a mut self) -> Self::MapperCPU;
+//     fn ppu_bus(&'a mut self) -> Self::MapperPPU;
+// }

@@ -23,21 +23,13 @@ impl GamePack {
     }
 }
 
-impl Deref for GamePack {
-    type Target = Rc<RefCell<Box<dyn Mapper>>>;
-
-    fn deref(&self) -> &Self::Target {
-        &self.mapper
-    }
-}
-
 impl Bus for GamePack {
     fn read(&self, address: u16) -> u8 {
-        self.borrow().read(address)
+        self.mapper.borrow_mut().cpu_bus().read(address)
     }
 
     fn write(&mut self, address: u16, data: u8) -> () {
-        self.borrow_mut().write(address, data)
+        self.mapper.borrow_mut().cpu_bus().write(address, data)
     }
 }
 
@@ -62,10 +54,10 @@ impl Deref for GamePackPPU {
 
 impl Bus for GamePackPPU {
     fn read(&self, address: u16) -> u8 {
-        self.borrow().ppu_read(address)
+        self.mapper.borrow_mut().ppu_bus().read(address)
     }
 
     fn write(&mut self, address: u16, data: u8) -> () {
-        self.borrow_mut().ppu_write(address, data)
+        self.mapper.borrow_mut().ppu_bus().write(address, data)
     }
 }

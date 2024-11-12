@@ -90,7 +90,7 @@ fn parse_v1(mut file: impl Read) -> Result<Box<dyn Mapper>> {
          ;
     }
     let mapper = match mapper_n {
-        0 => Box::new(Mapper000 { chr_rom, pgr_rom }),
+        0 => Box::new(Mapper000::new(pgr_rom, chr_rom)),
         _ => return Err(INesParseErr::new("Unknown Mapper")),
     };
     Ok(mapper)
@@ -161,10 +161,8 @@ fn parse_v2(mut file: &[u8]) -> Result<Box<dyn Mapper>> {
 
     // Constructing the mapper
     let mapper = match mapper_n {
-        0 => Box::new(Mapper000 {
-            chr_rom: Vec::new(),
-            pgr_rom: Vec::new(),
-        }),
+        0 => Box::new(Mapper000::new(Vec::new(), Vec::new())
+        ),
         _ => return Err(INesParseErr::new("Unknown Mapper")),
     };
     Ok(mapper)

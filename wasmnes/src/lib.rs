@@ -1,99 +1,52 @@
-use std::mem::size_of;
-use std::panic;
-use allocator::WidePointer;
+use core::slice;
+
 use nes_core::ppu2c02::Pixel;
 use nes_core::{ppu2c02::VideoBackend, Emulator, Tick};
-use nes_core::log;
+use wasm_bindgen::prelude::*;
 
-mod allocator;
-
-static mut EMU_PTR: usize = 0;
-
-extern "C" {
-    #[link_name = "render"]
-    fn ffi_render(fb: *const Pixel, n: usize);
-    #[link_name = "print"]
-    fn ffi_print(bytes: *const u8, n: usize);
-    #[link_name = "error"]
-    fn ffi_error(bytes: *const u8, n: usize);
-}
-
-fn render(fb: &[Pixel]) {
-    unsafe {
-        ffi_render(fb.as_ptr(), fb.len() * size_of::<Pixel>());
-    }
-}
-
-pub fn print_wasm(text:&str) {
-    unsafe {
-        ffi_print(text.as_ptr(), text.len());
-    }
-}
-
-fn error(text:&str) {
-    unsafe {
-        ffi_error(text.as_ptr(), text.len());
-    }
-}
-
-#[export_name = "init"]
+#[wasm_bindgen(start)]
 pub fn init() {
-    panic::set_hook(Box::new(|info| {
-        let mesg = info.to_string();
-        error(&mesg);
-    }));
-    nes_core::logger::register_logger(print_wasm);
+    std::panic::set_hook(Box::new(console_error_panic_hook::hook));
+    console_log::init_with_level(log::Level::Debug).unwrap();
 }
 
-struct FFIVideo;
+struct FFIVideo(js_sys::Function);
 impl VideoBackend for FFIVideo {
     fn render(&mut self, fb: &[Pixel]) -> () {
-        render(fb)
+
+        let view = unsafe {
+            let slice = slice::from_raw_parts(fb.as_ptr() as *const u8, fb.len() * size_of::<Pixel>()) ;
+            js_sys::Uint8Array::view(slice)
+        };
+        let this = JsValue::null();
+        let arg1 = JsValue::from(view);
+        // ffi_render(fb.as_ptr(), fb.len() * size_of::<Pixel>());
+        self.0.call1(&this, &arg1).unwrap();
     }
 }
 
+#[wasm_bindgen]
+pub struct WasmNES(Emulator);
 
-#[export_name = "load"]
-pub extern "C" fn load(nes_file: *mut WidePointer) {
-    let nes_file = unsafe {
-        let nes_file = &*nes_file;
-        std::slice::from_raw_parts(nes_file.buf, nes_file.len)
-    };
-
-    let mut emu = Emulator::new(nes_file, FFIVideo);
-    emu.reset();
-    let emu = Box::new(emu);
-    unsafe {
-        if EMU_PTR != 0 {
-            panic!("ROM already loaded!");
-        }
-        EMU_PTR = Box::into_raw(emu) as usize;
+#[wasm_bindgen]
+impl WasmNES {
+    #[wasm_bindgen(constructor)]
+    pub fn new(nes_file: &[u8], render_fn: js_sys::Function) -> Self {
+        let video = FFIVideo(render_fn);
+        let emu = Emulator::new(nes_file, video);
+        log::info!("Loaded new Game ROM");
+        Self(emu)
     }
-    log!("Loaded new Game ROM");
-}
 
-#[export_name = "step"]
-pub extern "C" fn step() -> u8 {
-    unsafe {
-        if EMU_PTR == 0 {
-            panic!("Cannot step before loading a ROM!");
-        }
-        let emu = EMU_PTR as *mut Emulator;
-        let emu = &mut *emu;
-        log!("Stepping");
-        emu.tick()
+    pub fn step(&mut self) -> u8 {
+        log::info!("Stepping");
+        self.0.tick()
     }
-}
 
-#[export_name = "reset"]
-pub extern "C" fn reset() {
-    unsafe {
-        if EMU_PTR == 0 {
-            panic!("Cannot reset before loading a ROM!");
-        }
-        let emu = EMU_PTR as *mut Emulator;
-        let emu = &mut *emu;
-        log!("Resetting");
-        emu.reset();
+    pub fn reset(&mut self) {
+        log::info!("Resetting");
+        self.0.reset()
     }
+
+    pub fn drop(self) -> () {}
 }
