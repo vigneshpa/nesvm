@@ -2,11 +2,10 @@ import { defineConfig } from 'vite';
 import wasm from "vite-plugin-wasm";
 
 export default defineConfig({
-    // server: {
-    //     fs: {
-    //         allow:[".."]
-    //     }
-    // },
+    base: "./",
+    build: {
+        target: "ESNext"
+    },
     plugins: [
         wasm()
     ]

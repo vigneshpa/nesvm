@@ -1,5 +1,3 @@
-// import WasmNES from "./wasmnes";
-
 export const SCALE = 3;
 const canvas = document.querySelector("canvas")!;
 canvas.width = 320 * SCALE;
@@ -10,8 +8,10 @@ import { WasmNES } from "../pkg";
 
 class State {
     #core: WasmNES | null;
+    isRunning: boolean;
     constructor() {
         this.#core = null;
+        this.isRunning = false;
     }
     get core() {
         if (this.#core === null)
@@ -24,8 +24,19 @@ class State {
         this.#core = new_core;
     }
 }
-
 const state = new State();
+
+
+export async function render(data: Uint8Array) {
+    const clampedView = new Uint8ClampedArray(data.buffer, data.byteOffset, data.byteLength);
+    const image = new ImageData(clampedView, 256, 240)
+    const bitmap = await createImageBitmap(image, {
+        resizeWidth: image.width * SCALE,
+        resizeHeight: image.height * SCALE,
+        resizeQuality: "pixelated",
+    });
+    ctx.transferFromImageBitmap(bitmap);
+}
 
 document.querySelector("button#load")!.addEventListener("click", async function selectROM() {
     if (window.showOpenFilePicker) {
@@ -63,32 +74,20 @@ document.querySelector("button#load")!.addEventListener("click", async function 
     }
     });
 
-let isRunning = false;
+// Game Loop
+
 document.querySelector("button#start")!.addEventListener("click", function start() {
-    isRunning = true;
+    state.isRunning = true;
     window.requestAnimationFrame(loop);
 });
 document.querySelector("button#reset")!.addEventListener("click", function reset() {
-    isRunning = false;
+    state.isRunning = false;
     state.core.reset();
 });
-
-
-export async function render(data: Uint8Array) {
-    const clampedView = new Uint8ClampedArray(data.buffer, data.byteOffset, data.byteLength);
-    const image = new ImageData(clampedView, 256, 240)
-    const bitmap = await createImageBitmap(image, {
-        resizeWidth: image.width * SCALE,
-        resizeHeight: image.height * SCALE,
-        resizeQuality: "pixelated",
-    });
-    ctx.transferFromImageBitmap(bitmap);
-}
-
 
 async function loop() {
     const cycles = state.core.step();
     console.log({ cycles });
-    if (isRunning)
+    if (state.isRunning)
         window.requestAnimationFrame(loop);
 }

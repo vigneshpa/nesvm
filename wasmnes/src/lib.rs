@@ -10,8 +10,8 @@ pub fn init() {
     console_log::init_with_level(log::Level::Debug).unwrap();
 }
 
-struct FFIVideo(js_sys::Function);
-impl VideoBackend for FFIVideo {
+struct WasmVideo(js_sys::Function);
+impl VideoBackend for WasmVideo {
     fn render(&mut self, fb: &[Pixel]) -> () {
 
         let view = unsafe {
@@ -32,7 +32,7 @@ pub struct WasmNES(Emulator);
 impl WasmNES {
     #[wasm_bindgen(constructor)]
     pub fn new(nes_file: &[u8], render_fn: js_sys::Function) -> Self {
-        let video = FFIVideo(render_fn);
+        let video = WasmVideo(render_fn);
         let emu = Emulator::new(nes_file, video);
         log::info!("Loaded new Game ROM");
         Self(emu)
