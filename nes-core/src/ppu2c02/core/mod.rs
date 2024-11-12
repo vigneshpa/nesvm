@@ -82,7 +82,7 @@ fn bitat(data:u8, i:usize) -> u8 {
 
 impl<B: Bus> Tick for Core<B> {
     fn tick(&mut self) -> u8 {
-        self.draw_debug();
+        // self.draw_debug();
         self.render();
         // todo!()
         0

@@ -2,21 +2,31 @@ use core::slice;
 
 use nes_core::ppu2c02::Pixel;
 use nes_core::{ppu2c02::VideoBackend, Emulator, Tick};
+
+use js_sys::Uint8ClampedArray;
 use wasm_bindgen::prelude::*;
 
+// WASM initilization
 #[wasm_bindgen(start)]
 pub fn init() {
     std::panic::set_hook(Box::new(console_error_panic_hook::hook));
     console_log::init_with_level(log::Level::Debug).unwrap();
 }
 
-struct WasmVideo(js_sys::Function);
+// Type definition for the render funtion
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(extends = js_sys::Function, typescript_type = "(fb: Uint8ClampedArray) => void")]
+    pub type FBRenderFunction;
+}
+
+struct WasmVideo(FBRenderFunction);
 impl VideoBackend for WasmVideo {
     fn render(&mut self, fb: &[Pixel]) -> () {
-
         let view = unsafe {
-            let slice = slice::from_raw_parts(fb.as_ptr() as *const u8, fb.len() * size_of::<Pixel>()) ;
-            js_sys::Uint8Array::view(slice)
+            let slice =
+                slice::from_raw_parts(fb.as_ptr() as *const u8, fb.len() * size_of::<Pixel>());
+            Uint8ClampedArray::view(slice)
         };
         let this = JsValue::null();
         let arg1 = JsValue::from(view);
@@ -31,22 +41,17 @@ pub struct WasmNES(Emulator);
 #[wasm_bindgen]
 impl WasmNES {
     #[wasm_bindgen(constructor)]
-    pub fn new(nes_file: &[u8], render_fn: js_sys::Function) -> Self {
+    pub fn new(nes_file: &[u8], render_fn: FBRenderFunction) -> Self {
         let video = WasmVideo(render_fn);
         let emu = Emulator::new(nes_file, video);
-        log::info!("Loaded new Game ROM");
         Self(emu)
     }
 
     pub fn step(&mut self) -> u8 {
-        log::info!("Stepping");
         self.0.tick()
     }
 
     pub fn reset(&mut self) {
-        log::info!("Resetting");
         self.0.reset()
     }
-
-    pub fn drop(self) -> () {}
 }

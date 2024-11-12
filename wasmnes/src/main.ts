@@ -20,16 +20,15 @@ class State {
     }
     set core(new_core) {
         if (this.#core !== null)
-            this.#core.drop();
+            this.#core.free();
         this.#core = new_core;
     }
 }
 const state = new State();
 
 
-export async function render(data: Uint8Array) {
-    const clampedView = new Uint8ClampedArray(data.buffer, data.byteOffset, data.byteLength);
-    const image = new ImageData(clampedView, 256, 240)
+export async function render(data: Uint8ClampedArray) {
+    const image = new ImageData(data, 256, 240)
     const bitmap = await createImageBitmap(image, {
         resizeWidth: image.width * SCALE,
         resizeHeight: image.height * SCALE,

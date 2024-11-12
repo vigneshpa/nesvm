@@ -32,11 +32,13 @@ pub struct Emulator {
 // TODO: Fix to proper cycles implementation
 impl Tick for Emulator {
     fn tick(&mut self) -> u8 {
+        log::info!("Emulator clock tick");
         let mut cycles = 0;
         cycles += self.ppu.tick();
         cycles += self.ppu.tick();
         cycles += self.ppu.tick();
         cycles += self.cpu.tick();
+        log::info!("Emulator passed a pahse cycles_spent: {cycles}");
         cycles
     }
 }
@@ -54,11 +56,18 @@ impl Emulator {
 
         let cpu = CPU::new(cpu_bus, 0x8000);
 
-        log::info!("Emulator Created");
+        log::info!("Emulator Instance created");
 
         Self { cpu, ppu }
     }
     pub fn reset(&mut self) {
+        log::info!("Emulator reset");
         self.cpu.reset();
+    }
+}
+
+impl Drop for Emulator {
+    fn drop(&mut self) {
+        log::info!("Emulator destroyed");
     }
 }
