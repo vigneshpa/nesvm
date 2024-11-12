@@ -4,7 +4,7 @@ canvas.width = 320 * SCALE;
 canvas.height = 240 * SCALE;
 const ctx = canvas.getContext("bitmaprenderer", { alpha: false })!;
 
-import { WasmNES } from "../pkg";
+import { WasmNES } from "../pkg/wasmnes";
 
 class State {
     #core: WasmNES | null;
