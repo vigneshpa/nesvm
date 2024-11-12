@@ -1,4 +1,4 @@
-use crate::{gamepack::GamePack, rp2c02::PPU, Bus};
+use crate::{gamepack::GamePack, rp2c0x::PPU, Bus};
 
 use super::{ppubus::PpuBus, ram::RAM};
 

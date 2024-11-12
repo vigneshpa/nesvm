@@ -1,12 +1,12 @@
 use rp2a0x::CPU;
 use gamepack::GamePack;
 use motherboard::{cpubus::CpuBus, ppubus::PpuBus, ram::RAM};
-use rp2c02::{VideoBackend, PPU};
+use rp2c0x::{VideoBackend, PPU};
 
 pub mod rp2a0x;
 pub mod gamepack;
 pub mod motherboard;
-pub mod rp2c02;
+pub mod rp2c0x;
 pub mod utils;
 
 pub trait Tick {
