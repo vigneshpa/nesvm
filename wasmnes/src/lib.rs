@@ -20,6 +20,7 @@ extern "C" {
     pub type FBRenderFunction;
 }
 
+// Video backend implementation
 struct WasmVideo(FBRenderFunction);
 impl VideoBackend for WasmVideo {
     fn render(&mut self, fb: &[Pixel]) -> () {
@@ -34,6 +35,8 @@ impl VideoBackend for WasmVideo {
         self.0.call1(&this, &arg1).unwrap();
     }
 }
+
+// Exposing WasmNES
 
 #[wasm_bindgen]
 pub struct WasmNES(Emulator);
