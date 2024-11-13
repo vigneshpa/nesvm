@@ -56,7 +56,7 @@ pub extern "C" fn ffi_step() -> u8 {
     }
 }
 
-use nes_core::{rp2a0x::CPU, Bus, Tick};
+use nes_core::{cpu::CPU, Bus, Tick};
 
 pub struct Game {
     pub cpu: CPU<GameBus>,

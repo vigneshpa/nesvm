@@ -1,7 +1,7 @@
 use core::slice;
 
-use nes_core::rp2c0x::Pixel;
-use nes_core::{rp2c0x::VideoBackend, Emulator, Tick};
+use nes_core::ppu::Pixel;
+use nes_core::{ppu::VideoBackend, Emulator, Tick};
 
 use js_sys::Uint8ClampedArray;
 use wasm_bindgen::prelude::*;
