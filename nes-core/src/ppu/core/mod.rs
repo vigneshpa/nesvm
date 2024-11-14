@@ -13,7 +13,7 @@ pub trait VideoBackend {
 
 pub struct Core<B: Bus> {
     bus: B,
-    oam: Box<[u8; 512]>,
+    // oam: Box<[u8; 512]>,
     fb: [Pixel; SCREEN_SZ],
     video_backend: Box<dyn VideoBackend>,
 }
@@ -22,7 +22,7 @@ impl<B: Bus> Core<B> {
     pub fn new(bus: B, video_backend: impl VideoBackend + 'static) -> Self {
         Self {
             bus,
-            oam:Box::new([0u8; 512]),
+            // oam:Box::new([0u8; 512]),
             video_backend: Box::new(video_backend),
             fb: [Pixel::default(); SCREEN_SZ],
         }
@@ -60,7 +60,7 @@ impl<B: Bus> Core<B> {
         }
     }
 
-    fn color_pixel(&mut self, x: u16, y:u16, n: u8, p:u8) {
+    fn color_pixel(&mut self, x: u16, y:u16, n: u8, _p:u8) {
         let pixel_idx = y as usize * SCREEN_W + x as usize;
         let pixel = &mut self.fb[pixel_idx];
         // let mut color = 0x3F00u16;
@@ -93,9 +93,8 @@ fn bitat(data:u8, i:u16) -> u8 {
 
 impl<B: Bus> Tick for Core<B> {
     fn tick(&mut self) -> u8 {
-        self.render();
+        // self.render();
         self.draw_debug();
-        // todo!()
         0
     }
 }
