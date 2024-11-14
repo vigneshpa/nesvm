@@ -30,6 +30,7 @@ impl<B: Bus> Core<B> {
 
     pub fn render(&mut self) {
         self.draw_background();
+        self.draw_debug();
         self.video_backend.render(&self.fb);
     }
 
@@ -54,26 +55,26 @@ impl<B: Bus> Core<B> {
             let rowa = sprite_data[i as usize];
             let rowb = sprite_data[8 + i as usize];
             for j in 0..8 {
-                let n = bitat(rowa, 7 - j) + bitat(rowb, 7 - j);
+                let n = (bitat(rowa, 7 - j) << 1) + bitat(rowb, 7 - j);
                 self.color_pixel(j + target_x, i + target_y, n, 0);
             }
         }
     }
 
-    fn color_pixel(&mut self, x: u16, y:u16, n: u8, _p:u8) {
+    fn color_pixel(&mut self, x: u16, y:u16, n: u8, p:u8) {
         let pixel_idx = y as usize * SCREEN_W + x as usize;
         let pixel = &mut self.fb[pixel_idx];
-        // let mut color = 0x3F00u16;
-        // if n != 0 {
-        //     color += (n as u16) + (p as u16) * 4;
-        // }
-        // let color = self.bus.read(color);
-        // pixel.color(color);
-        pixel.grayscale(n * 84);
+        let mut color = 0x3F00u16;
+        if n != 0 {
+            color += (n as u16) + (p as u16) * 4;
+        }
+        let color = self.bus.read(color);
+        pixel.color(color);
+        pixel.grayscale(n * 85);
     }
 
     #[allow(dead_code)]
-    pub fn draw_debug(&mut self) {
+    fn draw_debug(&mut self) {
         for i in 0..16u8 {
             for j in 0..16u8 {
                 self.draw_sprite((j * 8) as u16, (i * 8) as u16, i * 16 + j, false);
@@ -93,8 +94,7 @@ fn bitat(data:u8, i:u16) -> u8 {
 
 impl<B: Bus> Tick for Core<B> {
     fn tick(&mut self) -> u8 {
-        // self.render();
-        self.draw_debug();
+        self.render();
         0
     }
 }

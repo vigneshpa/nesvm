@@ -14,6 +14,7 @@ impl Pixel {
         self.red = v;
         self.green = v;
         self.blue = v;
+        self.alpha = v;
     }
 
     /// Applies the color (0 to 63) to from the system pallete
