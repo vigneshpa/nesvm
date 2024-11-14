@@ -31,17 +31,15 @@ impl PpuBus {
 
 impl Bus for PpuBus {
     fn read(&self, address: u16) -> u8 {
-        if address < 0x2000 {
-            self.gamepack.read(address)
-        } else if address < 0x2FFF {
-            let address = self.decode_nametable_address(address-0x2FFF);
-            self.memory[address]
-        } else if address < 0x3EFF {
-            self.read(address - 0x3EFF + 0x2000)
-        } else if address < 0x3FFF {
-            self.pallete[((address - 0x3FFF) & 0x001F) as usize]
-        } else {
-            0
+        match address {
+            0x0000..0x2000 => self.gamepack.read(address),
+            0x2000..0x2FFF => {
+                let address = self.decode_nametable_address(address-0x2000);
+                self.memory[address]
+            },
+            0x2FFF..0x3EFF => self.read(address + 0x2000 - 0x3EFF),
+            0x3EFF..0x3FFF => self.pallete[((address - 0x3EFF) & 0x001F) as usize],
+            _ => 0,
         }
     }
 
