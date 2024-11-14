@@ -4,7 +4,9 @@ canvas.width = 320 * SCALE;
 canvas.height = 240 * SCALE;
 const ctx = canvas.getContext("bitmaprenderer", { alpha: false })!;
 
-import { WasmNES } from "../pkg/wasmnes";
+import init, { WasmNES } from "../pkg/wasmnes";
+
+init();
 
 class State {
     #core: WasmNES | null;
@@ -48,10 +50,10 @@ document.querySelector("button#load")!.addEventListener("click", async function 
                     "application/x-ines": ".nes"
                 }
             }],
-            excludeAcceptAllOption:false
+            excludeAcceptAllOption: false
         });
         const rom = await files[0].getFile();
-        const romData = new Uint8Array(await rom.arrayBuffer())
+        const romData = new Uint8Array(await rom.arrayBuffer());
         state.core = new WasmNES(romData, render);
     } else {
         return await new Promise((resolve) => {
@@ -71,7 +73,7 @@ document.querySelector("button#load")!.addEventListener("click", async function 
             el.click();
         });
     }
-    });
+});
 
 // Game Loop
 

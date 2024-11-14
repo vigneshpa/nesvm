@@ -1,4 +1,4 @@
-import { build, ConfigEnv, defineConfig, type PluginOption } from 'vite';
+import { ConfigEnv, defineConfig, type PluginOption } from 'vite';
 import { execSync, spawn } from 'node:child_process';
 import wasm from "vite-plugin-wasm";
 
@@ -33,7 +33,7 @@ function wasmPackBuildPlugin(env: ConfigEnv): PluginOption {
         case "production":
             mode = "--release"
     }
-    const wasmPackCmd = `wasm-pack build -t bundler --no-pack ${mode}`;
+    const wasmPackCmd = `wasm-pack build -t web --no-pack ${mode}`;
     return {
         name: "wasm-pack-build-plugin",
         buildStart() {
