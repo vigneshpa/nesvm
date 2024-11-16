@@ -11,6 +11,7 @@ init();
 class State {
     #core: WasmNES | null;
     isRunning: boolean;
+    previousTimestamp?: number;
     constructor() {
         this.#core = null;
         this.isRunning = false;
@@ -86,9 +87,23 @@ document.querySelector("button#reset")!.addEventListener("click", function reset
     state.core.reset();
 });
 
-async function loop() {
-    const cycles = state.core.step();
-    console.log({ cycles });
+async function loop(currentTimestamp: DOMHighResTimeStamp) {
+    if (!state.previousTimestamp) {
+        state.previousTimestamp = currentTimestamp;
+        return;
+    }
+    const delta = currentTimestamp - state.previousTimestamp;
+    state.previousTimestamp = currentTimestamp;
+    step(delta);
     if (state.isRunning)
         window.requestAnimationFrame(loop);
+}
+
+const cpuFreq = 1.79 * 1E6;
+
+async function step(delta: number) {
+    let targetCycles = (delta * cpuFreq) / 1000;
+    while (targetCycles > 0) {
+        targetCycles -= state.core.step();
+    }
 }

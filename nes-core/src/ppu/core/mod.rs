@@ -101,10 +101,9 @@ impl<B: Bus> Tick for Core<B> {
 
 impl<B: Bus> Bus for Core<B> {
     fn read(&self, _address: u16) -> u8 {
-        todo!()
+        0
     }
 
     fn write(&mut self, _address: u16, _data: u8) {
-        todo!()
     }
 }

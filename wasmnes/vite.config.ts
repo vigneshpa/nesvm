@@ -9,8 +9,8 @@ export default defineConfig((env) => ({
     },
     plugins: [
         wasm(),
-        typescriptCheck(env),
         wasmPackBuildPlugin(env),
+        typescriptCheck(env),
     ]
 }))
 
