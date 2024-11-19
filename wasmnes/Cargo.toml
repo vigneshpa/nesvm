@@ -10,6 +10,8 @@ crate-type = ["cdylib"]
 
 [profile.release]
 lto = true
+panic = "unwind"
+strip = true
 
 [dependencies]
 console_error_panic_hook = "0.1.7"
