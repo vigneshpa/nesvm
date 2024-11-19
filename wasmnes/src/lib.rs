@@ -6,18 +6,27 @@ use nes_core::{ppu::VideoBackend, Emulator, Tick};
 use js_sys::Uint8ClampedArray;
 use wasm_bindgen::prelude::*;
 
-// WASM initilization
-#[wasm_bindgen(start)]
-pub fn init() {
-    std::panic::set_hook(Box::new(console_error_panic_hook::hook));
-    console_log::init_with_level(log::Level::Debug).unwrap();
-}
-
 // Type definition for the render funtion
 #[wasm_bindgen]
 extern "C" {
     #[wasm_bindgen(extends = js_sys::Function, typescript_type = "(fb: Uint8ClampedArray) => void")]
     pub type FBRenderFunction;
+}
+
+#[wasm_bindgen(raw_module = "../src/main.ts")]
+extern "C" {
+    pub fn panic_handler(info: &str);
+}
+
+// WASM initilization
+#[wasm_bindgen(start)]
+pub fn init() {
+    std::panic::set_hook(Box::new(|info| {
+        let info = info.to_string();
+        // let stackTace = info.stack
+        panic_handler(&info);
+    }));
+    console_log::init_with_level(log::Level::Trace).unwrap();
 }
 
 // Video backend implementation

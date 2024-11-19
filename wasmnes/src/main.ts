@@ -6,7 +6,7 @@ const ctx = canvas.getContext("bitmaprenderer", { alpha: false })!;
 
 import init, { WasmNES } from "../pkg/wasmnes";
 
-init();
+await init();
 
 class State {
     #core: WasmNES | null;
@@ -27,8 +27,13 @@ class State {
         this.#core = new_core;
     }
 }
-const state = new State();
+let state = new State();
 
+export async function panic_handler(info: string) {
+    console.error("%c" + info, "font-weight: bold; font-size: 1.2em");
+    state = new State();
+    await init();
+}
 
 export async function render(data: Uint8ClampedArray) {
     const image = new ImageData(data, 256, 240)
@@ -90,18 +95,25 @@ document.querySelector("button#reset")!.addEventListener("click", function reset
 async function loop(currentTimestamp: DOMHighResTimeStamp) {
     if (!state.previousTimestamp) {
         state.previousTimestamp = currentTimestamp;
+        window.requestAnimationFrame(loop);
         return;
     }
     const delta = currentTimestamp - state.previousTimestamp;
     state.previousTimestamp = currentTimestamp;
-    step(delta);
+    try {
+        step(delta);
+    } catch (e) {
+        console.error("Error occoured while stepping", e);
+        state.isRunning = false;
+        return;
+    }
     if (state.isRunning)
         window.requestAnimationFrame(loop);
 }
 
 const cpuFreq = 1.79 * 1E6;
 
-async function step(delta: number) {
+function step(delta: number) {
     let targetCycles = (delta * cpuFreq) / 1000;
     while (targetCycles > 0) {
         targetCycles -= state.core.step();
