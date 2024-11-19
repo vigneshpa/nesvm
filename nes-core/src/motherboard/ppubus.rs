@@ -33,26 +33,26 @@ impl Bus for PpuBus {
     fn read(&self, address: u16) -> u8 {
         match address {
             0x0000..0x2000 => self.gamepack.read(address),
-            0x2000..0x2FFF => {
+            0x2000..0x3000 => {
                 let address = self.decode_nametable_address(address-0x2000);
                 self.memory[address]
             },
-            0x2FFF..0x3EFF => self.read(address + 0x2000 - 0x3EFF),
-            0x3EFF..0x3FFF => self.pallete[((address - 0x3EFF) & 0x001F) as usize],
+            0x3000..0x3F00 => self.read(address - 0x3000 + 0x2000),
+            0x3F00..0x3FFF => self.pallete[((address - 0x3F00) & 0x001F) as usize],
             _ => 0,
         }
     }
 
     fn write(&mut self, address: u16, data: u8) {
-        if address < 0x2000 {
-            self.gamepack.write(address, data);
-        } else if address < 0x2FFF {
-            let address = self.decode_nametable_address(address-0x2FFF);
-            self.memory[address] = data;
-        } else if address < 0x3EFF {
-            self.write(address - 0x3EFF + 0x2000, data);
-        } else if address < 0x3FFF {
-            self.pallete[((address - 0x3FFF) & 0x001F) as usize] = data;
+        match address {
+            0x0000..0x2000 => self.gamepack.write(address, data),
+            0x2000..0x3000 => {
+                let address = self.decode_nametable_address(address-0x2000);
+                self.memory[address] = data;
+            },
+            0x3000..0x3F00 => self.write(address - 0x3000 + 0x2000, data),
+            0x3F00..0x3F20 => self.pallete[((address - 0x3F00) & 0x001F) as usize] = data,
+            _ => {}
         }
     }
 }
