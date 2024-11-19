@@ -51,7 +51,7 @@ impl Bus for PpuBus {
                 self.memory[address] = data;
             },
             0x3000..0x3F00 => self.write(address - 0x3000 + 0x2000, data),
-            0x3F00..0x3F20 => self.pallete[((address - 0x3F00) & 0x001F) as usize] = data,
+            0x3F00..0x3FFF => self.pallete[((address - 0x3F00) & 0x001F) as usize] = data,
             _ => {}
         }
     }
