@@ -8,11 +8,6 @@ edition = "2021"
 [lib]
 crate-type = ["cdylib"]
 
-[profile.release]
-lto = true
-panic = "unwind"
-strip = true
-
 [dependencies]
 console_log = "1.0.0"
 js-sys = "0.3.72"
