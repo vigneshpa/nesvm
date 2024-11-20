@@ -32,7 +32,7 @@ let state = new State();
 export async function panic_handler(info: string) {
     console.error("%c" + info, "font-weight: bold; font-size: 1.2em");
     state = new State();
-    await init();
+    // await init();
 }
 
 export async function render(data: Uint8ClampedArray) {
