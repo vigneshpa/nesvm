@@ -11,7 +11,7 @@ impl Opcode {
         use AddressingMode::*;
         use Instruction::*;
 
-        // Generated from the build script
+        // Decoder is generated from the build script
         include!(concat!(env!("OUT_DIR"), "/opcode_match.rs"))
     }
 }

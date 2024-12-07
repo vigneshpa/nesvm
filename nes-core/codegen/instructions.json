@@ -14,7 +14,7 @@
         "(zp,x)": "ZeroPageIndexedIndirect",
         "(zp),y": "ZeroPageIndirectIndexedWithY"
     },
-    "instructions": {
+    "map": {
         "LDA": {
             "name": "Load Accumulator with Memory",
             "opcodes": {

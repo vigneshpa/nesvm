@@ -49,10 +49,10 @@ impl Emulator {
         let gamepack = GamePack::new(nes_file);
 
         let ppu_bus = PpuBus::new(gamepack.clone());
-        let ppu = PPU::new(ppu_bus, video_backend);
+        let mut ppu = PPU::new(ppu_bus, video_backend);
 
         let apu = RAM::new(0x0018);
-        let cpu_bus = CpuBus::new(ppu.clone(), apu, gamepack);
+        let cpu_bus = CpuBus::new(ppu.get_registers(), apu, gamepack);
 
         let cpu = CPU::new(cpu_bus, 0x8000);
 

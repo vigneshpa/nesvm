@@ -21,3 +21,7 @@ pub fn add_with_carry(a: u8, b: u8, carry: bool) -> u8 {
 pub fn sub_with_carry(a: u8, b: u8, carry: bool) -> u8 {
     a.wrapping_sub(b).wrapping_sub(if carry { 1 } else { 0 })
 }
+
+pub fn bitat(data:u8, i:u16) -> u8 {
+    ((0b1 << i) & data) >> i
+}
