@@ -463,11 +463,11 @@ impl<'a, B: Bus> InstructionExecutor<'a, B> {
     }
 
     fn load(&self) -> u8 {
-        self.cpu.load(self.operand)
+        self.operand.load(self.cpu)
     }
 
     fn store(&mut self, data: u8) {
-        self.cpu.store(self.operand, data)
+        self.operand.store(data, self.cpu)
     }
 
     fn compare(&mut self, data: u8) {
