@@ -5,7 +5,7 @@ mod opcode;
 use crate::utils;
 use crate::{Bus, Tick};
 
-use self::{addressing_mode::Operand, opcode::Opcode};
+use opcode::Opcode;
 
 struct StatusRegister {
     carry: bool,
@@ -157,26 +157,6 @@ impl<B: Bus> CPU<B> {
         }
     }
 
-    fn read_next(&mut self) -> u8 {
-        let next = self.bus.read(self.registers.program_counter);
-        self.registers.program_counter = self.registers.program_counter.wrapping_add(1);
-        next
-    }
-
-    fn read_next_u16(&mut self) -> u16 {
-        let low = self.read_next();
-        let high = self.read_next();
-        crate::utils::concat(low, high)
-    }
-
-    fn load(&self, operand: Operand) -> u8 {
-        operand.load(self)
-    }
-
-    fn store(&mut self, operand: Operand, data: u8) {
-        operand.store(data, self);
-    }
-
     pub fn raise_irq(&mut self) {
         self.pending_irq = true;
     }
@@ -215,6 +195,18 @@ impl<B: Bus> CPU<B> {
         self.cycles = 0;
     }
 
+    fn read_next(&mut self) -> u8 {
+        let next = self.bus.read(self.registers.program_counter);
+        self.registers.program_counter = self.registers.program_counter.wrapping_add(1);
+        next
+    }
+
+    fn read_next_u16(&mut self) -> u16 {
+        let low = self.read_next();
+        let high = self.read_next();
+        crate::utils::concat(low, high)
+    }
+
     fn read_vector(&self, base: u16) -> u16 {
         let low = self.bus.read(base);
         let high = self.bus.read(base + 1);
@@ -232,6 +224,8 @@ impl<B: Bus> CPU<B> {
         self.set_sp(sp);
         self.bus.read(sp as u16 | 0x100)
     }
+
+    // Short hands
 
     fn get_carry(&self) -> bool {
         self.registers.status_register.carry
